@@ -56,11 +56,12 @@ private:
 	//Handle Attack Pressed
 	void OnAttackPressed();
 	int AttackCount = 0;
+	int CurrentMaxAttackCount = 3;
 	void ResetAttack();
-	FTimerHandle* AttackTimer; 
+	FTimerHandle AttackTimer; 
 
 	//Handle Finisher Pressed
-	void OnFinisherPressed();
+	void DoFinisher();
 
 	//Handle Interact Pressed
 	void OnInteractPressed();

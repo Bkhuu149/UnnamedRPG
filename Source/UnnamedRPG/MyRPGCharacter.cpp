@@ -48,7 +48,7 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	PlayerInputComponent->BindAction(TEXT("Attack 1"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnAttackPressed);
 
-	PlayerInputComponent->BindAction(TEXT("Finsher"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnFinisherPressed);
+	PlayerInputComponent->BindAction(TEXT("Finisher"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::DoFinisher);
 
 	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnInteractPressed);
 
@@ -116,14 +116,32 @@ void AMyRPGCharacter::OnTargetPressed() {
 
 void AMyRPGCharacter::OnAttackPressed() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
+	AttackCount++;
+	if (AttackCount >= CurrentMaxAttackCount) {
+		DoFinisher();
+		return;
+	}
+
+	if (AttackTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
+		AttackTimer.Invalidate();
+	}
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, 2.f, false);
+	
+
 }
 
 void AMyRPGCharacter::ResetAttack() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack Reset"));
+	if (GetWorld()->GetTimerManager().IsTimerActive(AttackTimer)) {
+		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
+	}
+	AttackCount = 0;
 }
 
-void AMyRPGCharacter::OnFinisherPressed() {
+void AMyRPGCharacter::DoFinisher() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Finisher Pressed"));
+	ResetAttack();
 }
 
 void AMyRPGCharacter::OnInteractPressed() {
@@ -131,11 +149,23 @@ void AMyRPGCharacter::OnInteractPressed() {
 }
 
 void AMyRPGCharacter::OnMenuPressed() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Open Menu"));
+	InMenu = !InMenu;
+	if (InMenu) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Open Menu"));
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Close Menu"));
+	}
 }
 
 void AMyRPGCharacter::OnInventoryPressed() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Open Inventory"));
+	InInventory = !InInventory;
+	if (InInventory) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Open Inventory"));
+	}
+	else {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Close Inventory"));
+	}
 }
 
 void AMyRPGCharacter::OnSprintPressed() {
