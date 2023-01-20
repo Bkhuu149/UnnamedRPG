@@ -3,7 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 #include "MyRPGCharacter.generated.h"
 
 UCLASS()
@@ -19,23 +22,39 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		bool Targeted;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		AActor* Target;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		bool IsJumping = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		bool IsBlocking = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		bool IsDodging = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		bool IsSprinting = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		int AttackCount = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		bool IsInteracting;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		bool InMenu;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		bool InInventory;
 private:
 
 	//Handle Jump Input
 	void OnJumpedPressed();
-	bool IsJumping = false;
-	FTimerHandle* JumpTimer;
+	FTimerHandle JumpTimer;
 	void ReleaseJump();
 
 	//Handle Target Pressed
 	void OnTargetPressed();
-	bool Targeted;
-	AActor* Target;
 
 	//Handle Block Inputs
 	void OnBlockPressed();
 	void OnBlockReleased();
-	bool IsBlocking = false;
 	int64 PressedTime = 0;
 	const int PARRY_THRESH = 1000;
 
@@ -45,17 +64,14 @@ private:
 
 	//Handle Dodge Input
 	void OnDodgePressed();
-	bool IsDodging = false;
 
 	//Handle Sprint Input
 	void OnSprintPressed();
 	void OnSprintReleased();
-	bool IsSprinting = false;
 	float SprintMultiplier = .5f;
 
 	//Handle Attack Pressed
 	void OnAttackPressed();
-	int AttackCount = 0;
 	int CurrentMaxAttackCount = 3;
 	void ResetAttack();
 	FTimerHandle AttackTimer; 
@@ -65,15 +81,14 @@ private:
 
 	//Handle Interact Pressed
 	void OnInteractPressed();
-	bool IsInteracting;
 	
 	//Handle Menu Pressed
 	void OnMenuPressed();
-	bool InMenu;
 
 	//Handle Inventory Pressed
 	void OnInventoryPressed();
-	bool InInventory;
+
+	void FocusTarget();
 
 public:	
 	// Called every frame
@@ -85,7 +100,7 @@ public:
 	void MoveForwardBack(float value);
 
 	void MoveRightLeft(float value);
-
+	
 	bool GetIsBlocking() { return IsBlocking; }
 
 	bool GetIsDodging() { return IsDodging; }

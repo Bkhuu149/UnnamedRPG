@@ -23,6 +23,8 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FocusTarget();
+
 }
 
 // Called to bind functionality to input
@@ -33,6 +35,7 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAxis(TEXT("RightLeft"), this, &AMyRPGCharacter::MoveRightLeft);
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnJumpedPressed);
+	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Released, this, &AMyRPGCharacter::ReleaseJump);
 
 	PlayerInputComponent->BindAction(TEXT("Target"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnTargetPressed);
 
@@ -103,11 +106,23 @@ void AMyRPGCharacter::OnDodgePressed() {
 }
 
 void AMyRPGCharacter::OnJumpedPressed() {
+	bool falling = GetCharacterMovement()->IsFalling();
+	if (falling) {
+		return;
+	}
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Jump"));
+	Jump();
+	IsJumping = true;
+	GetWorld()->GetTimerManager().SetTimer(JumpTimer, this, &AMyRPGCharacter::ReleaseJump, 1.f, false);
 }
 
 void AMyRPGCharacter::ReleaseJump() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Jump Released"));
+	if (GetWorld()->GetTimerManager().IsTimerActive(JumpTimer)) {
+		GetWorld()->GetTimerManager().ClearTimer(JumpTimer);
+	}
+	StopJumping();
+	IsJumping = false;
 }
 
 void AMyRPGCharacter::OnTargetPressed() {
@@ -178,4 +193,21 @@ void AMyRPGCharacter::OnSprintReleased() {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Stop Sprinting"));
 	SprintMultiplier = .5f;
 	IsSprinting = false;
+}
+
+void AMyRPGCharacter::FocusTarget() {
+	if (!Target) {
+		return;
+	}
+	
+	FVector CurrentLocation = GetActorLocation();
+	FVector TargetLocation = Target->GetActorLocation();
+	float Distance = (CurrentLocation - TargetLocation).Length();
+	if (Distance > 2000) {
+		Target = nullptr;
+		Targeted = false;
+		return;
+	}
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
+	GetController()->SetControlRotation(LookAtRotation);
 }
