@@ -51,6 +51,8 @@ private:
 
 	//Handle Target Pressed
 	void OnTargetPressed();
+	void FocusTarget();
+	void ResetTarget();
 
 	//Handle Block Inputs
 	void OnBlockPressed();
@@ -87,8 +89,6 @@ private:
 
 	//Handle Inventory Pressed
 	void OnInventoryPressed();
-
-	void FocusTarget();
 
 public:	
 	// Called every frame

@@ -197,6 +197,7 @@ void AMyRPGCharacter::OnSprintReleased() {
 
 void AMyRPGCharacter::FocusTarget() {
 	if (!Target) {
+		ResetTarget();
 		return;
 	}
 	
@@ -204,10 +205,14 @@ void AMyRPGCharacter::FocusTarget() {
 	FVector TargetLocation = Target->GetActorLocation();
 	float Distance = (CurrentLocation - TargetLocation).Length();
 	if (Distance > 2000) {
-		Target = nullptr;
-		Targeted = false;
+		ResetTarget();
 		return;
 	}
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 	GetController()->SetControlRotation(LookAtRotation);
+}
+
+void AMyRPGCharacter::ResetTarget() {
+	Target = nullptr;
+	Targeted = false;
 }
