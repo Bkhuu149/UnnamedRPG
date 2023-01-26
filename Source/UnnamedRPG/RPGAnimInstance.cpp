@@ -3,3 +3,11 @@
 
 #include "RPGAnimInstance.h"
 
+
+void URPGAnimInstance::NativeInitializeAnimation() {
+
+}
+
+void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
+
+}
