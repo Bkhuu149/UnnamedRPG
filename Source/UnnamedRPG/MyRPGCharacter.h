@@ -69,7 +69,11 @@ private:
 
 	//Handle Healing Inputs
 	void OnHealPressed();
-	float Mana = 1000;
+	void IncrementMana();
+	void RestoreMana();
+	float Mana = 100.0;
+	float ManaMax = 100.0;
+	FTimerHandle ManaTimer;
 
 	//Handle Dodge Input
 	void OnDodgePressed();

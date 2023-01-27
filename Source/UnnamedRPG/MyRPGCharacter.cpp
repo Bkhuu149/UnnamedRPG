@@ -98,10 +98,17 @@ void AMyRPGCharacter::OnBlockReleased() {
 }
 
 void AMyRPGCharacter::OnHealPressed() {
+	if (Mana < 100.0) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Not enough Mana"));
+		return;
+	}
+	Mana = 0.0;
 	HealChar(10.0);
+	IncrementMana();
 }
 
 void AMyRPGCharacter::OnDodgePressed() {
+	DamageChar(100.0);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
 }
 
@@ -237,4 +244,19 @@ void AMyRPGCharacter::HealChar(float val) {
 	}
 	Health += val;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Healed: %f"), Health));
+}
+
+void AMyRPGCharacter::RestoreMana() {
+	if (Mana < ManaMax) {
+		Mana += 10.0;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Mana: %f"), Mana));
+	}
+	if (ManaTimer.IsValid() && ManaMax == Mana) {
+		GetWorld()->GetTimerManager().ClearTimer(ManaTimer);
+		ManaTimer.Invalidate();
+	}
+}
+
+void AMyRPGCharacter::IncrementMana() {
+	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AMyRPGCharacter::RestoreMana, 1.0f, true);
 }
