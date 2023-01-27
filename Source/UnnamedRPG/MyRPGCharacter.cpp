@@ -98,7 +98,7 @@ void AMyRPGCharacter::OnBlockReleased() {
 }
 
 void AMyRPGCharacter::OnHealPressed() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Heal"));
+	HealChar(10.0);
 }
 
 void AMyRPGCharacter::OnDodgePressed() {
@@ -217,4 +217,24 @@ void AMyRPGCharacter::FocusTarget() {
 void AMyRPGCharacter::ResetTarget() {
 	Target = nullptr;
 	Targeted = false;
+}
+
+void AMyRPGCharacter::DamageChar(float val) {
+	if (Health - val < 0) {
+		Health = 0;
+		IsDead = true;
+		return;
+	}
+	Health -= val;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
+}
+
+void AMyRPGCharacter::HealChar(float val) {
+	if (val <= 0) { return; }
+	if (val > HealthMax - Health) {
+		Health = HealthMax;
+		return;
+	}
+	Health += val;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Healed: %f"), Health));
 }

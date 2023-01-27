@@ -32,7 +32,7 @@ public:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
-		bool bIsTargeted = false;
+	bool bIsTargeted = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	float GroundSpeed = 0.f;

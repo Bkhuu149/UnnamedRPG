@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+#include "Engine/GameEngine.h"
 #include "MyRPGCharacter.generated.h"
 
 UCLASS()
@@ -35,6 +36,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool IsSprinting = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		bool IsDead = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		int AttackCount = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool IsInteracting;
@@ -42,6 +45,10 @@ protected:
 		bool InMenu;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool InInventory;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		float Health = 100.0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		float HealthMax = 100.0;
 private:
 
 	//Handle Jump Input
@@ -90,8 +97,9 @@ private:
 	//Handle Inventory Pressed
 	void OnInventoryPressed();
 
-	//Char Info
-	float Health = 100.0;
+	//Handle Health
+	void DamageChar(float val);
+	void HealChar(float val);
 
 public:	
 	// Called every frame
@@ -112,6 +120,8 @@ public:
 
 	int GetAttackCount() { return AttackCount; }
 
+	float GetHealth() { return Health; }
+
 	bool GetIsInteracting() { return IsInteracting; }
 
 	bool GetIsInMenu() { return InMenu; }
@@ -121,5 +131,7 @@ public:
 	bool GetIsJumping() { return IsJumping; }
 
 	bool GetIsTargeted() { return Targeted; }
+
+	bool GetIsDead() { return IsDead; }
 };
 
