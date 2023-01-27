@@ -204,8 +204,7 @@ void AMyRPGCharacter::OnSprintReleased() {
 
 void AMyRPGCharacter::FocusTarget() {
 	if (!Target) {
-		ResetTarget();
-		bUseControllerRotationYaw = false;
+		ResetTarget();;
 		return;
 	}
 	
@@ -214,7 +213,6 @@ void AMyRPGCharacter::FocusTarget() {
 	float Distance = (CurrentLocation - TargetLocation).Length();
 	if (Distance > 2000) {
 		ResetTarget();
-		bUseControllerRotationYaw = false;
 		return;
 	}
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
@@ -224,6 +222,8 @@ void AMyRPGCharacter::FocusTarget() {
 void AMyRPGCharacter::ResetTarget() {
 	Target = nullptr;
 	Targeted = false;
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 void AMyRPGCharacter::DamageChar(float val) {
