@@ -41,9 +41,19 @@ public:
 	FVector Velocity;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	FVector Acceleration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	bool ShouldMove = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	bool IsFalling = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	float ForwardBackValue = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	float LeftRightValue = 0.f;
+private:
+	void CalculateMovementInput();
 };
