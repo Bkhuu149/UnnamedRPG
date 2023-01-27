@@ -22,7 +22,16 @@ class UNNAMEDRPG_API URPGAnimInstance : public UAnimInstance
 
 
 public:
+
+	AMyRPGCharacter* Character;
+
 	virtual void NativeInitializeAnimation() override;
 
 	virtual void NativeUpdateAnimation(float DeltaTimeX) override;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Information")
+		bool bIsTargeted = false;
+
+
 };

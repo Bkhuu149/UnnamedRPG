@@ -58,7 +58,7 @@ private:
 	void OnBlockPressed();
 	void OnBlockReleased();
 	int64 PressedTime = 0;
-	const int PARRY_THRESH = 1000;
+	const int PARRY_THRESH = 2000;
 
 	//Handle Healing Inputs
 	void OnHealPressed();

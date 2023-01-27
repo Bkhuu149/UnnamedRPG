@@ -198,6 +198,7 @@ void AMyRPGCharacter::OnSprintReleased() {
 void AMyRPGCharacter::FocusTarget() {
 	if (!Target) {
 		ResetTarget();
+		bUseControllerRotationYaw = false;
 		return;
 	}
 	
@@ -206,6 +207,7 @@ void AMyRPGCharacter::FocusTarget() {
 	float Distance = (CurrentLocation - TargetLocation).Length();
 	if (Distance > 2000) {
 		ResetTarget();
+		bUseControllerRotationYaw = false;
 		return;
 	}
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);

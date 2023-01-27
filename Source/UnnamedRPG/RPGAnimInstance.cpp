@@ -5,9 +5,14 @@
 
 
 void URPGAnimInstance::NativeInitializeAnimation() {
-
+	Character = static_cast<AMyRPGCharacter*>(TryGetPawnOwner());
 }
 
 void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 
+	if (!Character) {
+		return;
+	}
+
+	bIsTargeted = Character->GetIsTargeted();
 }
