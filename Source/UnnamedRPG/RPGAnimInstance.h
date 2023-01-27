@@ -24,14 +24,26 @@ class UNNAMEDRPG_API URPGAnimInstance : public UAnimInstance
 public:
 
 	AMyRPGCharacter* Character;
+	UCharacterMovementComponent* MoveComp;
 
 	virtual void NativeInitializeAnimation() override;
 
 	virtual void NativeUpdateAnimation(float DeltaTimeX) override;
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Information")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool bIsTargeted = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	float GroundSpeed = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	FVector Velocity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	bool ShouldMove = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	bool IsFalling = false;
 
 };
