@@ -134,6 +134,16 @@ void AMyRPGCharacter::ReleaseJump() {
 
 void AMyRPGCharacter::OnTargetPressed() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Targeting"));
+	if (Targeted) {
+		ResetTarget();
+		return;
+	}
+	FVector CurrentLocation = GetActorLocation();
+	FRotator Camera = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetControlRotation();
+	FVector CameraRotation = 1000.f*Camera.Vector();
+	FVector TargetTraceEnd = CurrentLocation + CameraRotation;
+	bool HitResult;
+
 }
 
 void AMyRPGCharacter::OnAttackPressed() {
