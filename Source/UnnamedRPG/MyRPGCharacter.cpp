@@ -138,11 +138,21 @@ void AMyRPGCharacter::OnTargetPressed() {
 		ResetTarget();
 		return;
 	}
-	FVector CurrentLocation = GetActorLocation();
-	FRotator Camera = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetControlRotation();
-	FVector CameraRotation = 1000.f*Camera.Vector();
-	FVector TargetTraceEnd = CurrentLocation + CameraRotation;
+	FVector TraceStart = GetActorLocation();
+	FVector TraceDistance = 1000.f * (UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetControlRotation().Vector());
+	FVector TraceEnd = TraceStart + TraceDistance;
+	
+	FHitResult OutHit;
+
 	bool HitResult;
+
+	FCollisionQueryParams Params = FCollisionQueryParams();
+	Params.AddIgnoredActor(this);
+
+	FCollisionShape MyColSphere = FCollisionShape::MakeSphere(500.0f);
+
+	HitResult = GetWorld()->SweepSingleByChannel(OutHit, TraceStart, TraceEnd, FVector(0, 0, 0).ToOrientationQuat(), 
+		ECC_GameTraceChannel1, MyColSphere, Params);
 
 }
 

@@ -7,8 +7,8 @@
 #include "Kismet/GameplayStatics.h" 
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "CollisionQueryParams.h"
 
-#include "Engine/World.h"
 #include "Engine/GameEngine.h"
 #include "MyRPGCharacter.generated.h"
 
