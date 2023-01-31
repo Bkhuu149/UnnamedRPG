@@ -274,8 +274,8 @@ void AMyRPGCharacter::HealChar(float val) {
 
 void AMyRPGCharacter::RestoreMana() {
 	if (Mana < ManaMax) {
-		Mana += 10.0;
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Mana: %f"), Mana));
+		Mana += .5;
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Mana: %f"), Mana));
 	}
 	if (ManaTimer.IsValid() && ManaMax == Mana) {
 		GetWorld()->GetTimerManager().ClearTimer(ManaTimer);
@@ -284,5 +284,5 @@ void AMyRPGCharacter::RestoreMana() {
 }
 
 void AMyRPGCharacter::IncrementMana() {
-	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AMyRPGCharacter::RestoreMana, 1.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AMyRPGCharacter::RestoreMana, .05f, true);
 }
