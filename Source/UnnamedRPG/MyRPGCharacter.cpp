@@ -58,6 +58,12 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAction(TEXT("Menu"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnMenuPressed);
 
 	PlayerInputComponent->BindAction(TEXT("Inventory"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnInventoryPressed);
+
+	PlayerInputComponent->BindAction(TEXT("TEMPKILL"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::KILL);
+}
+
+void AMyRPGCharacter::KILL() {
+	DamageChar(10);
 }
 
 void AMyRPGCharacter::MoveForwardBack(float value) {
@@ -103,12 +109,12 @@ void AMyRPGCharacter::OnHealPressed() {
 		return;
 	}
 	Mana = 0.0;
-	HealChar(10.0);
+	HealChar(20.0);
 	IncrementMana();
 }
 
 void AMyRPGCharacter::OnDodgePressed() {
-	DamageChar(100.0);
+	//Brian Working On This	
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
 }
 

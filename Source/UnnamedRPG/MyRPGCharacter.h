@@ -51,7 +51,15 @@ protected:
 		float Health = 100.0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		float HealthMax = 100.0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		float Mana = 100.0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		float ManaMax = 100.0;
+
 private:
+	//TO BE REMOVED LATER, LEFT IN FOR TESTING DAMAGE
+	void KILL();
+
 
 	//Handle Jump Input
 	void OnJumpedPressed();
@@ -73,8 +81,6 @@ private:
 	void OnHealPressed();
 	void IncrementMana();
 	void RestoreMana();
-	float Mana = 100.0;
-	float ManaMax = 100.0;
 	FTimerHandle ManaTimer;
 
 	//Handle Dodge Input
