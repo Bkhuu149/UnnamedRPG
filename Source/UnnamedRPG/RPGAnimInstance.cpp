@@ -25,7 +25,9 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	ShouldMove = (Acceleration != FVector(0, 0, 0)) && (GroundSpeed > 3);
 	IsFalling = MoveComp->IsFalling();
 	
-	CalculateMovementInput();
+	if (bIsTargeted) {
+		CalculateMovementInput();
+	}
 }
 
 void URPGAnimInstance::CalculateMovementInput() {
@@ -34,10 +36,10 @@ void URPGAnimInstance::CalculateMovementInput() {
 	FVector2d Acceleration2D = (FVector2D)Acceleration;
 	FVector2d ForwardVector2D = (FVector2D)Character->GetActorForwardVector();
 	FVector2d RightVector2D = (FVector2D)Character->GetActorRightVector();
-	Acceleration2D.Normalize();
-	ForwardVector2D.Normalize();
-	RightVector2D.Normalize();
-	ForwardBackValue = ForwardVector2D.Dot(Acceleration2D);
-	LeftRightValue = RightVector2D.Dot(Acceleration2D);
+	//Acceleration2D.Normalize();
+	//ForwardVector2D.Normalize();
+	//RightVector2D.Normalize();
+	LeftRightValue = Acceleration2D.Dot(ForwardVector2D)/10;
+	ForwardBackValue = Acceleration2D.Dot(RightVector2D)/10;
 
 }
