@@ -220,12 +220,19 @@ void AMyRPGCharacter::OnSprintPressed() {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Sprinting"));
 	SprintMultiplier = 3.f;
 	IsSprinting = true;
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	
 }
 
 void AMyRPGCharacter::OnSprintReleased() {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Stop Sprinting"));
 	SprintMultiplier = .5f;
 	IsSprinting = false;
+	if (Target) {
+		bUseControllerRotationYaw = true;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+	}
 }
 
 void AMyRPGCharacter::FocusTarget() {

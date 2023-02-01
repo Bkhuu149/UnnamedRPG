@@ -50,6 +50,9 @@ public:
 	bool IsFalling = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	bool IsSprinting = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	float ForwardBackValue = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
