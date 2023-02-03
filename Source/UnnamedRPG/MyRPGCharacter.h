@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CollisionQueryParams.h"
 #include "Engine/DataTable.h"
+#include "Animation/AnimMontage.h"
 
 #include "Engine/GameEngine.h"
 #include "MyRPGCharacter.generated.h"
@@ -59,7 +60,11 @@ protected:
 
 	//Data Tables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-	FDataTableRowHandle AbilityTab;
+	UDataTable* AbilityTab;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UAnimMontage* DodgeAnim;
+
 
 private:
 	//TO BE REMOVED LATER, LEFT IN FOR TESTING DAMAGE
