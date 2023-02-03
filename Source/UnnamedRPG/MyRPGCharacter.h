@@ -94,6 +94,8 @@ private:
 
 	//Handle Dodge Input
 	void OnDodgePressed();
+	void DodgeFinished();
+	FTimerHandle DodgeTimer;
 
 	//Handle Sprint Input
 	void OnSprintPressed();

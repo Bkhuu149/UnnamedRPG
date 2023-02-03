@@ -66,18 +66,22 @@ void AMyRPGCharacter::KILL() {
 	DamageChar(10);
 }
 
-void AMyRPGCharacter::MoveForwardBack(float value) {
+void AMyRPGCharacter::MoveForwardBack(float value) 
+{
+	if (IsDodging) { return; }
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
 	AddMovementInput(Direction, value * SprintMultiplier);
 }
 
 void AMyRPGCharacter::MoveRightLeft(float value)
 {
+	if (IsDodging) { return; }
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
 	AddMovementInput(Direction, value * SprintMultiplier);
 }
 
 void AMyRPGCharacter::OnBlockPressed() {
+	if (IsDodging) { return; }
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Blocked Pressed"));
 	//Start a timer to see how long this button was pressed to distinguish between blocking and parrying
 	IsBlocking = true;
@@ -104,6 +108,7 @@ void AMyRPGCharacter::OnBlockReleased() {
 }
 
 void AMyRPGCharacter::OnHealPressed() {
+	if (IsDodging) { return; }
 	if (Mana < 100.0) {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Not enough Mana"));
 		return;
@@ -114,13 +119,24 @@ void AMyRPGCharacter::OnHealPressed() {
 }
 
 void AMyRPGCharacter::OnDodgePressed() {
-	//Brian Working On This	
+	if (GetCharacterMovement()->IsFalling()) { return; }
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
+	IsDodging = true;
+	float duration = PlayAnimMontage(DodgeAnim);
+	GetWorld()->GetTimerManager().SetTimer(DodgeTimer, this, &AMyRPGCharacter::DodgeFinished, duration, false);
+}
+
+void AMyRPGCharacter::DodgeFinished() {
+	IsDodging = false;
+	if (DodgeTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(DodgeTimer);
+		DodgeTimer.Invalidate();
+	}
 }
 
 void AMyRPGCharacter::OnJumpedPressed() {
 	bool falling = GetCharacterMovement()->IsFalling();
-	if (falling) {
+	if (falling || IsDodging) {
 		return;
 	}
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Jump"));
@@ -139,6 +155,7 @@ void AMyRPGCharacter::ReleaseJump() {
 }
 
 void AMyRPGCharacter::OnTargetPressed() {
+	if (IsDodging) { return; }
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Targeting"));
 	if (Targeted) {
 		ResetTarget();
@@ -163,6 +180,7 @@ void AMyRPGCharacter::OnTargetPressed() {
 }
 
 void AMyRPGCharacter::OnAttackPressed() {
+	if (IsDodging) { return; }
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
 	AttackCount++;
 	if (AttackCount >= CurrentMaxAttackCount) {
@@ -217,6 +235,7 @@ void AMyRPGCharacter::OnInventoryPressed() {
 }
 
 void AMyRPGCharacter::OnSprintPressed() {
+	if (IsDodging) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Sprinting"));
 	SprintMultiplier = 3.f;
 	IsSprinting = true;
@@ -236,6 +255,8 @@ void AMyRPGCharacter::OnSprintReleased() {
 }
 
 void AMyRPGCharacter::FocusTarget() {
+	if (IsDodging) { return; }
+
 	if (!Target) {
 		ResetTarget();;
 		return;
