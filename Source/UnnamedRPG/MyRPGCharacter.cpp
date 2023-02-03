@@ -119,7 +119,7 @@ void AMyRPGCharacter::OnHealPressed() {
 }
 
 void AMyRPGCharacter::OnDodgePressed() {
-	if (GetCharacterMovement()->IsFalling()) { return; }
+	if (GetCharacterMovement()->IsFalling() && IsDodging) { return; }
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
 	IsDodging = true;
 	float duration = PlayAnimMontage(DodgeAnim);
