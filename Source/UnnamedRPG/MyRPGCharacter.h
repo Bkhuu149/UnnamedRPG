@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CollisionQueryParams.h"
+#include "Engine/DataTable.h"
 
 #include "Engine/GameEngine.h"
 #include "MyRPGCharacter.generated.h"
@@ -56,10 +57,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		float ManaMax = 100.0;
 
+	//Data Tables
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	FDataTableRowHandle AbilityTab;
+
 private:
 	//TO BE REMOVED LATER, LEFT IN FOR TESTING DAMAGE
 	void KILL();
-
 
 	//Handle Jump Input
 	void OnJumpedPressed();
