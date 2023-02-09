@@ -9,13 +9,21 @@ AMyRPGCharacter::AMyRPGCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	AbilityComp = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+
 }
 
 // Called when the game starts or when spawned
 void AMyRPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	AbilityComp->InitAbilityActorInfo(this, this);
+
+	AttackCombo.Add(FName(TEXT("GreatSwordAttack1")));
+	AttackCombo.Add(FName(TEXT("SwordAttack1")));
+	AttackCombo.Add(FName(TEXT("SwordAttack2")));
+
+
 }
 
 // Called every frame
@@ -68,14 +76,14 @@ void AMyRPGCharacter::KILL() {
 
 void AMyRPGCharacter::MoveForwardBack(float value) 
 {
-	if (IsDodging) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
 	AddMovementInput(Direction, value * SprintMultiplier);
 }
 
 void AMyRPGCharacter::MoveRightLeft(float value)
 {
-	if (IsDodging) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
 	AddMovementInput(Direction, value * SprintMultiplier);
 }
@@ -180,19 +188,26 @@ void AMyRPGCharacter::OnTargetPressed() {
 }
 
 void AMyRPGCharacter::OnAttackPressed() {
-	if (IsDodging) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
-	AttackCount++;
 	if (AttackCount >= CurrentMaxAttackCount) {
 		DoFinisher();
 		return;
 	}
 
+
+	FAttackStruct* TestAttack = AbilityTab->FindRow<FAttackStruct>(AttackCombo[AttackCount], "");
+
+	FGameplayAbilitySpec Test = FGameplayAbilitySpec(TestAttack->Attack.GetDefaultObject(), 1, 0);
+	AbilityComp->GiveAbilityAndActivateOnce(Test);
+
+	AttackCount++;
+
 	if (AttackTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
 		AttackTimer.Invalidate();
 	}
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, 2.f, false);
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() + 2.f, false);
 	
 
 }

@@ -11,11 +11,33 @@
 #include "Engine/DataTable.h"
 #include "Animation/AnimMontage.h"
 
+#include "Abilities/GameplayAbility_Montage.h"
+#include "AbilitySystemInterface.h"
+#include "GameplayAbilitySpec.h"
+#include "AbilitySystemComponent.h"
+
 #include "Engine/GameEngine.h"
 #include "MyRPGCharacter.generated.h"
 
+
+USTRUCT(BlueprintType)
+struct FAttackStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 Index;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<class UGameplayAbility_Montage> Attack;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool Unlocked = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool IsFinisher = false;
+
+};
+
 UCLASS()
-class UNNAMEDRPG_API AMyRPGCharacter : public ACharacter
+class UNNAMEDRPG_API AMyRPGCharacter : public ACharacter , public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -26,6 +48,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+		UAbilitySystemComponent* AbilityComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool Targeted;
@@ -107,6 +132,9 @@ private:
 	int CurrentMaxAttackCount = 3;
 	void ResetAttack();
 	FTimerHandle AttackTimer; 
+	TArray<FName> AttackCombo;
+
+
 
 	//Handle Finisher Pressed
 	void DoFinisher();
@@ -156,5 +184,10 @@ public:
 	bool GetIsTargeted() { return Targeted; }
 
 	bool GetIsDead() { return IsDead; }
+
+	UAbilitySystemComponent* GetAbilitySystemComponent() const override //We add this function, overriding it from IAbilitySystemInterface.
+	{
+		return AbilityComp;
+	};
 };
 
