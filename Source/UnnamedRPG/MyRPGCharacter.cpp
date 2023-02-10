@@ -94,7 +94,7 @@ void AMyRPGCharacter::OnBlockPressed() {
 	//Start a timer to see how long this button was pressed to distinguish between blocking and parrying
 	IsBlocking = true;
 	PressedTime = FDateTime::Now().GetTicks();
-
+	PlayAnimMontage(BlockAnim);
 
 }
 
@@ -104,12 +104,10 @@ void AMyRPGCharacter::OnBlockReleased() {
 	int64 CurrentTime = FDateTime::Now().GetTicks();
 
 	if ((CurrentTime - PressedTime)/1000 <= PARRY_THRESH) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Parry"));
-		IsBlocking = false;
-		return;
+		PlayAnimMontage(ParryAnim);
 	}
+	StopAnimMontage(BlockAnim);
 
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Block"));
 	IsBlocking = false;
 	return;
 
@@ -127,7 +125,7 @@ void AMyRPGCharacter::OnHealPressed() {
 }
 
 void AMyRPGCharacter::OnDodgePressed() {
-	if (GetCharacterMovement()->IsFalling() && IsDodging) { return; }
+	if (GetCharacterMovement()->IsFalling() || IsDodging) { return; }
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
 	IsDodging = true;
 	float duration = PlayAnimMontage(DodgeAnim);

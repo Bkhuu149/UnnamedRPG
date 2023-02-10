@@ -83,12 +83,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		float ManaMax = 100.0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	TArray<FName> AttackCombo;
+
 	//Data Tables
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UDataTable* AbilityTab;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* DodgeAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
+	UAnimMontage* ParryAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
+	UAnimMontage* BlockAnim;
 
 
 private:
@@ -132,8 +141,6 @@ private:
 	int CurrentMaxAttackCount = 3;
 	void ResetAttack();
 	FTimerHandle AttackTimer; 
-	TArray<FName> AttackCombo;
-
 
 
 	//Handle Finisher Pressed
@@ -185,9 +192,6 @@ public:
 
 	bool GetIsDead() { return IsDead; }
 
-	UAbilitySystemComponent* GetAbilitySystemComponent() const override //We add this function, overriding it from IAbilitySystemInterface.
-	{
-		return AbilityComp;
-	};
+	UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
 };
 
