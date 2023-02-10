@@ -102,7 +102,7 @@ private:
 
 	//Handle Target Pressed
 	void OnTargetPressed();
-	void FocusTarget();
+	void FocusTarget(float DeltaTime);
 	void ResetTarget();
 
 	//Handle Block Inputs

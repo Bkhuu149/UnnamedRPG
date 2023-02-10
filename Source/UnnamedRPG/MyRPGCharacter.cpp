@@ -31,7 +31,7 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FocusTarget();
+	FocusTarget(DeltaTime);
 
 }
 
@@ -269,11 +269,11 @@ void AMyRPGCharacter::OnSprintReleased() {
 	}
 }
 
-void AMyRPGCharacter::FocusTarget() {
+void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 	if (IsDodging) { return; }
 
 	if (!Target) {
-		ResetTarget();;
+		ResetTarget();
 		return;
 	}
 	
@@ -285,7 +285,9 @@ void AMyRPGCharacter::FocusTarget() {
 		return;
 	}
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
-	GetController()->SetControlRotation(LookAtRotation);
+	FRotator CameraRotation = GetController()->GetControlRotation();
+	FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, LookAtRotation, DeltaTime, 10.0);
+	GetController()->SetControlRotation(RinterpVal);
 }
 
 void AMyRPGCharacter::ResetTarget() {
