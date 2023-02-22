@@ -263,8 +263,8 @@ void AMyRPGCharacter::OnSprintPressed() {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Sprinting"));
 	SprintMultiplier = 3.f;
 	IsSprinting = true;
-	bUseControllerRotationYaw = false;
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	//bUseControllerRotationYaw = false;
+	//GetCharacterMovement()->bOrientRotationToMovement = true;
 	
 }
 
@@ -272,10 +272,10 @@ void AMyRPGCharacter::OnSprintReleased() {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Stop Sprinting"));
 	SprintMultiplier = .5f;
 	IsSprinting = false;
-	if (Target) {
-		bUseControllerRotationYaw = true;
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-	}
+	//if (Target) {
+		//bUseControllerRotationYaw = true;
+		//GetCharacterMovement()->bOrientRotationToMovement = false;
+	//}
 }
 
 void AMyRPGCharacter::FocusTarget(float DeltaTime) {
@@ -293,6 +293,16 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 		ResetTarget();
 		return;
 	}
+
+	if (IsSprinting && !GetVelocity().IsZero()) {
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		bUseControllerRotationYaw = false;
+	}
+	else {
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		bUseControllerRotationYaw = true;
+	}
+
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 	FRotator CameraRotation = GetController()->GetControlRotation();
 	FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, LookAtRotation, DeltaTime, 10.0);
