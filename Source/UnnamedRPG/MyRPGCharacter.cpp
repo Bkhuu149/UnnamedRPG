@@ -33,6 +33,9 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 
 	FocusTarget(DeltaTime);
 
+	ForwardBackInputValue = GetInputAxisValue("ForwardBack");
+	RightLeftInputValue = GetInputAxisKeyValue("RightLeft");
+
 }
 
 // Called to bind functionality to input
@@ -78,6 +81,11 @@ void AMyRPGCharacter::MoveForwardBack(float value)
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+
+	if (RightLeftInputValue != 0) {
+		value = value * .7071;
+	}
+
 	AddMovementInput(Direction, value * SprintMultiplier);
 }
 
@@ -85,6 +93,9 @@ void AMyRPGCharacter::MoveRightLeft(float value)
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
+	if (ForwardBackInputValue != 0) {
+		value = value * .7071;
+	}
 	AddMovementInput(Direction, value * SprintMultiplier);
 }
 

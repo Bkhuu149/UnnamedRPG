@@ -106,6 +106,10 @@ private:
 	//TO BE REMOVED LATER, LEFT IN FOR TESTING DAMAGE
 	void KILL();
 
+	//Util values
+	float ForwardBackInputValue;
+	float RightLeftInputValue;
+
 	//Handle Jump Input
 	void OnJumpedPressed();
 	FTimerHandle JumpTimer;
