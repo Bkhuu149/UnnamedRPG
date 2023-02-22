@@ -33,6 +33,8 @@ struct FAttackStruct : public FTableRowBase
 	bool Unlocked = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool IsFinisher = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UStaticMesh* WeaponMesh;
 
 };
 
