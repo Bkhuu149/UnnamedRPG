@@ -26,7 +26,7 @@ struct FAttackStruct : public FTableRowBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 Index;
+	int32 Index = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<class UGameplayAbility_Montage> Attack;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -34,7 +34,7 @@ struct FAttackStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool IsFinisher = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UStaticMesh* WeaponMesh;
+	UStaticMesh* WeaponMesh = nullptr;
 
 };
 

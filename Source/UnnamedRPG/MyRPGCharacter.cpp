@@ -19,9 +19,14 @@ void AMyRPGCharacter::BeginPlay()
 	Super::BeginPlay();
 	AbilityComp->InitAbilityActorInfo(this, this);
 
-	AttackCombo.Add(FName(TEXT("GreatSwordAttack1")));
-	AttackCombo.Add(FName(TEXT("SwordAttack1")));
-	AttackCombo.Add(FName(TEXT("SwordAttack2")));
+
+	//CAN ONLY HAVE 3 Attacks for now
+	//AttackCombo.Add(FName(TEXT("GreatSwordAttack1")));
+	//AttackCombo.Add(FName(TEXT("SwordAttack1")));
+	//AttackCombo.Add(FName(TEXT("SwordAttack2")));
+	AttackCombo.Add(FName(TEXT("SwordAttack3")));
+	AttackCombo.Add(FName(TEXT("SwordAttack4")));
+	AttackCombo.Add(FName(TEXT("SwordAttack5")));
 
 
 }
@@ -34,7 +39,7 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 	FocusTarget(DeltaTime);
 
 	ForwardBackInputValue = GetInputAxisValue("ForwardBack");
-	RightLeftInputValue = GetInputAxisKeyValue("RightLeft");
+	RightLeftInputValue = GetInputAxisValue("RightLeft");
 
 }
 
@@ -294,8 +299,11 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 		return;
 	}
 
-
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
+	FRotator CameraRotation = GetController()->GetControlRotation();
+	FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, LookAtRotation, DeltaTime, 10.0);
+	GetController()->SetControlRotation(RinterpVal);
+
 	if (IsSprinting && !GetVelocity().IsZero()) {
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		//bUseControllerRotationYaw = false;
@@ -303,12 +311,12 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 	else {
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		//bUseControllerRotationYaw = true;
-		FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), LookAtRotation, DeltaTime, 10.0);
+		CurrentLocation.Z = 0;
+		TargetLocation.Z = 0;
+		FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
+		FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 5.0);
 		SetActorRotation(CharacterRotationInterpVal);
 	}
-	FRotator CameraRotation = GetController()->GetControlRotation();
-	FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, LookAtRotation, DeltaTime, 10.0);
-	GetController()->SetControlRotation(RinterpVal);
 }
 
 void AMyRPGCharacter::ResetTarget() {
