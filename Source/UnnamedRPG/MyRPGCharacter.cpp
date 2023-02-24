@@ -315,7 +315,7 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 	FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, LookAtRotation, DeltaTime, 10.0);
 	GetController()->SetControlRotation(RinterpVal);
 
-	if (IsDodging || IsSprinting && !GetVelocity().IsZero()) {
+	if (IsSprinting && !GetVelocity().IsZero()) {
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		//bUseControllerRotationYaw = false;
 	}
@@ -325,7 +325,10 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 		CurrentLocation.Z = 0;
 		TargetLocation.Z = 0;
 		FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
-		FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 10.0);
+
+		float LerpTime = (IsDodging) ? 1.f : 10.f;
+
+		FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, LerpTime);
 		SetActorRotation(CharacterRotationInterpVal);
 	}
 }
