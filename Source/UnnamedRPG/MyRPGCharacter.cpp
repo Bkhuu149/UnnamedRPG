@@ -88,7 +88,7 @@ void AMyRPGCharacter::MoveForwardBack(float value)
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-
+	Direction.Z = 0;
 	if (RightLeftInputValue != 0) {
 		value = value * .7071;
 	}
@@ -100,6 +100,7 @@ void AMyRPGCharacter::MoveRightLeft(float value)
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
+	Direction.Z = 0;
 	if (ForwardBackInputValue != 0) {
 		value = value * .7071;
 	}
@@ -148,6 +149,7 @@ void AMyRPGCharacter::OnDodgePressed() {
 	IsDodging = true;
 	float duration = PlayAnimMontage(DodgeAnim);
 	GetWorld()->GetTimerManager().SetTimer(DodgeTimer, this, &AMyRPGCharacter::DodgeFinished, duration, false);
+	SetActorRotation(GetActorRotation() + FVector(ForwardBackInputValue,RightLeftInputValue,0).Rotation());
 }
 
 void AMyRPGCharacter::DodgeFinished() {
@@ -295,8 +297,6 @@ void AMyRPGCharacter::OnSprintReleased() {
 }
 
 void AMyRPGCharacter::FocusTarget(float DeltaTime) {
-	if (IsDodging) { return; }
-
 	if (!Target) {
 		ResetTarget();
 		return;
@@ -315,7 +315,7 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 	FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, LookAtRotation, DeltaTime, 10.0);
 	GetController()->SetControlRotation(RinterpVal);
 
-	if (IsSprinting && !GetVelocity().IsZero()) {
+	if (IsDodging || IsSprinting && !GetVelocity().IsZero()) {
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		//bUseControllerRotationYaw = false;
 	}
