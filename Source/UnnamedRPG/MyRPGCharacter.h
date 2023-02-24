@@ -88,6 +88,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TArray<FName> AttackCombo;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	FName Finisher;
+
 	//Data Tables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UDataTable* AbilityTab;

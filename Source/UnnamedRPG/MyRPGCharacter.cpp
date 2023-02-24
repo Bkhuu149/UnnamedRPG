@@ -28,6 +28,8 @@ void AMyRPGCharacter::BeginPlay()
 	AttackCombo.Add(FName(TEXT("SwordAttack4")));
 	AttackCombo.Add(FName(TEXT("SwordAttack5")));
 
+	Finisher = FName(TEXT("SwordAttack2"));
+	
 
 }
 
@@ -235,7 +237,16 @@ void AMyRPGCharacter::ResetAttack() {
 }
 
 void AMyRPGCharacter::DoFinisher() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Finisher Pressed"));
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Finisher Pressed"));
+
+	FAttackStruct* FinisherAttack = AbilityTab->FindRow<FAttackStruct>(Finisher, "");
+	//If the attack is not a finisher, return for safety
+	if (!FinisherAttack->IsFinisher) { return; }
+
+	FGameplayAbilitySpec FinalAttack = FGameplayAbilitySpec(FinisherAttack->Attack.GetDefaultObject(), 1, 0);
+	AbilityComp->GiveAbilityAndActivateOnce(FinalAttack);
 	ResetAttack();
 }
 
@@ -314,7 +325,7 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 		CurrentLocation.Z = 0;
 		TargetLocation.Z = 0;
 		FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
-		FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 5.0);
+		FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 10.0);
 		SetActorRotation(CharacterRotationInterpVal);
 	}
 }
