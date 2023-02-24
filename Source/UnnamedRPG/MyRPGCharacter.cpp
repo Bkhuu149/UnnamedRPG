@@ -149,7 +149,7 @@ void AMyRPGCharacter::OnDodgePressed() {
 	IsDodging = true;
 	float duration = PlayAnimMontage(DodgeAnim);
 	GetWorld()->GetTimerManager().SetTimer(DodgeTimer, this, &AMyRPGCharacter::DodgeFinished, duration, false);
-	if (!IsSprinting)
+	if (Targeted && !IsSprinting)
 	{
 		SetActorRotation(GetActorRotation() + FVector(ForwardBackInputValue, RightLeftInputValue, 0).Rotation());
 	}
