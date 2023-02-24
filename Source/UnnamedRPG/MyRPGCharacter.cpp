@@ -149,7 +149,10 @@ void AMyRPGCharacter::OnDodgePressed() {
 	IsDodging = true;
 	float duration = PlayAnimMontage(DodgeAnim);
 	GetWorld()->GetTimerManager().SetTimer(DodgeTimer, this, &AMyRPGCharacter::DodgeFinished, duration, false);
-	SetActorRotation(GetActorRotation() + FVector(ForwardBackInputValue,RightLeftInputValue,0).Rotation());
+	if (!IsSprinting)
+	{
+		SetActorRotation(GetActorRotation() + FVector(ForwardBackInputValue, RightLeftInputValue, 0).Rotation());
+	}
 }
 
 void AMyRPGCharacter::DodgeFinished() {
@@ -314,17 +317,21 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 	FRotator CameraRotation = GetController()->GetControlRotation();
 	FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, LookAtRotation, DeltaTime, 10.0);
 	GetController()->SetControlRotation(RinterpVal);
-
+	CurrentLocation.Z = 0;
+	TargetLocation.Z = 0;
+	FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 	if (IsSprinting && !GetVelocity().IsZero()) {
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		//bUseControllerRotationYaw = false;
+		if (IsDodging) {
+			FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 1.f);
+			SetActorRotation(CharacterRotationInterpVal);
+		}
 	}
 	else {
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		//bUseControllerRotationYaw = true;
-		CurrentLocation.Z = 0;
-		TargetLocation.Z = 0;
-		FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
+
 
 		float LerpTime = (IsDodging) ? 1.f : 10.f;
 
