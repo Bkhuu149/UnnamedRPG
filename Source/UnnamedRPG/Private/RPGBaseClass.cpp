@@ -39,7 +39,6 @@ void ARPGBaseClass::DamageChar(float val) {
 		return;
 	}
 	Health -= val;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
 }
 
 void ARPGBaseClass::HealChar(float val) {
@@ -49,6 +48,5 @@ void ARPGBaseClass::HealChar(float val) {
 		return;
 	}
 	Health += val;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Healed: %f"), Health));
 }
 

@@ -349,10 +349,13 @@ void AMyRPGCharacter::ResetTarget() {
 
 void AMyRPGCharacter::DamageChar(float val) {
 	Super::DamageChar(val);
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
+
 }
 
 void AMyRPGCharacter::HealChar(float val) {
 	Super::HealChar(val);
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Healed: %f"), Health));
 }
 
 void AMyRPGCharacter::RestoreMana() {
