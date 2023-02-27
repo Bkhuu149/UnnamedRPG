@@ -109,7 +109,7 @@ void AMyRPGCharacter::MoveRightLeft(float value)
 
 void AMyRPGCharacter::OnBlockPressed() {
 	if (IsDodging) { return; }
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Blocked Pressed"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Blocked Pressed"));
 	//Start a timer to see how long this button was pressed to distinguish between blocking and parrying
 	IsBlocking = true;
 	PressedTime = FDateTime::Now().GetTicks();
@@ -135,7 +135,7 @@ void AMyRPGCharacter::OnBlockReleased() {
 void AMyRPGCharacter::OnHealPressed() {
 	if (IsDodging) { return; }
 	if (Mana < 100.0) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Not enough Mana"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Not enough Mana"));
 		return;
 	}
 	Mana = 0.0;
@@ -145,7 +145,7 @@ void AMyRPGCharacter::OnHealPressed() {
 
 void AMyRPGCharacter::OnDodgePressed() {
 	if (GetCharacterMovement()->IsFalling() || IsDodging) { return; }
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
 	IsDodging = true;
 	float duration = PlayAnimMontage(DodgeAnim);
 	GetWorld()->GetTimerManager().SetTimer(DodgeTimer, this, &AMyRPGCharacter::DodgeFinished, duration, false);
@@ -175,7 +175,7 @@ void AMyRPGCharacter::OnJumpedPressed() {
 }
 
 void AMyRPGCharacter::ReleaseJump() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Jump Released"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Jump Released"));
 	if (GetWorld()->GetTimerManager().IsTimerActive(JumpTimer)) {
 		GetWorld()->GetTimerManager().ClearTimer(JumpTimer);
 	}
@@ -185,7 +185,7 @@ void AMyRPGCharacter::ReleaseJump() {
 
 void AMyRPGCharacter::OnTargetPressed() {
 	if (IsDodging) { return; }
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Targeting"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Targeting"));
 	if (Targeted) {
 		ResetTarget();
 		return;
@@ -210,7 +210,7 @@ void AMyRPGCharacter::OnTargetPressed() {
 
 void AMyRPGCharacter::OnAttackPressed() {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
 	if (AttackCount >= CurrentMaxAttackCount) {
 		DoFinisher();
 		return;
@@ -234,7 +234,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 }
 
 void AMyRPGCharacter::ResetAttack() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack Reset"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack Reset"));
 	if (GetWorld()->GetTimerManager().IsTimerActive(AttackTimer)) {
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
 	}
@@ -348,23 +348,11 @@ void AMyRPGCharacter::ResetTarget() {
 }
 
 void AMyRPGCharacter::DamageChar(float val) {
-	if (Health - val < 0) {
-		Health = 0;
-		IsDead = true;
-		return;
-	}
-	Health -= val;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
+	Super::DamageChar(val);
 }
 
 void AMyRPGCharacter::HealChar(float val) {
-	if (val <= 0) { return; }
-	if (val > HealthMax - Health) {
-		Health = HealthMax;
-		return;
-	}
-	Health += val;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Healed: %f"), Health));
+	Super::HealChar(val);
 }
 
 void AMyRPGCharacter::RestoreMana() {

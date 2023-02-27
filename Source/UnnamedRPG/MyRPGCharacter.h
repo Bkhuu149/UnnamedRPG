@@ -10,6 +10,7 @@
 #include "CollisionQueryParams.h"
 #include "Engine/DataTable.h"
 #include "Animation/AnimMontage.h"
+#include "Public/RPGBaseClass.h"
 
 #include "Abilities/GameplayAbility_Montage.h"
 #include "AbilitySystemInterface.h"
@@ -39,7 +40,7 @@ struct FAttackStruct : public FTableRowBase
 };
 
 UCLASS()
-class UNNAMEDRPG_API AMyRPGCharacter : public ACharacter , public IAbilitySystemInterface
+class UNNAMEDRPG_API AMyRPGCharacter : public ARPGBaseClass , public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -67,8 +68,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool IsSprinting = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-		bool IsDead = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		int AttackCount = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool IsInteracting;
@@ -76,14 +75,6 @@ protected:
 		bool InMenu;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool InInventory;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-		float Health = 100.0;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-		float HealthMax = 100.0;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-		float Mana = 100.0;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-		float ManaMax = 100.0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TArray<FName> AttackCombo;
@@ -134,6 +125,8 @@ private:
 	void IncrementMana();
 	void RestoreMana();
 	FTimerHandle ManaTimer;
+	float Mana = 100.0;
+	float ManaMax = 100.0;
 
 	//Handle Dodge Input
 	void OnDodgePressed();
@@ -164,13 +157,13 @@ private:
 	//Handle Inventory Pressed
 	void OnInventoryPressed();
 
-	//Handle Health
-	void DamageChar(float val);
-	void HealChar(float val);
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	//Handle Health
+	virtual void DamageChar(float val) override;
+	virtual void HealChar(float val) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -187,8 +180,6 @@ public:
 
 	int GetAttackCount() { return AttackCount; }
 
-	float GetHealth() { return Health; }
-
 	bool GetIsInteracting() { return IsInteracting; }
 
 	bool GetIsInMenu() { return InMenu; }
@@ -199,7 +190,12 @@ public:
 
 	bool GetIsTargeted() { return Targeted; }
 
-	bool GetIsDead() { return IsDead; }
+	UFUNCTION(BlueprintCallable, Category = "Character Information")
+	float GetMana() { return Mana; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Information")
+	float GetManaMax() { return ManaMax; }
+
 
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
 };
