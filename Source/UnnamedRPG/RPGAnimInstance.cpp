@@ -22,7 +22,7 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	Velocity = MoveComp->Velocity;
 	GroundSpeed = ((FVector2D)Velocity).Length();
 	Acceleration = MoveComp->GetCurrentAcceleration();
-	ShouldMove = (Acceleration != FVector(0, 0, 0)) && (GroundSpeed > 3);
+	ShouldMove = (Velocity != FVector(0, 0, 0)) && (GroundSpeed > 3);
 	IsFalling = MoveComp->IsFalling();
 	IsSprinting = Character->GetIsSprinting();
 	
