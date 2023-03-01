@@ -149,18 +149,18 @@ void AMyRPGCharacter::OnDodgePressed() {
 	IsDodging = true;
 	float duration = PlayAnimMontage(DodgeAnim);
 	GetWorld()->GetTimerManager().SetTimer(DodgeTimer, this, &AMyRPGCharacter::DodgeFinished, duration, false);
+	if (ForwardBackInputValue < 0) {
+		IsBackDodging = true;
+	}
 	if (Targeted && !IsSprinting)
 	{
-		if (ForwardBackInputValue < 0) {
-			IsDodgingAway = true;
-		}
 		SetActorRotation(GetActorRotation() + FVector(ForwardBackInputValue, RightLeftInputValue, 0).Rotation());
 	}
 }
 
 void AMyRPGCharacter::DodgeFinished() {
 	IsDodging = false;
-	IsDodgingAway = false;
+	IsBackDodging = false;
 	if (DodgeTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(DodgeTimer);
 		DodgeTimer.Invalidate();
@@ -327,24 +327,16 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 	CurrentLocation.Z = 0;
 	TargetLocation.Z = 0;
 	FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
-	if (IsSprinting && !GetVelocity().IsZero()) {
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-		//bUseControllerRotationYaw = false;
-		if (IsDodging) {
-			FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 1.f);
-			SetActorRotation(CharacterRotationInterpVal);
-		}
-	}
-	else {
-		GetCharacterMovement()->bOrientRotationToMovement = false;
-		//bUseControllerRotationYaw = true;
 
-		if (!IsDodgingAway)
-		{
-			float LerpTime = (IsDodging) ? 1.f : 10.f;
-			FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, LerpTime);
-			SetActorRotation(CharacterRotationInterpVal);
-		}
+	bool IsSprintandMove = IsSprinting && !GetVelocity().IsZero();
+
+	GetCharacterMovement()->bOrientRotationToMovement = (IsSprintandMove) ? true : false;
+
+	if (!IsSprintandMove && !IsBackDodging) {
+		float LerpTime = (IsDodging) ? 1.f : 10.f;
+		FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, LerpTime);
+		SetActorRotation(CharacterRotationInterpVal);
+		
 	}
 }
 

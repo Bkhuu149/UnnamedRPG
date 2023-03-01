@@ -132,7 +132,7 @@ private:
 	void OnDodgePressed();
 	void DodgeFinished();
 	FTimerHandle DodgeTimer;
-	bool IsDodgingAway = false;
+	bool IsBackDodging = false;
 
 	//Handle Sprint Input
 	void OnSprintPressed();
