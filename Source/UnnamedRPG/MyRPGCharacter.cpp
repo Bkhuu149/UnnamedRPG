@@ -206,6 +206,9 @@ void AMyRPGCharacter::OnTargetPressed() {
 	HitResult = GetWorld()->SweepSingleByChannel(OutHit, TraceStart, TraceEnd, FVector(0, 0, 0).ToOrientationQuat(), 
 		ECC_GameTraceChannel1, MyColSphere, Params);
 
+	Target = OutHit.HitObjectHandle.FetchActor();
+
+	Targeted = HitResult;
 }
 
 void AMyRPGCharacter::OnAttackPressed() {
