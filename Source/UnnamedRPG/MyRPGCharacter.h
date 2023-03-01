@@ -132,6 +132,7 @@ private:
 	void OnDodgePressed();
 	void DodgeFinished();
 	FTimerHandle DodgeTimer;
+	bool IsDodgingAway = false;
 
 	//Handle Sprint Input
 	void OnSprintPressed();
@@ -156,6 +157,7 @@ private:
 
 	//Handle Inventory Pressed
 	void OnInventoryPressed();
+
 
 public:	
 	// Called every frame

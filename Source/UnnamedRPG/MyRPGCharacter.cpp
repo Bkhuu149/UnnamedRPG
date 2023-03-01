@@ -151,12 +151,16 @@ void AMyRPGCharacter::OnDodgePressed() {
 	GetWorld()->GetTimerManager().SetTimer(DodgeTimer, this, &AMyRPGCharacter::DodgeFinished, duration, false);
 	if (Targeted && !IsSprinting)
 	{
+		if (ForwardBackInputValue < 0) {
+			IsDodgingAway = true;
+		}
 		SetActorRotation(GetActorRotation() + FVector(ForwardBackInputValue, RightLeftInputValue, 0).Rotation());
 	}
 }
 
 void AMyRPGCharacter::DodgeFinished() {
 	IsDodging = false;
+	IsDodgingAway = false;
 	if (DodgeTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(DodgeTimer);
 		DodgeTimer.Invalidate();
@@ -335,11 +339,12 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		//bUseControllerRotationYaw = true;
 
-
-		float LerpTime = (IsDodging) ? 1.f : 10.f;
-
-		FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, LerpTime);
-		SetActorRotation(CharacterRotationInterpVal);
+		if (!IsDodgingAway)
+		{
+			float LerpTime = (IsDodging) ? 1.f : 10.f;
+			FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, LerpTime);
+			SetActorRotation(CharacterRotationInterpVal);
+		}
 	}
 }
 
