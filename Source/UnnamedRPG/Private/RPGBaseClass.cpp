@@ -36,9 +36,7 @@ void ARPGBaseClass::DamageChar(float val) {
 	if (Health - val <= 0) {
 		Health = 0;
 		IsDead = true;
-
-
-		UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, 2)];
+		UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, DeathAnims.Num())];
 
 		PlayAnimMontage(DeathMontage);
 		return;
