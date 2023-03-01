@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Animation/AnimMontage.h"
 #include "RPGBaseClass.generated.h"
 
 UCLASS()
@@ -48,5 +49,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Character Information")
 	float GetHealthMax() { return HealthMax; }
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Animations")
+	TArray<UAnimMontage*> DeathAnims;
 
 };

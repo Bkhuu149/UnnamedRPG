@@ -108,7 +108,7 @@ void AMyRPGCharacter::MoveRightLeft(float value)
 }
 
 void AMyRPGCharacter::OnBlockPressed() {
-	if (IsDodging) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Blocked Pressed"));
 	//Start a timer to see how long this button was pressed to distinguish between blocking and parrying
 	IsBlocking = true;
@@ -133,7 +133,7 @@ void AMyRPGCharacter::OnBlockReleased() {
 }
 
 void AMyRPGCharacter::OnHealPressed() {
-	if (IsDodging) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	if (Mana < 100.0) {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Not enough Mana"));
 		return;
@@ -144,7 +144,7 @@ void AMyRPGCharacter::OnHealPressed() {
 }
 
 void AMyRPGCharacter::OnDodgePressed() {
-	if (GetCharacterMovement()->IsFalling() || IsDodging) { return; }
+	if (GetCharacterMovement()->IsFalling() || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
 	IsDodging = true;
 	float duration = PlayAnimMontage(DodgeAnim);
@@ -165,7 +165,7 @@ void AMyRPGCharacter::DodgeFinished() {
 
 void AMyRPGCharacter::OnJumpedPressed() {
 	bool falling = GetCharacterMovement()->IsFalling();
-	if (falling || IsDodging) {
+	if (falling || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) {
 		return;
 	}
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Jump"));
@@ -280,7 +280,7 @@ void AMyRPGCharacter::OnInventoryPressed() {
 }
 
 void AMyRPGCharacter::OnSprintPressed() {
-	if (IsDodging) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Sprinting"));
 	SprintMultiplier = 3.f;
 	IsSprinting = true;
@@ -354,11 +354,13 @@ void AMyRPGCharacter::DamageChar(float val) {
 }
 
 void AMyRPGCharacter::HealChar(float val) {
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	Super::HealChar(val);
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Healed: %f"), Health));
 }
 
 void AMyRPGCharacter::RestoreMana() {
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	if (Mana < ManaMax) {
 		Mana += .5;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Mana: %f"), Mana));

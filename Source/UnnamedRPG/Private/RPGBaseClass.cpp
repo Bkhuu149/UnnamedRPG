@@ -33,9 +33,14 @@ void ARPGBaseClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 }
 
 void ARPGBaseClass::DamageChar(float val) {
-	if (Health - val < 0) {
+	if (Health - val <= 0) {
 		Health = 0;
 		IsDead = true;
+
+
+		UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, 2)];
+
+		PlayAnimMontage(DeathMontage);
 		return;
 	}
 	Health -= val;
