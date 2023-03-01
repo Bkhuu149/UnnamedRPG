@@ -95,6 +95,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* BlockAnim;
 
+	UClass* WeaponClass;
 
 private:
 	//TO BE REMOVED LATER, LEFT IN FOR TESTING DAMAGE

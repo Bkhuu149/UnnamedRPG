@@ -223,7 +223,6 @@ void AMyRPGCharacter::OnAttackPressed() {
 		return;
 	}
 
-
 	FAttackStruct* TestAttack = AbilityTab->FindRow<FAttackStruct>(AttackCombo[AttackCount], "");
 
 	FGameplayAbilitySpec Test = FGameplayAbilitySpec(TestAttack->Attack.GetDefaultObject(), 1, 0);
