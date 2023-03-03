@@ -82,6 +82,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	FName Finisher;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	UClass* WeaponClass;
+
 	//Data Tables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UDataTable* AbilityTab;
@@ -94,8 +97,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* BlockAnim;
-
-	UClass* WeaponClass;
 
 private:
 	//TO BE REMOVED LATER, LEFT IN FOR TESTING DAMAGE
@@ -144,6 +145,7 @@ private:
 	void OnAttackPressed();
 	int CurrentMaxAttackCount = 3;
 	void ResetAttack();
+	AActor* Weapon;
 	FTimerHandle AttackTimer; 
 
 

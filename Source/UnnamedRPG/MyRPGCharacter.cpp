@@ -222,11 +222,24 @@ void AMyRPGCharacter::OnAttackPressed() {
 		DoFinisher();
 		return;
 	}
+	
+	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
+	Weapon = GetWorld()->SpawnActor<AActor>(WeaponClass, WeaponTransform);
+	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 
 	FAttackStruct* TestAttack = AbilityTab->FindRow<FAttackStruct>(AttackCombo[AttackCount], "");
 
 	FGameplayAbilitySpec Test = FGameplayAbilitySpec(TestAttack->Attack.GetDefaultObject(), 1, 0);
 	AbilityComp->GiveAbilityAndActivateOnce(Test);
+
+	FTimerHandle AnimTimer;
+	GetWorld()->GetTimerManager().SetTimer(AnimTimer, [&]() {
+		if (Weapon != nullptr) {
+			GetWorld()->DestroyActor(Weapon);
+		}
+		GetWorld()->GetTimerManager().ClearTimer(AnimTimer);
+		AnimTimer.Invalidate();
+	}, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength(), false);
 
 	AttackCount++;
 
@@ -235,8 +248,6 @@ void AMyRPGCharacter::OnAttackPressed() {
 		AttackTimer.Invalidate();
 	}
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() + 2.f, false);
-	
-
 }
 
 void AMyRPGCharacter::ResetAttack() {
