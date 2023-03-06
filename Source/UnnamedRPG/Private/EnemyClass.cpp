@@ -34,6 +34,11 @@ void AEnemyClass::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	if (Targeted) {
+		if (FVector::Distance(Target->GetActorLocation(), SpawnLocation) > 1000.f) {
+			ResetTarget();
+			return;
+		}
+		Walk();
 
 	}
 	else {
@@ -47,14 +52,19 @@ void AEnemyClass::Tick(float DeltaTime)
 
 void AEnemyClass::Walk() {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Walk"));
-	
+	//MyController->MoveToLocation(Target->GetActorLocation(), 100.f);
 	DelayTimer.Invalidate();
+}
+
+void AEnemyClass::ResetTarget() {
+	Targeted = false;
+	Target = nullptr;
 }
 
 
 void AEnemyClass::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor && (OtherActor != this) && OtherComp)
+	if (OtherActor && (OtherActor != this) && OtherComp && static_cast<AMyRPGCharacter*>(OtherActor))
 	{
 		Targeted = true;
 		Target = OtherActor;

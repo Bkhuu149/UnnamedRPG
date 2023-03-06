@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "RPGBaseClass.h"
 #include "AIController.h"
+#include "../MyRPGCharacter.h"
 #include "EnemyClass.generated.h"
 
 UCLASS()
@@ -36,6 +37,8 @@ private:
 	AAIController* MyController;
 
 	void Walk();
+
+	void ResetTarget();
 
 public: 
 	// Called every frame
