@@ -23,8 +23,10 @@ AEnemyClass::AEnemyClass()
 void AEnemyClass::BeginPlay()
 {
 	Super::BeginPlay();
+	//Set spawn location to get center of walk radius
 	SpawnLocation = GetActorLocation();
 	MyController = static_cast<AAIController*>(GetController());
+	NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
 
 
 }
@@ -33,30 +35,50 @@ void AEnemyClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+
+	//If Targeted, approach target. Else, walk to random point within spawn radius
 	if (Targeted) {
+		DelayTimer.Invalidate();
 		if (FVector::Distance(Target->GetActorLocation(), SpawnLocation) > 1000.f) {
 			ResetTarget();
 			return;
 		}
 		Walk();
-
 	}
 	else {
 		if (!DelayTimer.IsValid()){
 			GetWorld()->GetTimerManager().SetTimer(DelayTimer, this, &AEnemyClass::Walk, 10.f, false);
 		}
 	}
-
-
 }
 
 void AEnemyClass::Walk() {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Walk"));
-	//MyController->MoveToLocation(Target->GetActorLocation(), 100.f);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Walk"));
+
+	//if Target, walk to target.  Else, go to random point
+	FVector Location;
+	
+	//Determine where the enemy should walk
+	if (Target) {
+		Location = Target->GetActorLocation();
+	} 
+	else {
+		if (!NavSys)
+		{
+			return;
+		}
+		FNavLocation ReachableLocation;
+		NavSys->GetRandomReachablePointInRadius(SpawnLocation, 1000.f, ReachableLocation);
+		Location = ReachableLocation.Location;
+	}
+
+	//Walk to location
+	MyController->MoveToLocation(Location, 100.f);
 	DelayTimer.Invalidate();
 }
 
 void AEnemyClass::ResetTarget() {
+	//Call to reset target values
 	Targeted = false;
 	Target = nullptr;
 }
@@ -69,6 +91,7 @@ void AEnemyClass::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, clas
 		Targeted = true;
 		Target = OtherActor;
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
+		Walk();
 	}
 }
 

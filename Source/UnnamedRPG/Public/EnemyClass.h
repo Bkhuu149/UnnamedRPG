@@ -6,6 +6,7 @@
 #include "RPGBaseClass.h"
 #include "AIController.h"
 #include "../MyRPGCharacter.h"
+#include "NavigationSystem.h"
 #include "EnemyClass.generated.h"
 
 UCLASS()
@@ -35,6 +36,8 @@ private:
 	FTimerHandle DelayTimer;
 
 	AAIController* MyController;
+
+	UNavigationSystemV1* NavSys;
 
 	void Walk();
 
