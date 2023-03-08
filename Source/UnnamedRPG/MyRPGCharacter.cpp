@@ -223,23 +223,23 @@ void AMyRPGCharacter::OnAttackPressed() {
 		return;
 	}
 	
-	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
-	Weapon = GetWorld()->SpawnActor<AActor>(WeaponClass, WeaponTransform);
-	Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
-
 	FAttackStruct* TestAttack = AbilityTab->FindRow<FAttackStruct>(AttackCombo[AttackCount], "");
+	
+	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
+	CurrentWeapon = GetWorld()->SpawnActor<AActor>(TestAttack->Weapon, WeaponTransform);
+	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 
 	FGameplayAbilitySpec Test = FGameplayAbilitySpec(TestAttack->Attack.GetDefaultObject(), 1, 0);
 	AbilityComp->GiveAbilityAndActivateOnce(Test);
 
 	FTimerHandle AnimTimer;
 	GetWorld()->GetTimerManager().SetTimer(AnimTimer, [&]() {
-		if (Weapon != nullptr) {
-			GetWorld()->DestroyActor(Weapon);
+		if (CurrentWeapon != nullptr) {
+			GetWorld()->DestroyActor(CurrentWeapon);
 		}
 		GetWorld()->GetTimerManager().ClearTimer(AnimTimer);
 		AnimTimer.Invalidate();
-	}, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength(), false);
+	}, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() * 0.9, false);
 
 	AttackCount++;
 
@@ -266,6 +266,19 @@ void AMyRPGCharacter::DoFinisher() {
 	FAttackStruct* FinisherAttack = AbilityTab->FindRow<FAttackStruct>(Finisher, "");
 	//If the attack is not a finisher, return for safety
 	if (!FinisherAttack->IsFinisher) { return; }
+
+	FTimerHandle AnimTimer;
+	GetWorld()->GetTimerManager().SetTimer(AnimTimer, [&]() {
+		if (CurrentWeapon != nullptr) {
+			GetWorld()->DestroyActor(CurrentWeapon);
+		}
+		GetWorld()->GetTimerManager().ClearTimer(AnimTimer);
+		AnimTimer.Invalidate();
+	}, FinisherAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() * 0.9, false);
+
+	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
+	CurrentWeapon = GetWorld()->SpawnActor<AActor>(FinisherAttack->Weapon, WeaponTransform);
+	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 
 	FGameplayAbilitySpec FinalAttack = FGameplayAbilitySpec(FinisherAttack->Attack.GetDefaultObject(), 1, 0);
 	AbilityComp->GiveAbilityAndActivateOnce(FinalAttack);

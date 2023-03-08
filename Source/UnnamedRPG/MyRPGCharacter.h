@@ -35,7 +35,7 @@ struct FAttackStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool IsFinisher = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UStaticMesh* WeaponMesh = nullptr;
+	UClass* Weapon = nullptr;
 
 };
 
@@ -145,7 +145,7 @@ private:
 	void OnAttackPressed();
 	int CurrentMaxAttackCount = 3;
 	void ResetAttack();
-	AActor* Weapon;
+	AActor* CurrentWeapon;
 	FTimerHandle AttackTimer; 
 
 
