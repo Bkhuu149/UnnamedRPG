@@ -94,7 +94,7 @@ void AMyRPGCharacter::MoveForwardBack(float value)
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-	Direction.Z = 0;
+	Direction.Normalize();
 	if (RightLeftInputValue != 0) {
 		value = value * .7071;
 	}
