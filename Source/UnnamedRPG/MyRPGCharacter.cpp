@@ -22,10 +22,10 @@ void AMyRPGCharacter::BeginPlay()
 
 	//CAN ONLY HAVE 3 Attacks for now
 	//AttackCombo.Add(FName(TEXT("GreatSwordAttack1")));
-	AttackCombo.Add(FName(TEXT("GreatSwordAttack6")));
 	AttackCombo.Add(FName(TEXT("GreatSwordAttack3")));
-	AttackCombo.Add(FName(TEXT("GreatSwordAttack5")));
-	//AttackCombo.Add(FName(TEXT("SwordAttack1")));
+	//AttackCombo.Add(FName(TEXT("GreatSwordAttack5")));
+	//AttackCombo.Add(FName(TEXT("GreatSwordAttack6")));
+	AttackCombo.Add(FName(TEXT("SwordAttack1")));
 	//AttackCombo.Add(FName(TEXT("SwordAttack2")));
 	//AttackCombo.Add(FName(TEXT("SwordAttack3")));
 	//AttackCombo.Add(FName(TEXT("SwordAttack4")));
@@ -34,8 +34,8 @@ void AMyRPGCharacter::BeginPlay()
 	//FINISHERS ONLY 1
 	//Finisher = FName(TEXT("SwordAttack2"));
 	//Finisher = FName(TEXT("GreatSwordAttack2"));
-	//Finisher = FName(TEXT("GreatSwordAttack4"));
-	Finisher = FName(TEXT("GreatSwordAttack7"));
+	Finisher = FName(TEXT("GreatSwordAttack4"));
+	//Finisher = FName(TEXT("GreatSwordAttack7"));
 
 }
 
