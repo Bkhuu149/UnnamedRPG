@@ -93,6 +93,7 @@ void AMyRPGCharacter::KILL() {
 void AMyRPGCharacter::MoveForwardBack(float value) 
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	IsAttacking = false;
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
 	Direction.Z = 0;
 	Direction.Normalize();
@@ -106,6 +107,7 @@ void AMyRPGCharacter::MoveForwardBack(float value)
 void AMyRPGCharacter::MoveRightLeft(float value)
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	IsAttacking = false;
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
 	Direction.Z = 0;
 	if (ForwardBackInputValue != 0) {
