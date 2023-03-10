@@ -147,6 +147,7 @@ private:
 	void ResetAttack();
 	AActor* CurrentWeapon;
 	FTimerHandle AttackTimer; 
+	bool IsAttacking = false;
 
 
 	//Handle Finisher Pressed

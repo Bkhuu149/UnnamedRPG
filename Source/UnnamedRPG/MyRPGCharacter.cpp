@@ -22,8 +22,8 @@ void AMyRPGCharacter::BeginPlay()
 
 	//CAN ONLY HAVE 3 Attacks for now
 	//AttackCombo.Add(FName(TEXT("GreatSwordAttack1")));
-	//AttackCombo.Add(FName(TEXT("GreatSwordAttack3")));
-	AttackCombo.Add(FName(TEXT("SwordAttack1")));
+	AttackCombo.Add(FName(TEXT("GreatSwordAttack3")));
+	//AttackCombo.Add(FName(TEXT("SwordAttack1")));
 	//AttackCombo.Add(FName(TEXT("GreatSwordAttack5")));
 	AttackCombo.Add(FName(TEXT("SwordAttack4")));
 	AttackCombo.Add(FName(TEXT("GreatSwordAttack6")));
@@ -33,8 +33,8 @@ void AMyRPGCharacter::BeginPlay()
 
 	//FINISHERS ONLY 1
 	//Finisher = FName(TEXT("SwordAttack2"));
-	//Finisher = FName(TEXT("GreatSwordAttack2"));
-	Finisher = FName(TEXT("GreatSwordAttack4"));
+	Finisher = FName(TEXT("GreatSwordAttack2"));
+	//Finisher = FName(TEXT("GreatSwordAttack4"));
 	//Finisher = FName(TEXT("GreatSwordAttack7"));
 
 }
@@ -94,6 +94,7 @@ void AMyRPGCharacter::MoveForwardBack(float value)
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+	Direction.Z = 0;
 	Direction.Normalize();
 	if (RightLeftInputValue != 0) {
 		value = value * .7071;
@@ -246,7 +247,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 		GetWorld()->GetTimerManager().ClearTimer(AnimTimer);
 		AnimTimer.Invalidate();
 	}, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() * 0.9, false);
-
+	IsAttacking = true;
 	AttackCount++;
 
 	if (AttackTimer.IsValid()) {
@@ -262,6 +263,7 @@ void AMyRPGCharacter::ResetAttack() {
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
 	}
 	AttackCount = 0;
+	IsAttacking = false;
 }
 
 void AMyRPGCharacter::DoFinisher() {
@@ -287,8 +289,11 @@ void AMyRPGCharacter::DoFinisher() {
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 
 	FGameplayAbilitySpec FinalAttack = FGameplayAbilitySpec(FinisherAttack->Attack.GetDefaultObject(), 1, 0);
+	IsAttacking = true;
 	AbilityComp->GiveAbilityAndActivateOnce(FinalAttack);
-	ResetAttack();
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, FinisherAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength(), false);
+
+	//ResetAttack();
 }
 
 void AMyRPGCharacter::OnInteractPressed() {
@@ -359,9 +364,9 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 
 	bool IsSprintandMove = IsSprinting && !GetVelocity().IsZero();
 
-	GetCharacterMovement()->bOrientRotationToMovement = (IsSprintandMove) ? true : false;
+	GetCharacterMovement()->bOrientRotationToMovement = (IsSprintandMove && !IsAttacking) ? true : false;
 
-	if (!IsSprintandMove && !IsBackDodging) {
+	if ((!(IsSprintandMove || IsBackDodging || IsAttacking))) {
 		float LerpTime = (IsDodging) ? 1.f : 10.f;
 		FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, LerpTime);
 		SetActorRotation(CharacterRotationInterpVal);
