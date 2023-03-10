@@ -364,7 +364,7 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 
 	bool IsSprintandMove = IsSprinting && !GetVelocity().IsZero();
 
-	GetCharacterMovement()->bOrientRotationToMovement = (IsSprintandMove && !IsAttacking) ? true : false;
+	GetCharacterMovement()->bOrientRotationToMovement = (IsSprintandMove) ? true : false;
 
 	if ((!(IsSprintandMove || IsBackDodging || IsAttacking))) {
 		float LerpTime = (IsDodging) ? 1.f : 10.f;
