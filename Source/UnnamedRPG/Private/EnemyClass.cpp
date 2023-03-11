@@ -34,8 +34,7 @@ void AEnemyClass::BeginPlay()
 void AEnemyClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-
+	if (IsDead) { return; }
 	//If Targeted, approach target. Else, walk to random point within spawn radius
 	if (Targeted) {
 		DelayTimer.Invalidate();
@@ -54,6 +53,10 @@ void AEnemyClass::Tick(float DeltaTime)
 
 void AEnemyClass::Walk() {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Walk"));
+
+	if (IsDead) {
+		return;
+	}
 
 	//if Target, walk to target.  Else, go to random point
 	FVector Location;
