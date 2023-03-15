@@ -33,6 +33,7 @@ void ARPGBaseClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 }
 
 void ARPGBaseClass::DamageChar(float val) {
+	if (IsDead) { return; }
 	if (Health - val <= 0) {
 		Health = 0;
 		IsDead = true;
