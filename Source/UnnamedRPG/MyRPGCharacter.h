@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Kismet/GameplayStatics.h" 
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CollisionQueryParams.h"
@@ -148,6 +149,11 @@ private:
 	AActor* CurrentWeapon;
 	FTimerHandle AttackTimer; 
 	bool IsAttacking = false;
+
+	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
+	void BeginSwordEvent();
+	UFUNCTION(BlueprintCallable, category = "MyRPGCharacter")
+	void EndSwordEvent();
 
 
 	//Handle Finisher Pressed

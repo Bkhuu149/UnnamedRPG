@@ -249,6 +249,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 		GetWorld()->GetTimerManager().ClearTimer(AnimTimer);
 		AnimTimer.Invalidate();
 	}, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() * 0.9, false);
+
 	IsAttacking = true;
 	AttackCount++;
 
@@ -257,6 +258,14 @@ void AMyRPGCharacter::OnAttackPressed() {
 		AttackTimer.Invalidate();
 	}
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() + 2.f, false);
+}
+
+void AMyRPGCharacter::BeginSwordEvent() {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("lol"));
+}
+
+void AMyRPGCharacter::EndSwordEvent() {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("lmao"));
 }
 
 void AMyRPGCharacter::ResetAttack() {
