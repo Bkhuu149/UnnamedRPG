@@ -9,7 +9,6 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CollisionQueryParams.h"
-#include "Engine/DataTable.h"
 #include "Animation/AnimMontage.h"
 #include "Public/RPGBaseClass.h"
 
@@ -19,6 +18,7 @@
 #include "AbilitySystemComponent.h"
 
 #include "Engine/GameEngine.h"
+#include "Engine/DataTable.h"
 #include "MyRPGCharacter.generated.h"
 
 
@@ -144,10 +144,12 @@ private:
 
 	//Handle Attack Pressed
 	void OnAttackPressed();
-	int CurrentMaxAttackCount = 3;
+	void WeaponLineTrace();
 	void ResetAttack();
 	AActor* CurrentWeapon;
 	FTimerHandle AttackTimer; 
+	FTimerHandle ColTimer;
+	int CurrentMaxAttackCount = 3;
 	bool IsAttacking = false;
 
 	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")

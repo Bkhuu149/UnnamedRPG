@@ -264,10 +264,21 @@ void AMyRPGCharacter::OnAttackPressed() {
 
 void AMyRPGCharacter::BeginSwordEvent() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("lol"));
+	//GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AMyRPGCharacter::WeaponLineTrace, 0.01, true);
 }
 
 void AMyRPGCharacter::EndSwordEvent() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("lmao"));
+}
+
+void AMyRPGCharacter::WeaponLineTrace() {
+	UActorComponent* WeaponComponent = CurrentWeapon->GetComponentByClass(UStaticMeshComponent::StaticClass());
+	UStaticMeshComponent* WeaponMesh = Cast<UStaticMeshComponent>(WeaponComponent);
+	FVector StartSocket = WeaponMesh->GetSocketLocation("Start");
+	FVector EndSocket = WeaponMesh->GetSocketLocation("End");
+	FHitResult OutHit;
+	TArray<AActor*> IgnoreList;
+	UKismetSystemLibrary::LineTraceSingle(nullptr, StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
 }
 
 void AMyRPGCharacter::ResetAttack() {
