@@ -46,7 +46,9 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FocusTarget(DeltaTime);
+	if (Targeted) {
+		FocusTarget(DeltaTime);
+	}
 
 	ForwardBackInputValue = GetInputAxisValue("ForwardBack");
 	RightLeftInputValue = GetInputAxisValue("RightLeft");
@@ -369,7 +371,7 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 		ResetTarget();
 		return;
 	}
-	
+
 	FVector CurrentLocation = GetActorLocation();
 	FVector TargetLocation = Target->GetActorLocation();
 	float Distance = (CurrentLocation - TargetLocation).Length();
