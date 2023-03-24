@@ -76,6 +76,10 @@ protected:
 		bool InMenu;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool InInventory;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		float ForwardBackInputValue;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		float RightLeftInputValue;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TArray<FName> AttackCombo;
@@ -104,8 +108,6 @@ private:
 	void KILL();
 
 	//Util values
-	float ForwardBackInputValue;
-	float RightLeftInputValue;
 
 	//Handle Jump Input
 	void OnJumpedPressed();
