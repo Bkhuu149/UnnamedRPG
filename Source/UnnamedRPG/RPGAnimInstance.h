@@ -23,7 +23,9 @@ class UNNAMEDRPG_API URPGAnimInstance : public UAnimInstance
 
 public:
 
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
 	AMyRPGCharacter* Character;
+
 	UCharacterMovementComponent* MoveComp;
 
 	virtual void NativeInitializeAnimation() override;
@@ -57,6 +59,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	float LeftRightValue = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	bool IsPushing = false;
 private:
 	void CalculateMovementInput();
 };
