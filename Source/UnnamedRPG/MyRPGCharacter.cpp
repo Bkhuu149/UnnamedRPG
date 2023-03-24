@@ -285,7 +285,9 @@ void AMyRPGCharacter::WeaponLineTrace() {
 	FVector StartSocket = WeaponMesh->GetSocketLocation("Start");
 	FVector EndSocket = WeaponMesh->GetSocketLocation("End");
 	FHitResult OutHit;
+	AActor* tableinit[] = { this }; // Add self to ignore list
 	TArray<AActor*> IgnoreList;
+	IgnoreList.Append(tableinit);
 	UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
 	UGameplayStatics::ApplyDamage(OutHit.GetActor(), 5.f, NULL, NULL, NULL);
 }
