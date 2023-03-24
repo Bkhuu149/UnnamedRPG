@@ -22,11 +22,11 @@ void AMyRPGCharacter::BeginPlay()
 
 	//CAN ONLY HAVE 3 Attacks for now
 	AttackCombo.Add(FName(TEXT("SpearAttack1")));
-	AttackCombo.Add(FName(TEXT("SpearAttack2")));
+	//AttackCombo.Add(FName(TEXT("SpearAttack2")));
 	//AttackCombo.Add(FName(TEXT("GreatSwordAttack1")));
 	//AttackCombo.Add(FName(TEXT("GreatSwordAttack3")));
 	AttackCombo.Add(FName(TEXT("SwordAttack1")));
-	//AttackCombo.Add(FName(TEXT("GreatSwordAttack5")));
+	AttackCombo.Add(FName(TEXT("GreatSwordAttack5")));
 	//AttackCombo.Add(FName(TEXT("SwordAttack4")));
 	//AttackCombo.Add(FName(TEXT("GreatSwordAttack6")));
 	//AttackCombo.Add(FName(TEXT("SwordAttack2")));
