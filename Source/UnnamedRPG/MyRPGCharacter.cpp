@@ -268,11 +268,15 @@ void AMyRPGCharacter::OnAttackPressed() {
 
 void AMyRPGCharacter::BeginSwordEvent() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("lol"));
-	//GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AMyRPGCharacter::WeaponLineTrace, 0.01, true);
+	GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AMyRPGCharacter::WeaponLineTrace, 0.01, true);
 }
 
 void AMyRPGCharacter::EndSwordEvent() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("lmao"));
+	if (ColTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(ColTimer);
+		ColTimer.Invalidate();
+	}
 }
 
 void AMyRPGCharacter::WeaponLineTrace() {
@@ -282,7 +286,8 @@ void AMyRPGCharacter::WeaponLineTrace() {
 	FVector EndSocket = WeaponMesh->GetSocketLocation("End");
 	FHitResult OutHit;
 	TArray<AActor*> IgnoreList;
-	UKismetSystemLibrary::LineTraceSingle(nullptr, StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
+	UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
+	UGameplayStatics::ApplyDamage(OutHit.GetActor(), 5.f, NULL, NULL, NULL);
 }
 
 void AMyRPGCharacter::ResetAttack() {
