@@ -25,6 +25,9 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	ShouldMove = (Velocity != FVector(0, 0, 0)) && (GroundSpeed > 3);
 	IsFalling = MoveComp->IsFalling();
 	IsSprinting = Character->GetIsSprinting();
+	if (IsPushing) {
+		PushingDirection = Character->GetInputAxisValue("ForwardBack");
+	}
 	
 	//Only care about this value because untargeted, the player rotates to where they move
 	//while when targeted, the player moves relative to what they are targeting - Brian

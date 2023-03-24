@@ -62,6 +62,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	bool IsPushing = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	float PushingDirection = 0.f;
 private:
 	void CalculateMovementInput();
 };
