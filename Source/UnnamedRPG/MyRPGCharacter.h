@@ -16,6 +16,7 @@
 #include "AbilitySystemInterface.h"
 #include "GameplayAbilitySpec.h"
 #include "AbilitySystemComponent.h"
+#include "Public/MyPushComponent.h"
 
 #include "Engine/GameEngine.h"
 #include "Engine/DataTable.h"
@@ -55,6 +56,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 		UAbilitySystemComponent* AbilityComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interacts")
+		UMyPushComponent* PushComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool Targeted;
@@ -196,6 +200,7 @@ public:
 
 	int GetAttackCount() { return AttackCount; }
 
+	void SetIsInteracting(bool value) { IsInteracting = value; }
 	bool GetIsInteracting() { return IsInteracting; }
 
 	bool GetIsInMenu() { return InMenu; }
@@ -214,5 +219,6 @@ public:
 
 
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
+	UMyPushComponent* GetPushComponent() const { return PushComp; }
 };
 

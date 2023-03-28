@@ -10,7 +10,7 @@ AMyRPGCharacter::AMyRPGCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AbilityComp = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
-
+	PushComp = CreateDefaultSubobject<UMyPushComponent>(TEXT("Push Component"));
 }
 
 // Called when the game starts or when spawned
