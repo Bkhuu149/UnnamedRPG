@@ -7,6 +7,7 @@
 #include "PushableActor.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "MyPushComponent.generated.h"
 
 class AMyRPGCharacter;
@@ -37,7 +38,9 @@ public:
 	bool IsPushingObject() { return IsValid(CurrentPushable); }
 	float GetPushableHeight();
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")
 	float PushSpeed = 2.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")
 	float PushRange = 120.f;
 		
 };
