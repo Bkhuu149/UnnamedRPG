@@ -39,9 +39,13 @@ private:
 
 	UNavigationSystemV1* NavSys;
 
+	EPathFollowingRequestResult::Type FollowResult;
+
 	void Walk();
 
 	void ResetTarget();
+
+	void Attack();
 
 public: 
 	// Called every frame

@@ -35,6 +35,11 @@ void AEnemyClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if (IsDead) { return; }
+
+	// If already at target, stop and attack
+	if (FollowResult == EPathFollowingRequestResult::AlreadyAtGoal) {
+		Attack();
+	}
 	//If Targeted, approach target. Else, walk to random point within spawn radius
 	if (Targeted) {
 		DelayTimer.Invalidate();
@@ -43,8 +48,7 @@ void AEnemyClass::Tick(float DeltaTime)
 			return;
 		}
 		Walk();
-	}
-	else {
+	} else {
 		if (!DelayTimer.IsValid()){
 			GetWorld()->GetTimerManager().SetTimer(DelayTimer, this, &AEnemyClass::Walk, 10.f, false);
 		}
@@ -76,7 +80,7 @@ void AEnemyClass::Walk() {
 	}
 
 	//Walk to location
-	MyController->MoveToLocation(Location, 100.f);
+	FollowResult = MyController->MoveToLocation(Location, 100.f);
 	DelayTimer.Invalidate();
 }
 
@@ -98,3 +102,7 @@ void AEnemyClass::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, clas
 	}
 }
 
+void AEnemyClass::Attack() 
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Attacking"));
+}

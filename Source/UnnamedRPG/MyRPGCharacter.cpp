@@ -267,12 +267,10 @@ void AMyRPGCharacter::OnAttackPressed() {
 }
 
 void AMyRPGCharacter::BeginSwordEvent() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("lol"));
 	GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AMyRPGCharacter::WeaponLineTrace, 0.01, true);
 }
 
 void AMyRPGCharacter::EndSwordEvent() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("lmao"));
 	if (ColTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(ColTimer);
 		ColTimer.Invalidate();
@@ -289,7 +287,7 @@ void AMyRPGCharacter::WeaponLineTrace() {
 	TArray<AActor*> IgnoreList;
 	IgnoreList.Append(tableinit);
 	UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::None, OutHit, true);
-	UGameplayStatics::ApplyDamage(OutHit.GetActor(), 5.f, NULL, NULL, NULL);
+	UGameplayStatics::ApplyDamage(OutHit.GetActor(), 5.f, NULL, NULL, NULL); // Apply 5 damage to the actor being hit
 }
 
 void AMyRPGCharacter::ResetAttack() {
