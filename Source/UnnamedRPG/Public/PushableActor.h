@@ -6,8 +6,14 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "MyPushComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "Engine/GameEngine.h"
 #include "PushableActor.generated.h"
+
+
+class UMyPushComponent;
+
 
 UCLASS()
 class UNNAMEDRPG_API APushableActor : public AActor
