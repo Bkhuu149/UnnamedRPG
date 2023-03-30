@@ -19,8 +19,8 @@ UMyPushComponent::UMyPushComponent()
 void UMyPushComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
+	OwningCharacter = Cast<ACharacter>(GetOwner());
+	SetComponentTickEnabled(false);
 	
 }
 
@@ -29,6 +29,21 @@ void UMyPushComponent::BeginPlay()
 void UMyPushComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(OwningCharacter);
+	if (!Player) {
+		return;
+	}
+
+	if (!IsValid(CurrentPushable)) {
+		return;
+	}
+
+
+	FVector DeltaLocation = Player->GetActorForwardVector() * (UKismetMathLibrary::FCeil(Player->GetForwardBackValue()) * PushSpeed);
+	CurrentPushable->AddActorWorldOffset(DeltaLocation, true);
+
+
 
 	// ...
 }
@@ -40,7 +55,6 @@ void UMyPushComponent::BeginPush(APushableActor* Pushable) {
 	}
 
 	//Check if character can push
-	ACharacter* OwningCharacter = Cast<ACharacter>(GetOwner());
 	if (!OwningCharacter) {
 		return;
 	}
@@ -68,7 +82,6 @@ void UMyPushComponent::EndPush() {
 	CurrentPushable = nullptr;
 
 	//Checking if Character is valid
-	ACharacter* OwningCharacter = Cast<ACharacter>(GetOwner());
 	if (!OwningCharacter) {
 		return;
 	}
@@ -90,7 +103,6 @@ float UMyPushComponent::GetPushableHeight() {
 	}
 
 	//Checking if Character is valid
-	ACharacter* OwningCharacter = Cast<ACharacter>(GetOwner());
 	if (!OwningCharacter) {
 		return 0;
 	}

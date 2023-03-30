@@ -29,13 +29,21 @@ protected:
 private:
 	//To Change class to be Pushable Object later
 	APushableActor* CurrentPushable;
+	ACharacter* OwningCharacter;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void BeginPush(APushableActor* CurrentPushable);
+	
+	UFUNCTION(BlueprintCallable)
 	void EndPush();
-	bool IsPushingObject() { return IsValid(CurrentPushable); }
+
+	UFUNCTION(BlueprintCallable)
+		bool IsPushingObject() { return CurrentPushable != nullptr; }
+
+	UFUNCTION(BlueprintCallable)
 	float GetPushableHeight();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")

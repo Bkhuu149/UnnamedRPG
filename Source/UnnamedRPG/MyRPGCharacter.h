@@ -217,6 +217,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character Information")
 	float GetManaMax() { return ManaMax; }
 
+	float GetForwardBackValue() { return ForwardBackInputValue; }
+	
+	float GetRightLeftValue() { return RightLeftInputValue; }
+
 
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
 	UMyPushComponent* GetPushComponent() const { return PushComp; }

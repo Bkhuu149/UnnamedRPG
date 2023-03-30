@@ -16,7 +16,7 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	if (!Character) {
 		return;
 	}
-	
+
 	//Reading character values to determine which state character is in
 	bIsTargeted = Character->GetIsTargeted();
 	Velocity = MoveComp->Velocity;
@@ -25,8 +25,10 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	ShouldMove = (Velocity != FVector(0, 0, 0)) && (GroundSpeed > 3);
 	IsFalling = MoveComp->IsFalling();
 	IsSprinting = Character->GetIsSprinting();
+	//IsPushing = Character->GetPushComponent()->IsPushingObject();
 	if (IsPushing) {
 		PushingDirection = Character->GetInputAxisValue("ForwardBack");
+		//PushHeight = Character->GetPushComponent()->GetPushableHeight();
 	}
 	
 	//Only care about this value because untargeted, the player rotates to where they move
