@@ -41,11 +41,14 @@ private:
 
 	EPathFollowingRequestResult::Type FollowResult;
 
+	enum WalkState { IDLE, FOLLOW, RANDOM };
+	WalkState CurrWalkState = IDLE;
+
 	void Walk();
 
 	void ResetTarget();
 
-	void Attack();
+	void Attack(float DeltaTime);
 
 public: 
 	// Called every frame

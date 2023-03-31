@@ -37,8 +37,8 @@ void AEnemyClass::Tick(float DeltaTime)
 	if (IsDead) { return; }
 
 	// If already at target, stop and attack
-	if (FollowResult == EPathFollowingRequestResult::AlreadyAtGoal) {
-		Attack();
+	if (FollowResult == EPathFollowingRequestResult::AlreadyAtGoal && CurrWalkState == FOLLOW) {
+		Attack(DeltaTime);
 	}
 	//If Targeted, approach target. Else, walk to random point within spawn radius
 	if (Targeted) {
@@ -66,14 +66,13 @@ void AEnemyClass::Walk() {
 	FVector Location;
 	
 	//Determine where the enemy should walk
-	if (Target) {
+	if (Target)
+	{
+		CurrWalkState = FOLLOW;
 		Location = Target->GetActorLocation();
-	} 
-	else {
-		if (!NavSys)
-		{
-			return;
-		}
+	} else {
+		if (!NavSys) { return; }
+		CurrWalkState = RANDOM;
 		FNavLocation ReachableLocation;
 		NavSys->GetRandomReachablePointInRadius(SpawnLocation, 1000.f, ReachableLocation);
 		Location = ReachableLocation.Location;
@@ -102,7 +101,13 @@ void AEnemyClass::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, clas
 	}
 }
 
-void AEnemyClass::Attack() 
+void AEnemyClass::Attack(float DeltaTime) 
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Attacking"));
+	FVector CurrentLocation = GetActorLocation();
+	FVector TargetLocation = Target->GetActorLocation();
+	CurrentLocation.Z = 0;
+	TargetLocation.Z = 0;
+	FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
+	FRotator CharacterRInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 10.f);
+	SetActorRotation(CharacterRInterpVal);
 }
