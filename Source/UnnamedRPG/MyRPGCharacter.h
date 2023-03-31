@@ -11,6 +11,7 @@
 #include "CollisionQueryParams.h"
 #include "Animation/AnimMontage.h"
 #include "Public/RPGBaseClass.h"
+#include "PushableActor.h"
 
 #include "Abilities/GameplayAbility_Montage.h"
 #include "AbilitySystemInterface.h"
