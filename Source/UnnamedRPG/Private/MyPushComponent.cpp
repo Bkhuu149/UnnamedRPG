@@ -120,3 +120,8 @@ float UMyPushComponent::GetPushableHeight() {
 	float FeetOfCharacter = OwningCharacter->GetActorLocation().Z - OwningCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 	return TopOfObject - FeetOfCharacter;
 }
+
+bool UMyPushComponent::IsPushingObject(){
+	return IsValid(CurrentPushable);
+	//return (CurrentPushable != nullptr); 
+}

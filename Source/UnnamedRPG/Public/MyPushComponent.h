@@ -41,7 +41,7 @@ public:
 	void EndPush();
 
 	UFUNCTION(BlueprintCallable)
-		bool IsPushingObject() { return CurrentPushable != nullptr; }
+		bool IsPushingObject();
 
 	UFUNCTION(BlueprintCallable)
 	float GetPushableHeight();

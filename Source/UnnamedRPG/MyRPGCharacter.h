@@ -41,6 +41,8 @@ struct FAttackStruct : public FTableRowBase
 
 };
 
+class InteractableInterface;
+
 UCLASS()
 class UNNAMEDRPG_API AMyRPGCharacter : public ARPGBaseClass , public IAbilitySystemInterface
 {
@@ -106,7 +108,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* BlockAnim;
-
 private:
 	//TO BE REMOVED LATER, LEFT IN FOR TESTING DAMAGE
 	void KILL();

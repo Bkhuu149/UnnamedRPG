@@ -27,6 +27,7 @@ public:
 	AMyRPGCharacter* Character;
 
 	UCharacterMovementComponent* MoveComp;
+	UMyPushComponent* PushComp;
 
 	virtual void NativeInitializeAnimation() override;
 

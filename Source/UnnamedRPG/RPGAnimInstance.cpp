@@ -7,8 +7,7 @@
 void URPGAnimInstance::NativeInitializeAnimation() {
 	Character = static_cast<AMyRPGCharacter*>(TryGetPawnOwner());
 	if (Character) {
-		MoveComp = static_cast<UCharacterMovementComponent*>(Character->GetMovementComponent());
-	}
+		MoveComp = static_cast<UCharacterMovementComponent*>(Character->GetMovementComponent());	}
 }
 
 void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
@@ -25,10 +24,15 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	ShouldMove = (Velocity != FVector(0, 0, 0)) && (GroundSpeed > 3);
 	IsFalling = MoveComp->IsFalling();
 	IsSprinting = Character->GetIsSprinting();
-	//IsPushing = Character->GetPushComponent()->IsPushingObject();
+
+	PushComp = static_cast<UMyPushComponent*>(Character->GetPushComponent());
+	if (IsValid(PushComp)) {
+		IsPushing = PushComp->IsPushingObject();
+	}
+
 	if (IsPushing) {
 		PushingDirection = Character->GetInputAxisValue("ForwardBack");
-		//PushHeight = Character->GetPushComponent()->GetPushableHeight();
+		PushHeight = Character->GetPushComponent()->GetPushableHeight();
 	}
 	
 	//Only care about this value because untargeted, the player rotates to where they move

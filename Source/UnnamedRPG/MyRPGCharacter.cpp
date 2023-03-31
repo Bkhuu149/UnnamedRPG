@@ -330,6 +330,24 @@ void AMyRPGCharacter::DoFinisher() {
 }
 
 void AMyRPGCharacter::OnInteractPressed() {
+
+	//Stop pushing if we are pushing something
+	if (!PushComp->IsPushingObject()) {
+		PushComp->EndPush();
+		return;
+	}
+
+	FVector Center = GetActorLocation();
+	Center.Z -= GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = {EObjectTypeQuery::ObjectTypeQuery1};
+
+	TArray<AActor*> IgnoreList = {this};
+
+	TArray<AActor*> OutHits;
+
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), Center, PushComp->PushRange, ObjectTypes, NULL, IgnoreList, OutHits);
+
+
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Interact"));
 }
 
