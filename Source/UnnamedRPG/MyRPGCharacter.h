@@ -66,7 +66,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool Targeted;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-		AActor* Target;
+		ARPGBaseClass* Target;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool IsJumping = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")

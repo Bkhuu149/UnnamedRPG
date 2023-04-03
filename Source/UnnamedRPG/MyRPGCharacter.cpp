@@ -225,7 +225,7 @@ void AMyRPGCharacter::OnTargetPressed() {
 	HitResult = GetWorld()->SweepSingleByChannel(OutHit, TraceStart, TraceEnd, FVector(0, 0, 0).ToOrientationQuat(), 
 		ECC_GameTraceChannel1, MyColSphere, Params);
 
-	Target = OutHit.HitObjectHandle.FetchActor();
+	Target = Cast<ARPGBaseClass>(OutHit.GetActor());
 
 	Targeted = HitResult;
 }
@@ -398,7 +398,7 @@ void AMyRPGCharacter::OnSprintReleased() {
 }
 
 void AMyRPGCharacter::FocusTarget(float DeltaTime) {
-	if (!Target) {
+	if (!Target || Target->GetIsDead()) {
 		ResetTarget();
 		return;
 	}
