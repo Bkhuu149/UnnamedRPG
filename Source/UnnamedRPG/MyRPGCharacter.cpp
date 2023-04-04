@@ -241,7 +241,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 	FAttackStruct* TestAttack = AbilityTab->FindRow<FAttackStruct>(AttackCombo[AttackCount], "");
 	
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
-	CurrentWeapon = GetWorld()->SpawnActor<AActor>(TestAttack->Weapon, WeaponTransform);
+	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(TestAttack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 
 	FGameplayAbilitySpec Test = FGameplayAbilitySpec(TestAttack->Attack.GetDefaultObject(), 1, 0);
@@ -268,6 +268,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 
 void AMyRPGCharacter::BeginSwordEvent() {
 	GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AMyRPGCharacter::WeaponLineTrace, 0.01, true);
+	CurrentWeapon->PlayTrail();
 }
 
 void AMyRPGCharacter::EndSwordEvent() {
@@ -275,6 +276,7 @@ void AMyRPGCharacter::EndSwordEvent() {
 		GetWorld()->GetTimerManager().ClearTimer(ColTimer);
 		ColTimer.Invalidate();
 	}
+	CurrentWeapon->EndTrail();
 }
 
 void AMyRPGCharacter::WeaponLineTrace() {
@@ -318,7 +320,7 @@ void AMyRPGCharacter::DoFinisher() {
 	}, FinisherAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() * 0.9, false);
 
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
-	CurrentWeapon = GetWorld()->SpawnActor<AActor>(FinisherAttack->Weapon, WeaponTransform);
+	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(FinisherAttack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 
 	FGameplayAbilitySpec FinalAttack = FGameplayAbilitySpec(FinisherAttack->Attack.GetDefaultObject(), 1, 0);

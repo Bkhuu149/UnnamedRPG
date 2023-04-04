@@ -11,6 +11,7 @@
 #include "CollisionQueryParams.h"
 #include "Animation/AnimMontage.h"
 #include "Public/RPGBaseClass.h"
+#include "Public/WeaponActor.h"
 #include "PushableActor.h"
 
 #include "Abilities/GameplayAbility_Montage.h"
@@ -154,7 +155,7 @@ private:
 	void OnAttackPressed();
 	void WeaponLineTrace();
 	void ResetAttack();
-	AActor* CurrentWeapon;
+	AWeaponActor* CurrentWeapon;
 	FTimerHandle AttackTimer; 
 	FTimerHandle ColTimer;
 	int CurrentMaxAttackCount = 3;

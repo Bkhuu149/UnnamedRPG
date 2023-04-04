@@ -15,7 +15,6 @@ AWeaponActor::AWeaponActor()
 void AWeaponActor::BeginPlay()
 {
 	Super::BeginPlay();
-	UNiagaraFunctionLibrary::SpawnSystemAttached(Trail, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT("Middle"), FVector(0,0,0), FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true);
 	
 }
 
@@ -27,11 +26,11 @@ void AWeaponActor::Tick(float DeltaTime)
 }
 
 void AWeaponActor::PlayTrail() {
-	UNiagaraFunctionLibrary::SpawnSystemAttached(Trail, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT("Middle"), FVector(0, 0, 0), FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true);
+	TrailComp = UNiagaraFunctionLibrary::SpawnSystemAttached(Trail, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT("Middle"), FVector(0, 0, 0), FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true);
 
 }
 
 void AWeaponActor::EndTrail() {
-
+	TrailComp->Deactivate();
 }
 

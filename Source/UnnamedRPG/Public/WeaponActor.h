@@ -29,6 +29,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UNiagaraSystem* Trail;
 
+	UNiagaraComponent* TrailComp;
+
 	void PlayTrail();
 	void EndTrail();
 
