@@ -17,7 +17,8 @@ public class UnnamedRPG : ModuleRules
 			"Engine", 
 			"InputCore",
 			"AIModule",
-			"NavigationSystem"
+			"NavigationSystem",
+			"Niagara"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
