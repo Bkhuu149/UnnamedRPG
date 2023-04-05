@@ -123,7 +123,7 @@ void AMyRPGCharacter::MoveRightLeft(float value)
 }
 
 void AMyRPGCharacter::OnBlockPressed() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Blocked Pressed"));
 	//Start a timer to see how long this button was pressed to distinguish between blocking and parrying
 	IsBlocking = true;
@@ -133,7 +133,7 @@ void AMyRPGCharacter::OnBlockPressed() {
 }
 
 void AMyRPGCharacter::OnBlockReleased() {
-
+	if (IsInteracting) { return; }
 	//Condiiton should check if timer is past a certain time limit. If true, then perform parry.  False would release block
 	int64 CurrentTime = FDateTime::Now().GetTicks();
 
@@ -148,7 +148,7 @@ void AMyRPGCharacter::OnBlockReleased() {
 }
 
 void AMyRPGCharacter::OnHealPressed() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
 	if (Mana < 100.0) {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Not enough Mana"));
 		return;
@@ -159,7 +159,7 @@ void AMyRPGCharacter::OnHealPressed() {
 }
 
 void AMyRPGCharacter::OnDodgePressed() {
-	if (GetCharacterMovement()->IsFalling() || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	if (GetCharacterMovement()->IsFalling() || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
 	IsDodging = true;
 	float duration = PlayAnimMontage(DodgeAnim);
@@ -184,7 +184,7 @@ void AMyRPGCharacter::DodgeFinished() {
 
 void AMyRPGCharacter::OnJumpedPressed() {
 	bool falling = GetCharacterMovement()->IsFalling();
-	if (falling || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) {
+	if (falling || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) {
 		return;
 	}
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Jump"));
@@ -231,7 +231,7 @@ void AMyRPGCharacter::OnTargetPressed() {
 }
 
 void AMyRPGCharacter::OnAttackPressed() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
 	if (AttackCount >= CurrentMaxAttackCount) {
 		DoFinisher();
@@ -302,7 +302,7 @@ void AMyRPGCharacter::ResetAttack() {
 }
 
 void AMyRPGCharacter::DoFinisher() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
 	
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Finisher Pressed"));
 
@@ -350,9 +350,14 @@ void AMyRPGCharacter::OnInteractPressed() {
 	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), Center, PushComp->PushRange, ObjectTypes, NULL, IgnoreList, OutHits);
 
 	for (int i = 0; i < OutHits.Num(); i++) {
-		APushableActor* PushableObject = Cast<APushableActor>(OutHits[i]);
-		if (PushableObject) {
-			PushableObject->HandleInteraction1(this);
+		IInteractableInterface* InteractableObject = Cast<IInteractableInterface>(OutHits[i]);
+		if (InteractableObject) {
+			InteractableObject->HandleInteraction(this);
+			if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) {
+				GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
+				GetCharacterMovement()->Velocity = FVector::ZeroVector;
+			}
+			break;
 		}
 	}
 
@@ -380,7 +385,7 @@ void AMyRPGCharacter::OnInventoryPressed() {
 }
 
 void AMyRPGCharacter::OnSprintPressed() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Sprinting"));
 	SprintMultiplier = 3.f;
 	IsSprinting = true;

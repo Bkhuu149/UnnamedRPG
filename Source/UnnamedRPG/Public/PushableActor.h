@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InteractableInterface.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -16,7 +17,7 @@ class UMyPushComponent;
 
 
 UCLASS()
-class UNNAMEDRPG_API APushableActor : public AActor
+class UNNAMEDRPG_API APushableActor : public AActor, public IInteractableInterface
 {
 	GENERATED_BODY()
 	
@@ -39,7 +40,7 @@ public:
 	int FindClosestPushTransformIndex1(FVector2D CharacterLocation, float PushRange);
 
 	UFUNCTION(BlueprintCallable)
-	void HandleInteraction1(ACharacter* Character);
+	virtual void HandleInteraction(ACharacter* Character) override;
 
 
 

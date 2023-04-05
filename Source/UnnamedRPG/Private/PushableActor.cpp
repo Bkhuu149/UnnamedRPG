@@ -48,7 +48,7 @@ int APushableActor::FindClosestPushTransformIndex1(FVector2D CharacterLocation, 
 	return ClosestTransformIndex;
 }
 
-void APushableActor::HandleInteraction1(ACharacter* Character) {
+void APushableActor::HandleInteraction(ACharacter* Character) {
 
 	if (!Character) {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Character not valid")));

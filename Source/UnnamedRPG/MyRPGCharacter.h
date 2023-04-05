@@ -12,7 +12,7 @@
 #include "Animation/AnimMontage.h"
 #include "Public/RPGBaseClass.h"
 #include "Public/WeaponActor.h"
-#include "PushableActor.h"
+#include "Public/InteractableInterface.h"
 
 #include "Abilities/GameplayAbility_Montage.h"
 #include "AbilitySystemInterface.h"
