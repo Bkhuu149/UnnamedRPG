@@ -32,8 +32,15 @@ protected:
 	AActor* Target;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	FVector SpawnLocation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	UAnimMontage* AttackAnim;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	float Cooldown = 2.f;
+
 private:
 	FTimerHandle DelayTimer;
+
+	FTimerHandle AttackTimer;
 
 	AAIController* MyController;
 
@@ -44,11 +51,15 @@ private:
 	enum WalkState { IDLE, FOLLOW, RANDOM };
 	WalkState CurrWalkState = IDLE;
 
+	bool CoolingDown = false;
+
 	void Walk();
 
 	void ResetTarget();
 
-	void Attack(float DeltaTime);
+	void Attack();
+
+	void Rotate(float DeltaTime);
 
 public: 
 	// Called every frame

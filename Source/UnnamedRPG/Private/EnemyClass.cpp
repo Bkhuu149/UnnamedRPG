@@ -38,7 +38,8 @@ void AEnemyClass::Tick(float DeltaTime)
 
 	// If already at target, stop and attack
 	if (FollowResult == EPathFollowingRequestResult::AlreadyAtGoal && CurrWalkState == FOLLOW) {
-		Attack(DeltaTime);
+		Rotate(DeltaTime);
+		Attack();
 	}
 	//If Targeted, approach target. Else, walk to random point within spawn radius
 	if (Targeted) {
@@ -58,9 +59,7 @@ void AEnemyClass::Tick(float DeltaTime)
 void AEnemyClass::Walk() {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Walk"));
 
-	if (IsDead) {
-		return;
-	}
+	if (IsDead) { return; }
 
 	//if Target, walk to target.  Else, go to random point
 	FVector Location;
@@ -101,13 +100,22 @@ void AEnemyClass::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, clas
 	}
 }
 
-void AEnemyClass::Attack(float DeltaTime) 
+void AEnemyClass::Rotate(float DeltaTime)
 {
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector CurrentLocation = GetActorLocation();
 	FVector TargetLocation = Target->GetActorLocation();
 	CurrentLocation.Z = 0;
 	TargetLocation.Z = 0;
 	FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
-	FRotator CharacterRInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 10.f);
+	FRotator CharacterRInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 20.f);
 	SetActorRotation(CharacterRInterpVal);
+}
+
+void AEnemyClass::Attack() 
+{
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || CoolingDown) { return; }
+	PlayAnimMontage(AttackAnim);
+	CoolingDown = true;
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { CoolingDown = false; }, Cooldown, false);
 }
