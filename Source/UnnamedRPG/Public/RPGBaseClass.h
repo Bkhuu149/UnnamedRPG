@@ -25,6 +25,10 @@ private:
 	float Health = 100.0;
 	float HealthMax = 100.0;
 
+	FTimerHandle InvincibiltyTimer;
+
+	void ResetInvincibility();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -38,6 +42,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Character Information")
 	virtual void HealChar(float val);
+
+	bool IsInvincible = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	bool IsDead = false;

@@ -33,7 +33,9 @@ void ARPGBaseClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 }
 
 void ARPGBaseClass::DamageChar(float val) {
-	if (IsDead) { return; }
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Damage"));
+
+	if (IsDead || IsInvincible) { return; }
 	if (Health - val <= 0) {
 		Health = 0;
 		IsDead = true;
@@ -43,6 +45,9 @@ void ARPGBaseClass::DamageChar(float val) {
 		return;
 	}
 	Health -= val;
+	IsInvincible = true;
+	GetWorld()->GetTimerManager().SetTimer(InvincibiltyTimer, this, &ARPGBaseClass::ResetInvincibility, 0.2, false);
+
 }
 
 void ARPGBaseClass::HealChar(float val) {
@@ -52,5 +57,9 @@ void ARPGBaseClass::HealChar(float val) {
 		return;
 	}
 	Health += val;
+}
+
+void ARPGBaseClass::ResetInvincibility() {
+	IsInvincible = false;
 }
 
