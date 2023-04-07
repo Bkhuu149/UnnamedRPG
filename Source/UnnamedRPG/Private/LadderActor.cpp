@@ -50,17 +50,23 @@ EPosition ALadderActor::FindClosestPushTransformIndex(FVector CharacterLocation)
 void ALadderActor::HandleInteraction(ACharacter* Character) {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Ladder Interact"));
 	EPosition Test = FindClosestPushTransformIndex(Character->GetActorLocation());
+
+	FTransform ClosestTransformLocal;
+
 	if (Test == EPosition::T_None) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("None"));
 		return;
 	}
 	else if (Test == EPosition::T_Top) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Top"));
-		return;
+		ClosestTransformLocal = LadderTop;
 	}
 	else {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bottom"));
-		return;
+		ClosestTransformLocal = LadderBottom;
 	}
-	
+	FTransform ClosestTransformGlobal = UKismetMathLibrary::ComposeTransforms(ClosestTransformLocal, GetActorTransform());
+
+	Character->SetActorTransform(ClosestTransformGlobal);
+
 }
