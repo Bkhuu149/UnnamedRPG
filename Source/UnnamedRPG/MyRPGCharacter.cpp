@@ -10,7 +10,7 @@ AMyRPGCharacter::AMyRPGCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AbilityComp = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
-	PushComp = CreateDefaultSubobject<UMyPushComponent>(TEXT("Push Component"));
+	InteractComp = CreateDefaultSubobject<UMyInteractComponent>(TEXT("Interact Component"));
 }
 
 // Called when the game starts or when spawned
@@ -314,8 +314,8 @@ void AMyRPGCharacter::DoFinisher() {
 void AMyRPGCharacter::OnInteractPressed() {
 
 	//Stop pushing if we are pushing something
-	if (PushComp->IsPushingObject()) {
-		PushComp->EndPush();
+	if (InteractComp->IsPushingObject()) {
+		InteractComp->EndPush();
 		return;
 	}
 
@@ -327,7 +327,7 @@ void AMyRPGCharacter::OnInteractPressed() {
 
 	TArray<AActor*> OutHits;
 
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), Center, PushComp->PushRange, ObjectTypes, NULL, IgnoreList, OutHits);
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), Center, InteractComp->PushRange, ObjectTypes, NULL, IgnoreList, OutHits);
 
 	for (int i = 0; i < OutHits.Num(); i++) {
 		IInteractableInterface* InteractableObject = Cast<IInteractableInterface>(OutHits[i]);

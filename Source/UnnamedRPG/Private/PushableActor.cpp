@@ -2,7 +2,7 @@
 
 
 #include "PushableActor.h"
-#include "MyPushComponent.h"
+#include "MyInteractComponent.h"
 
 // Sets default values
 APushableActor::APushableActor()
@@ -55,13 +55,13 @@ void APushableActor::HandleInteraction(ACharacter* Character) {
 		return;
 	}
 
-	UMyPushComponent* PushComp = Cast<UMyPushComponent>(Character->GetComponentByClass(UMyPushComponent::StaticClass()));
-	if (!PushComp) {
+	UMyInteractComponent* InteractComp = Cast<UMyInteractComponent>(Character->GetComponentByClass(UMyInteractComponent::StaticClass()));
+	if (!InteractComp) {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Character does not have push component")));
 		return;
 	}
 
-	float BestIndex = FindClosestPushTransformIndex1(FVector2D(Character->GetActorLocation()), PushComp->PushRange);	
+	float BestIndex = FindClosestPushTransformIndex1(FVector2D(Character->GetActorLocation()), InteractComp->PushRange);	
 
 	if (BestIndex < 0) {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("No Push Transform Found")));
@@ -132,7 +132,7 @@ void APushableActor::HandleInteraction(ACharacter* Character) {
 	Character->SetActorLocation(CharacterNewTransform.GetLocation());
 	Character->SetActorRotation(CharacterNewTransform.GetRotation());
 
-	PushComp->BeginPush(this);
+	InteractComp->BeginPush(this);
 
 	return;
 }

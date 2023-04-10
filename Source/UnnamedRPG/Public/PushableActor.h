@@ -13,7 +13,7 @@
 #include "PushableActor.generated.h"
 
 
-class UMyPushComponent;
+class UMyInteractComponent;
 
 
 UCLASS()

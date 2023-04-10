@@ -8,18 +8,18 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "MyPushComponent.generated.h"
+#include "MyInteractComponent.generated.h"
 
 class AMyRPGCharacter;
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class UNNAMEDRPG_API UMyPushComponent : public UActorComponent
+class UNNAMEDRPG_API UMyInteractComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UMyPushComponent();
+	UMyInteractComponent();
 
 
 protected:

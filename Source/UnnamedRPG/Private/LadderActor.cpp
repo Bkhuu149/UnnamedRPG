@@ -69,4 +69,9 @@ void ALadderActor::HandleInteraction(ACharacter* Character) {
 
 	Character->SetActorTransform(ClosestTransformGlobal);
 
+	Character->AttachToActor(this,
+		FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, true));
+
+	Cast<AMyRPGCharacter>(Character)->SetIsInteracting(true);
+
 }

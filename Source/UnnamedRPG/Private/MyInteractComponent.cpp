@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MyPushComponent.h"
+#include "MyInteractComponent.h"
 #include "../MyRPGCharacter.h"
 
 // Sets default values for this component's properties
-UMyPushComponent::UMyPushComponent()
+UMyInteractComponent::UMyInteractComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -16,7 +16,7 @@ UMyPushComponent::UMyPushComponent()
 
 
 // Called when the game starts
-void UMyPushComponent::BeginPlay()
+void UMyInteractComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	OwningCharacter = Cast<ACharacter>(GetOwner());
@@ -26,7 +26,7 @@ void UMyPushComponent::BeginPlay()
 
 
 // Called every frame
-void UMyPushComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UMyInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
@@ -48,7 +48,7 @@ void UMyPushComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-void UMyPushComponent::BeginPush(APushableActor* Pushable) {
+void UMyInteractComponent::BeginPush(APushableActor* Pushable) {
 	//Check if object being pushed is valid
 	if (!IsValid(Pushable)) {
 		return;
@@ -74,7 +74,7 @@ void UMyPushComponent::BeginPush(APushableActor* Pushable) {
 	//Set bool value
 	Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(true);
 }
-void UMyPushComponent::EndPush() {
+void UMyInteractComponent::EndPush() {
 	//Check if CurrentPushable is valid
 	if (!IsValid(CurrentPushable)) {
 		return;
@@ -96,7 +96,7 @@ void UMyPushComponent::EndPush() {
 
 	Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(false);
 }
-float UMyPushComponent::GetPushableHeight() {
+float UMyInteractComponent::GetPushableHeight() {
 	//Check if CurrentPushable is valid
 	if (!IsValid(CurrentPushable)) {
 		return 0;
@@ -121,7 +121,7 @@ float UMyPushComponent::GetPushableHeight() {
 	return TopOfObject - FeetOfCharacter;
 }
 
-bool UMyPushComponent::IsPushingObject(){
+bool UMyInteractComponent::IsPushingObject(){
 	return IsValid(CurrentPushable);
 	//return (CurrentPushable != nullptr); 
 }

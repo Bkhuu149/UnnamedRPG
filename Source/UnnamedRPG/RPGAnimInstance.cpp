@@ -25,14 +25,14 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	IsFalling = MoveComp->IsFalling();
 	IsSprinting = Character->GetIsSprinting();
 
-	PushComp = static_cast<UMyPushComponent*>(Character->GetPushComponent());
-	if (IsValid(PushComp)) {
-		IsPushing = PushComp->IsPushingObject();
+	InteractComp = static_cast<UMyInteractComponent*>(Character->GetInteractComponent());
+	if (IsValid(InteractComp)) {
+		IsPushing = InteractComp->IsPushingObject();
 	}
 
 	if (IsPushing) {
 		PushingDirection = Character->GetInputAxisValue("ForwardBack");
-		PushHeight = Character->GetPushComponent()->GetPushableHeight();
+		PushHeight = Character->GetInteractComponent()->GetPushableHeight();
 	}
 	
 	//Only care about this value because untargeted, the player rotates to where they move
