@@ -43,6 +43,7 @@ void UMyInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	case EInteractType::Pushing:
 		DeltaLocation = Player->GetActorForwardVector() * (UKismetMathLibrary::FCeil(Player->GetForwardBackValue()) * PushSpeed);
 		CurrentPushable->AddActorWorldOffset(DeltaLocation, true);
+		break;
 	case EInteractType::Climbing:
 		if ((OwningCharacter->GetActorLocation().Z >= CurrentLadder->GetLadderTop().GetLocation().Z && Player->GetForwardBackValue() > 0)
 			|| (OwningCharacter->GetActorLocation().Z <= CurrentLadder->GetLadderBottom().GetLocation().Z + OwningCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() && Player->GetForwardBackValue() < 0)
@@ -52,7 +53,7 @@ void UMyInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		Player->GetCharacterMovement()->Velocity = FVector::ZeroVector;
 		DeltaLocation = Player->GetActorUpVector() * (UKismetMathLibrary::FCeil(Player->GetForwardBackValue()) * PushSpeed);
 		OwningCharacter->AddActorWorldOffset(DeltaLocation, true);
-		
+		break;
 	}
 }
 
