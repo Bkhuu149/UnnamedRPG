@@ -35,17 +35,23 @@ void UMyInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		return;
 	}
 
-	if (!IsValid(CurrentPushable)) {
+	FVector DeltaLocation = FVector::ZeroVector;
+
+	switch (CurrentType) {
+	case EInteractType::None:
 		return;
+	case EInteractType::Pushing:
+		DeltaLocation = Player->GetActorForwardVector() * (UKismetMathLibrary::FCeil(Player->GetForwardBackValue()) * PushSpeed);
+		CurrentPushable->AddActorWorldOffset(DeltaLocation, true);
+	case EInteractType::Climbing:
+		if (OwningCharacter->GetActorLocation().Z >= CurrentLadder->GetLadderTop().GetLocation().Z && Player->GetForwardBackValue() > 0) {
+			EndInteract();
+		}
+
+		DeltaLocation = Player->GetActorUpVector() * (UKismetMathLibrary::FCeil(Player->GetForwardBackValue()) * PushSpeed);
+		OwningCharacter->AddActorWorldOffset(DeltaLocation, true);
+		
 	}
-
-
-	FVector DeltaLocation = Player->GetActorForwardVector() * (UKismetMathLibrary::FCeil(Player->GetForwardBackValue()) * PushSpeed);
-	CurrentPushable->AddActorWorldOffset(DeltaLocation, true);
-
-
-
-	// ...
 }
 
 void UMyInteractComponent::BeginPush(APushableActor* Pushable) {
@@ -69,22 +75,38 @@ void UMyInteractComponent::BeginPush(APushableActor* Pushable) {
 	CharMovementComp->SetPlaneConstraintEnabled(true);
 	CharMovementComp->SetPlaneConstraintNormal(OwningCharacter->GetActorRightVector());
 	CharMovementComp->bOrientRotationToMovement = false;
+	CurrentType = EInteractType::Pushing;
 	SetComponentTickEnabled(true);
 	
 	//Set bool value
 	Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(true);
 }
-void UMyInteractComponent::EndPush() {
-	//Check if CurrentPushable is valid
-	if (!IsValid(CurrentPushable)) {
-		return;
-	}
-	CurrentPushable = nullptr;
-
+void UMyInteractComponent::EndInteract() {
 	//Checking if Character is valid
 	if (!OwningCharacter) {
 		return;
 	}
+
+	//Do certain actions based on what interaction is happening
+	switch (CurrentType) {
+	case EInteractType::None:
+		return;
+	case EInteractType::Climbing:
+		if (OwningCharacter->GetActorLocation().Z >= CurrentLadder->GetLadderTop().GetLocation().Z) {
+
+			FTransform ClimbExitTransform = UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderTop(), CurrentLadder->GetActorTransform());
+
+			FVector ClimbExitLocation = ClimbExitTransform.GetLocation();
+			ClimbExitLocation.Z += OwningCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+
+			OwningCharacter->SetActorLocation(ClimbExitLocation);
+		}
+		CurrentLadder = nullptr;
+	case EInteractType::Pushing:
+		CurrentPushable = nullptr;
+	}
+
+
 
 	OwningCharacter->DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, false));
 
@@ -95,6 +117,7 @@ void UMyInteractComponent::EndPush() {
 	SetComponentTickEnabled(false);
 
 	Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(false);
+	CurrentType = EInteractType::None;
 }
 float UMyInteractComponent::GetPushableHeight() {
 	//Check if CurrentPushable is valid
@@ -124,4 +147,31 @@ float UMyInteractComponent::GetPushableHeight() {
 bool UMyInteractComponent::IsPushingObject(){
 	return IsValid(CurrentPushable);
 	//return (CurrentPushable != nullptr); 
+}
+
+void UMyInteractComponent::BeginClimb(ALadderActor* Ladder) {
+	if (!IsValid(Ladder)) {
+		return;
+	}
+
+	//Check if character can Climb
+	if (!OwningCharacter) {
+		return;
+	}
+
+	//Attach character to Ladder
+	CurrentLadder = Ladder;
+	OwningCharacter->AttachToActor(CurrentLadder,
+		FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, true));
+
+	//Disable movement except in one axis
+	UCharacterMovementComponent* CharMovementComp = OwningCharacter->GetCharacterMovement();
+	CharMovementComp->SetPlaneConstraintEnabled(true);
+	CharMovementComp->SetPlaneConstraintNormal(OwningCharacter->GetActorUpVector());
+	CharMovementComp->bOrientRotationToMovement = false;
+	CurrentType = EInteractType::Climbing;
+	SetComponentTickEnabled(true);
+
+	//Set bool value
+	Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(true);
 }

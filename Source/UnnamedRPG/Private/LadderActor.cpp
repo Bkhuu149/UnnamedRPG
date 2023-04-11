@@ -2,6 +2,8 @@
 
 
 #include "LadderActor.h"
+#include "MyInteractComponent.h"
+#include "../MyRPGCharacter.h"
 
 // Sets default values
 ALadderActor::ALadderActor()
@@ -67,11 +69,15 @@ void ALadderActor::HandleInteraction(ACharacter* Character) {
 	}
 	FTransform ClosestTransformGlobal = UKismetMathLibrary::ComposeTransforms(ClosestTransformLocal, GetActorTransform());
 
-	Character->SetActorTransform(ClosestTransformGlobal);
+	FVector ClimbLocation = ClosestTransformGlobal.GetLocation();
+	ClimbLocation.Z += Character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+
+	FTransform CharacterNewTransform = FTransform(ClosestTransformGlobal.GetRotation(), ClimbLocation, ClosestTransformGlobal.GetScale3D());
+	Character->SetActorTransform(CharacterNewTransform);
 
 	Character->AttachToActor(this,
 		FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, true));
 
-	Cast<AMyRPGCharacter>(Character)->SetIsInteracting(true);
+	Cast<AMyRPGCharacter>(Character)->GetInteractComponent()->BeginClimb(this);
 
 }

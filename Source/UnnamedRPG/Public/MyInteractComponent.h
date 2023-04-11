@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "LadderActor.h"
 #include "PushableActor.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -11,6 +12,12 @@
 #include "MyInteractComponent.generated.h"
 
 class AMyRPGCharacter;
+
+enum class EInteractType : uint8 {
+	Pushing         UMETA(DisplayName = "Pushing"),
+	Climbing      UMETA(DisplayName = "Climbing"),
+	None        UMETA(DisplayName = "None"),
+};
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class UNNAMEDRPG_API UMyInteractComponent : public UActorComponent
@@ -28,17 +35,22 @@ protected:
 
 private:
 	//To Change class to be Pushable Object later
+	ALadderActor* CurrentLadder;
 	APushableActor* CurrentPushable;
 	ACharacter* OwningCharacter;
+
+	EInteractType CurrentType = EInteractType::None;
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void BeginPush(APushableActor* CurrentPushable);
+
+	void BeginClimb(ALadderActor* Ladder);
 	
 	UFUNCTION(BlueprintCallable)
-	void EndPush();
+	void EndInteract();
 
 	UFUNCTION(BlueprintCallable)
 		bool IsPushingObject();
@@ -50,5 +62,9 @@ public:
 	float PushSpeed = 2.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")
 	float PushRange = 120.f;
+
+	EInteractType GetInteractType() { return CurrentType; }
+
+	void SetInteractType(EInteractType NewMode) { CurrentType = NewMode; }
 		
 };

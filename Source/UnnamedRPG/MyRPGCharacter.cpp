@@ -314,8 +314,8 @@ void AMyRPGCharacter::DoFinisher() {
 void AMyRPGCharacter::OnInteractPressed() {
 
 	//Stop pushing if we are pushing something
-	if (InteractComp->IsPushingObject()) {
-		InteractComp->EndPush();
+	if (InteractComp->GetInteractType() != EInteractType::None) {
+		InteractComp->EndInteract();
 		return;
 	}
 

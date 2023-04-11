@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../MyRPGCharacter.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
@@ -11,6 +10,9 @@
 #include "InteractableInterface.h"
 #include "GameFramework/Actor.h"
 #include "LadderActor.generated.h"
+
+
+class UMyInteractComponent;
 
 
 enum class EPosition : uint8 {
@@ -51,5 +53,9 @@ public:
 	EPosition FindClosestPushTransformIndex(FVector CharacterLocation);
 
 	virtual void HandleInteraction(ACharacter* Character) override;
+
+	FTransform GetLadderTop() { return LadderTop; }
+
+	FTransform GetLadderBottom() { return LadderBottom; }
 
 };
