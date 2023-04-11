@@ -46,6 +46,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FTransform LadderTop;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FTransform LadderTopExit;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -55,6 +58,8 @@ public:
 	virtual void HandleInteraction(ACharacter* Character) override;
 
 	FTransform GetLadderTop() { return LadderTop; }
+
+	FTransform GetLadderTopExit() { return LadderTopExit; }
 
 	FTransform GetLadderBottom() { return LadderBottom; }
 

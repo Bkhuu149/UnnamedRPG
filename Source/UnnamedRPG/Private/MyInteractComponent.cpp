@@ -44,10 +44,12 @@ void UMyInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 		DeltaLocation = Player->GetActorForwardVector() * (UKismetMathLibrary::FCeil(Player->GetForwardBackValue()) * PushSpeed);
 		CurrentPushable->AddActorWorldOffset(DeltaLocation, true);
 	case EInteractType::Climbing:
-		if (OwningCharacter->GetActorLocation().Z >= CurrentLadder->GetLadderTop().GetLocation().Z && Player->GetForwardBackValue() > 0) {
+		if ((OwningCharacter->GetActorLocation().Z >= CurrentLadder->GetLadderTop().GetLocation().Z && Player->GetForwardBackValue() > 0)
+			|| (OwningCharacter->GetActorLocation().Z <= CurrentLadder->GetLadderBottom().GetLocation().Z + OwningCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() && Player->GetForwardBackValue() < 0)
+			) {
 			EndInteract();
 		}
-
+		Player->GetCharacterMovement()->Velocity = FVector::ZeroVector;
 		DeltaLocation = Player->GetActorUpVector() * (UKismetMathLibrary::FCeil(Player->GetForwardBackValue()) * PushSpeed);
 		OwningCharacter->AddActorWorldOffset(DeltaLocation, true);
 		
@@ -92,14 +94,26 @@ void UMyInteractComponent::EndInteract() {
 	case EInteractType::None:
 		return;
 	case EInteractType::Climbing:
+		//At top of ladder and want to get off
 		if (OwningCharacter->GetActorLocation().Z >= CurrentLadder->GetLadderTop().GetLocation().Z) {
 
-			FTransform ClimbExitTransform = UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderTop(), CurrentLadder->GetActorTransform());
+			FTransform ClimbExitTransform = UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderTopExit(), CurrentLadder->GetActorTransform());
 
 			FVector ClimbExitLocation = ClimbExitTransform.GetLocation();
 			ClimbExitLocation.Z += OwningCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
 
 			OwningCharacter->SetActorLocation(ClimbExitLocation);
+		}
+		else if (OwningCharacter->GetActorLocation().Z <= CurrentLadder->GetLadderBottom().GetLocation().Z + OwningCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()) {
+			FTransform ClimbExitTransform = UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderBottom(), CurrentLadder->GetActorTransform());
+
+			FVector ClimbExitLocation = ClimbExitTransform.GetLocation();
+			ClimbExitLocation.Z += OwningCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+
+			OwningCharacter->SetActorLocation(ClimbExitLocation);
+		}
+		else {
+
 		}
 		CurrentLadder = nullptr;
 	case EInteractType::Pushing:

@@ -332,11 +332,11 @@ void AMyRPGCharacter::OnInteractPressed() {
 	for (int i = 0; i < OutHits.Num(); i++) {
 		IInteractableInterface* InteractableObject = Cast<IInteractableInterface>(OutHits[i]);
 		if (InteractableObject) {
-			InteractableObject->HandleInteraction(this);
 			if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) {
 				GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
 				GetCharacterMovement()->Velocity = FVector::ZeroVector;
 			}
+			InteractableObject->HandleInteraction(this);
 			break;
 		}
 	}

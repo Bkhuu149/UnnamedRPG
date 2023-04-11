@@ -29,12 +29,12 @@ void ALadderActor::Tick(float DeltaTime)
 
 EPosition ALadderActor::FindClosestPushTransformIndex(FVector CharacterLocation) {
 
-	FVector Top = UKismetMathLibrary::TransformLocation(GetActorTransform(), LadderTop.GetLocation());
+	FVector Top = UKismetMathLibrary::TransformLocation(GetActorTransform(), LadderTopExit.GetLocation());
 	FVector Bottom = UKismetMathLibrary::TransformLocation(GetActorTransform(), LadderBottom.GetLocation());
 
 	float DistanceToTop = FVector::DistSquared(Top, CharacterLocation);
 	float DistanceToBottom = FVector::DistSquared(Bottom, CharacterLocation);
-	if (DistanceToTop < pow(120.f, 2) || DistanceToBottom < pow(120.f, 2)) {
+	if (DistanceToTop < pow(120.f, 2) || DistanceToBottom < pow(200.f, 2)) {
 
 		if (DistanceToTop < DistanceToBottom) {
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Top"));
@@ -62,19 +62,21 @@ void ALadderActor::HandleInteraction(ACharacter* Character) {
 	else if (Test == EPosition::T_Top) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Top"));
 		ClosestTransformLocal = LadderTop;
+		FTransform ClosestTransformGlobal = UKismetMathLibrary::ComposeTransforms(ClosestTransformLocal, GetActorTransform());
+
+		FVector ClimbLocation = ClosestTransformGlobal.GetLocation();
+		Character->SetActorTransform(ClosestTransformGlobal);
 	}
 	else {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bottom"));
 		ClosestTransformLocal = LadderBottom;
+		FTransform ClosestTransformGlobal = UKismetMathLibrary::ComposeTransforms(ClosestTransformLocal, GetActorTransform());
+
+		FVector ClimbLocation = ClosestTransformGlobal.GetLocation();
+		ClimbLocation.Z += Character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+		FTransform CharacterNewTransform = FTransform(ClosestTransformGlobal.GetRotation(), ClimbLocation, ClosestTransformGlobal.GetScale3D());
+		Character->SetActorTransform(CharacterNewTransform);
 	}
-	FTransform ClosestTransformGlobal = UKismetMathLibrary::ComposeTransforms(ClosestTransformLocal, GetActorTransform());
-
-	FVector ClimbLocation = ClosestTransformGlobal.GetLocation();
-	ClimbLocation.Z += Character->GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
-
-	FTransform CharacterNewTransform = FTransform(ClosestTransformGlobal.GetRotation(), ClimbLocation, ClosestTransformGlobal.GetScale3D());
-	Character->SetActorTransform(CharacterNewTransform);
-
 	Character->AttachToActor(this,
 		FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, true));
 
