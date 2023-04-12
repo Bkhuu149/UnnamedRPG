@@ -62,4 +62,3 @@ void ARPGBaseClass::HealChar(float val) {
 void ARPGBaseClass::ResetInvincibility() {
 	IsInvincible = false;
 }
-

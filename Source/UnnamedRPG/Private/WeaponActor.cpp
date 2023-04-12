@@ -33,4 +33,3 @@ void AWeaponActor::PlayTrail() {
 void AWeaponActor::EndTrail() {
 	TrailComp->Deactivate();
 }
-
