@@ -97,8 +97,6 @@ void UMyInteractComponent::EndInteract() {
 		return;
 	}
 
-	FTransform Top = UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderTop(), CurrentLadder->GetActorTransform());
-	FTransform Bottom = UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderBottom(), CurrentLadder->GetActorTransform());
 
 	//Do certain actions based on what interaction is happening
 	switch (CurrentType) {
@@ -107,8 +105,7 @@ void UMyInteractComponent::EndInteract() {
 	case EInteractType::Climbing:
 		//At top of ladder and want to get off
 
-
-		if (OwningCharacter->GetActorLocation().Z >= Top.GetLocation().Z) {
+		if (OwningCharacter->GetActorLocation().Z >= UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderTop(), CurrentLadder->GetActorTransform()).GetLocation().Z) {
 
 			FTransform ClimbExitTransform = UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderTopExit(), CurrentLadder->GetActorTransform());
 
@@ -117,7 +114,7 @@ void UMyInteractComponent::EndInteract() {
 
 			OwningCharacter->SetActorLocation(ClimbExitLocation);
 		}
-		else if (OwningCharacter->GetActorLocation().Z <= Bottom.GetLocation().Z + OwningCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()) {
+		else if (OwningCharacter->GetActorLocation().Z <= UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderBottom(), CurrentLadder->GetActorTransform()).GetLocation().Z + OwningCharacter->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()) {
 			FTransform ClimbExitTransform = UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderBottom(), CurrentLadder->GetActorTransform());
 
 			FVector ClimbExitLocation = ClimbExitTransform.GetLocation();
@@ -129,8 +126,10 @@ void UMyInteractComponent::EndInteract() {
 
 		}
 		CurrentLadder = nullptr;
+		break;
 	case EInteractType::Pushing:
 		CurrentPushable = nullptr;
+		break;
 	}
 
 
