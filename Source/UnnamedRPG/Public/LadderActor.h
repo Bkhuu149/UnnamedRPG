@@ -35,23 +35,21 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
-		int Segments = 0;
-
-	UPROPERTY(EditAnywhere)
-		UStaticMesh* LadderSegment;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float Height = 200.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FTransform LadderBottom;
+		FTransform LadderBottom = FTransform(FRotator(0,180,0), FVector(100, 0, 2.5f), FVector::OneVector);
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FTransform LadderTop;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FTransform LadderTopExit;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 
 	EPosition FindClosestPushTransformIndex(FVector CharacterLocation);
 
