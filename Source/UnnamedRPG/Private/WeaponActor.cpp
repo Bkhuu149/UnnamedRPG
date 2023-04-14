@@ -33,3 +33,27 @@ void AWeaponActor::PlayTrail() {
 void AWeaponActor::EndTrail() {
 	TrailComp->Deactivate();
 }
+
+void AWeaponActor::WeaponLineTrace() {
+	UActorComponent* WeaponComponent = GetComponentByClass(UStaticMeshComponent::StaticClass());
+	UStaticMeshComponent* WeaponMesh = Cast<UStaticMeshComponent>(WeaponComponent);
+	FVector StartSocket = WeaponMesh->GetSocketLocation("Start");
+	FVector EndSocket = WeaponMesh->GetSocketLocation("End");
+	FHitResult OutHit;
+	AActor* tableinit[] = { Owner }; // Add self to ignore list
+	TArray<AActor*> IgnoreList;
+	IgnoreList.Append(tableinit);
+	UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::None, OutHit, true);
+	UGameplayStatics::ApplyDamage(OutHit.GetActor(), 5.f, NULL, NULL, NULL); // Apply 5 damage to the actor being hit
+}
+
+void AWeaponActor::StartLineTrace() {
+	GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AWeaponActor::WeaponLineTrace, 0.01, true);
+}
+
+void AWeaponActor::EndLineTrace() {
+	if (ColTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(ColTimer);
+		ColTimer.Invalidate();
+	}
+}

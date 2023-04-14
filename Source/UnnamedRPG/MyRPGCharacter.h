@@ -11,7 +11,6 @@
 #include "CollisionQueryParams.h"
 #include "Animation/AnimMontage.h"
 #include "Public/RPGBaseClass.h"
-#include "Public/WeaponActor.h"
 #include "Public/InteractableInterface.h"
 
 #include "Abilities/GameplayAbility_Montage.h"
@@ -153,19 +152,10 @@ private:
 
 	//Handle Attack Pressed
 	void OnAttackPressed();
-	void WeaponLineTrace();
 	void ResetAttack();
-	AWeaponActor* CurrentWeapon;
 	FTimerHandle AttackTimer; 
-	FTimerHandle ColTimer;
 	int CurrentMaxAttackCount = 3;
 	bool IsAttacking = false;
-
-	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
-	void BeginSwordEvent();
-	UFUNCTION(BlueprintCallable, category = "MyRPGCharacter")
-	void EndSwordEvent();
-
 
 	//Handle Finisher Pressed
 	void DoFinisher();

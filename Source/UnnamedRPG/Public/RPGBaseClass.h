@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Animation/AnimMontage.h"
+#include "WeaponActor.h"
 #include "RPGBaseClass.generated.h"
 
 UCLASS()
@@ -28,6 +29,12 @@ private:
 	FTimerHandle InvincibiltyTimer;
 
 	void ResetInvincibility();
+
+	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
+	void BeginSwordEvent();
+	UFUNCTION(BlueprintCallable, category = "MyRPGCharacter")
+	void EndSwordEvent();
+
 
 public:	
 	// Called every frame
@@ -59,4 +66,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Animations")
 	TArray<UAnimMontage*> DeathAnims;
 
+	AWeaponActor* CurrentWeapon;
 };

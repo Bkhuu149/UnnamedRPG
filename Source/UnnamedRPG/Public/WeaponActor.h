@@ -7,6 +7,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 #include "WeaponActor.generated.h"
 
 UCLASS()
@@ -24,8 +25,11 @@ protected:
 
 private:
 	AActor* Owner;
+	FTimerHandle ColTimer;
 
-public:	
+	void WeaponLineTrace();
+
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -36,6 +40,9 @@ public:
 
 	void PlayTrail();
 	void EndTrail();
+
+	void StartLineTrace();
+	void EndLineTrace();
 
 	void SetOwner(AActor* MyActor) { Owner = MyActor; }
 };

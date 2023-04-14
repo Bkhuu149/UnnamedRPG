@@ -223,6 +223,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(TestAttack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
+	CurrentWeapon->SetOwner(this);
 
 	FGameplayAbilitySpec Test = FGameplayAbilitySpec(TestAttack->Attack.GetDefaultObject(), 1, 0);
 	AbilityComp->GiveAbilityAndActivateOnce(Test);
@@ -244,32 +245,6 @@ void AMyRPGCharacter::OnAttackPressed() {
 		AttackTimer.Invalidate();
 	}
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() + 2.f, false);
-}
-
-void AMyRPGCharacter::BeginSwordEvent() {
-	GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AMyRPGCharacter::WeaponLineTrace, 0.01, true);
-	CurrentWeapon->PlayTrail();
-}
-
-void AMyRPGCharacter::EndSwordEvent() {
-	if (ColTimer.IsValid()) {
-		GetWorld()->GetTimerManager().ClearTimer(ColTimer);
-		ColTimer.Invalidate();
-	}
-	CurrentWeapon->EndTrail();
-}
-
-void AMyRPGCharacter::WeaponLineTrace() {
-	UActorComponent* WeaponComponent = CurrentWeapon->GetComponentByClass(UStaticMeshComponent::StaticClass());
-	UStaticMeshComponent* WeaponMesh = Cast<UStaticMeshComponent>(WeaponComponent);
-	FVector StartSocket = WeaponMesh->GetSocketLocation("Start");
-	FVector EndSocket = WeaponMesh->GetSocketLocation("End");
-	FHitResult OutHit;
-	AActor* tableinit[] = { this }; // Add self to ignore list
-	TArray<AActor*> IgnoreList;
-	IgnoreList.Append(tableinit);
-	UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::None, OutHit, true);
-	UGameplayStatics::ApplyDamage(OutHit.GetActor(), 5.f, NULL, NULL, NULL); // Apply 5 damage to the actor being hit
 }
 
 void AMyRPGCharacter::ResetAttack() {
@@ -302,6 +277,7 @@ void AMyRPGCharacter::DoFinisher() {
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(FinisherAttack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
+	CurrentWeapon->SetOwner(this);
 
 	FGameplayAbilitySpec FinalAttack = FGameplayAbilitySpec(FinisherAttack->Attack.GetDefaultObject(), 1, 0);
 	IsAttacking = true;

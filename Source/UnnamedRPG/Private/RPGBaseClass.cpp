@@ -33,7 +33,7 @@ void ARPGBaseClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 }
 
 void ARPGBaseClass::DamageChar(float val) {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Damage"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Damage"));
 
 	if (IsDead || IsInvincible) { return; }
 	if (Health - val <= 0) {
@@ -61,4 +61,14 @@ void ARPGBaseClass::HealChar(float val) {
 
 void ARPGBaseClass::ResetInvincibility() {
 	IsInvincible = false;
+}
+
+void ARPGBaseClass::BeginSwordEvent() {
+	CurrentWeapon->StartLineTrace();
+	CurrentWeapon->PlayTrail();
+}
+
+void ARPGBaseClass::EndSwordEvent() {
+	CurrentWeapon->EndLineTrace();
+	CurrentWeapon->EndTrail();
 }
