@@ -35,5 +35,26 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void HandleInteraction(ACharacter* Character) override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UStaticMeshComponent* Door;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FTransform TargetTransform;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FTransform InteractableLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsOpen = false;
+private:
+
+	FTimerHandle OpenTimer;
+
+	void RaiseGate();
+
+	void LowerBridge();
+
+	void RotateDoor();
 
 };

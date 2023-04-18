@@ -27,20 +27,42 @@ void ADoorActor::Tick(float DeltaTime)
 
 
 void ADoorActor::HandleInteraction(ACharacter* Character) {
+	
+	if (!Door) {
+		return;
+	}
+	IsOpen = true;
+
 	switch (DoorType){
 		case EDoorType::Swivel:
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("A Swivel Door"));
+			RotateDoor();
 			break;
 
 		case EDoorType::Bridge:
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("A Bridge Door"));
+			LowerBridge();
 			break;
 
 
 		case EDoorType::Gate:
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("A Gate Door"));
+			RaiseGate();
 			break;
 
 	}
 
+
+}
+
+void ADoorActor::RaiseGate() {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("A Gate Door"));
+	FTransform Transform = Door->GetRelativeTransform();
+}
+
+void ADoorActor::LowerBridge() {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("A Bridge Door"));
+	FTransform Transform = Door->GetRelativeTransform();
+}
+
+void ADoorActor::RotateDoor() {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("A Swivel Door"));
+	FTransform Transform = Door->GetRelativeTransform();
 }
