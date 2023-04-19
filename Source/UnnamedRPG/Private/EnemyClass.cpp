@@ -28,7 +28,10 @@ void AEnemyClass::BeginPlay()
 	MyController = static_cast<AAIController*>(GetController());
 	NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
 
-
+	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
+	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(ChosenWeapon, WeaponTransform));
+	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
+	CurrentWeapon->SetOwner(this);
 }
 
 void AEnemyClass::Tick(float DeltaTime)

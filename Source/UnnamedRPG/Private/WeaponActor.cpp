@@ -44,7 +44,7 @@ void AWeaponActor::WeaponLineTrace() {
 	TArray<AActor*> IgnoreList;
 	IgnoreList.Append(tableinit);
 	UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::None, OutHit, true);
-	UGameplayStatics::ApplyDamage(OutHit.GetActor(), 5.f, NULL, NULL, NULL); // Apply 5 damage to the actor being hit
+	UGameplayStatics::ApplyDamage(OutHit.GetActor(), 10.f, NULL, NULL, NULL); // Apply 5 damage to the actor being hit
 }
 
 void AWeaponActor::StartLineTrace() {

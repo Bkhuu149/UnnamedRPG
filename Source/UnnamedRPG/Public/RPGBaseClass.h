@@ -66,5 +66,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Animations")
 	TArray<UAnimMontage*> DeathAnims;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
+	UClass* ChosenWeapon;
+
 	AWeaponActor* CurrentWeapon;
 };
