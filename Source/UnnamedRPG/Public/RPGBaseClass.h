@@ -28,6 +28,8 @@ private:
 
 	FTimerHandle InvincibiltyTimer;
 
+	FTimerHandle DisableColTimer;
+
 	void ResetInvincibility();
 
 	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
