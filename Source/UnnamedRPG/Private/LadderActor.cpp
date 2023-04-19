@@ -34,7 +34,7 @@ EPosition ALadderActor::FindClosestPushTransformIndex(FVector CharacterLocation)
 
 	float DistanceToTop = FVector::DistSquared(Top, CharacterLocation);
 	float DistanceToBottom = FVector::DistSquared(Bottom, CharacterLocation);
-	if (DistanceToTop < pow(120.f, 2) || DistanceToBottom < pow(200.f, 2)) {
+	if (DistanceToTop < pow(200.f, 2) || DistanceToBottom < pow(200.f, 2)) {
 
 		if (DistanceToTop < DistanceToBottom) {
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Top"));

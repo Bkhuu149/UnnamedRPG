@@ -3,6 +3,8 @@
 #pragma once
 
 #include "InteractableInterface.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "DoorActor.generated.h"
@@ -50,6 +52,8 @@ public:
 private:
 
 	FTimerHandle OpenTimer;
+
+	bool CheckDistance(FVector CharacterLocation, float PushRange);
 
 	void RaiseGate();
 
