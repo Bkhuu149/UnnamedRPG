@@ -80,7 +80,6 @@ void ADoorActor::HandleInteraction(ACharacter* Character) {
 
 		case EDoorType::Bridge:
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("A Bridge Door"));
-
 			LowerBridge();
 			break;
 
