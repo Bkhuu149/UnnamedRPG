@@ -7,7 +7,10 @@
 void URPGAnimInstance::NativeInitializeAnimation() {
 	Character = static_cast<AMyRPGCharacter*>(TryGetPawnOwner());
 	if (Character) {
-		MoveComp = static_cast<UCharacterMovementComponent*>(Character->GetMovementComponent());	}
+		MoveComp = static_cast<UCharacterMovementComponent*>(Character->GetMovementComponent());	
+		InteractComp = static_cast<UMyInteractComponent*>(Character->GetInteractComponent());
+
+	}
 }
 
 void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
@@ -25,8 +28,7 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	IsFalling = MoveComp->IsFalling();
 	IsSprinting = Character->GetIsSprinting();
 
-	InteractComp = static_cast<UMyInteractComponent*>(Character->GetInteractComponent());
-	if (IsValid(InteractComp)) {
+	if (InteractComp) {
 		IsPushing = InteractComp->IsPushingObject();
 	}
 
