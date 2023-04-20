@@ -1,0 +1,59 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "EnemyClass.h"
+#include "Animation/AnimInstance.h"
+#include "SmallEnemyAnimInstance.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class UNNAMEDRPG_API USmallEnemyAnimInstance : public UAnimInstance
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(BlueprintReadOnly, Category = "Character")
+		AEnemyClass* Character;
+
+	UCharacterMovementComponent* MoveComp;
+
+	virtual void NativeInitializeAnimation() override;
+
+	virtual void NativeUpdateAnimation(float DeltaTimeX) override;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		bool bIsTargeted = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		float GroundSpeed = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		FVector Velocity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		FVector Acceleration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		bool ShouldMove = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		bool IsFalling = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		bool IsSprinting = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		float ForwardBackValue = 0.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		float LeftRightValue = 0.f;
+
+
+private:
+	void CalculateMovementInput();
+};

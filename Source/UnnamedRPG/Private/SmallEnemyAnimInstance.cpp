@@ -1,19 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "RPGAnimInstance.h"
+#include "SmallEnemyAnimInstance.h"
 
-
-void URPGAnimInstance::NativeInitializeAnimation() {
-	Character = Cast<AMyRPGCharacter>(TryGetPawnOwner());
+void USmallEnemyAnimInstance::NativeInitializeAnimation() {
+	Character = Cast<AEnemyClass>(TryGetPawnOwner());
 	if (Character) {
-		MoveComp = Cast<UCharacterMovementComponent>(Character->GetMovementComponent());	
-		InteractComp = Cast<UMyInteractComponent>(Character->GetInteractComponent());
-
+		MoveComp = Cast<UCharacterMovementComponent>(Character->GetMovementComponent());
 	}
 }
 
-void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
+void USmallEnemyAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 
 	if (!Character) {
 		return;
@@ -26,17 +23,7 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	Acceleration = MoveComp->GetCurrentAcceleration();
 	ShouldMove = (Velocity != FVector(0, 0, 0)) && (GroundSpeed > 3);
 	IsFalling = MoveComp->IsFalling();
-	IsSprinting = Character->GetIsSprinting();
 
-	if (InteractComp) {
-		IsPushing = InteractComp->IsPushingObject();
-	}
-
-	if (IsPushing) {
-		PushingDirection = Character->GetInputAxisValue("ForwardBack");
-		PushHeight = Character->GetInteractComponent()->GetPushableHeight();
-	}
-	
 	//Only care about this value because untargeted, the player rotates to where they move
 	//while when targeted, the player moves relative to what they are targeting - Brian
 	if (bIsTargeted) {
@@ -44,7 +31,7 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	}
 }
 
-void URPGAnimInstance::CalculateMovementInput() {
+void USmallEnemyAnimInstance::CalculateMovementInput() {
 	//Calculate movementinput for use in animbp
 
 	FVector2d Acceleration2D = (FVector2D)Acceleration;
@@ -53,7 +40,7 @@ void URPGAnimInstance::CalculateMovementInput() {
 	//Acceleration2D.Normalize();
 	//ForwardVector2D.Normalize();
 	//RightVector2D.Normalize();
-	LeftRightValue = Acceleration2D.Dot(ForwardVector2D)/10;
-	ForwardBackValue = Acceleration2D.Dot(RightVector2D)/10;
+	LeftRightValue = Acceleration2D.Dot(ForwardVector2D) / 10;
+	ForwardBackValue = Acceleration2D.Dot(RightVector2D) / 10;
 
 }

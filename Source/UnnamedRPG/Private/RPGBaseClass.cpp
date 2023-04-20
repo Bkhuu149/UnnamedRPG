@@ -22,6 +22,9 @@ void ARPGBaseClass::BeginPlay()
 void ARPGBaseClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//Use Pawn Sensing component to find player
+	//Set player as target if found
+	//Else, move randomly
 
 }
 
@@ -41,9 +44,7 @@ void ARPGBaseClass::DamageChar(float val) {
 		IsDead = true;
 		UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, DeathAnims.Num())];
 		PlayAnimMontage(DeathMontage);
-		GetWorld()->GetTimerManager().SetTimer(DisableColTimer, [&]() {
-			SetActorEnableCollision(false);
-			}, DeathMontage->GetPlayLength(), false);
+		GetWorld()->GetTimerManager().SetTimer(DisableColTimer, [&]() { SetActorEnableCollision(false); 	PrimaryActorTick.bCanEverTick = false;}, DeathMontage->GetPlayLength(), false);
 		return;
 	}
 	Health -= val;

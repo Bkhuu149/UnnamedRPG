@@ -12,12 +12,12 @@ AEnemyClass::AEnemyClass()
 
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("Pawn Sensing Component"));
 	
-	TriggerSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Trigger Sphere"));
-	TriggerSphere->InitSphereRadius(500.f);
-	TriggerSphere->SetCollisionProfileName(TEXT("Trigger"));
-	TriggerSphere->SetupAttachment(RootComponent);
+	//TriggerSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Trigger Sphere"));
+	//TriggerSphere->InitSphereRadius(500.f);
+	//TriggerSphere->SetCollisionProfileName(TEXT("Trigger"));
+	//TriggerSphere->SetupAttachment(RootComponent);
 
-	TriggerSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemyClass::OnOverlapBegin);
+	//TriggerSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemyClass::OnOverlapBegin);
 
 
 }
@@ -94,16 +94,16 @@ void AEnemyClass::ResetTarget() {
 }
 
 
-void AEnemyClass::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (OtherActor && (OtherActor != this) && OtherComp && static_cast<AMyRPGCharacter*>(OtherActor))
-	{
-		Targeted = true;
-		Target = OtherActor;
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
-		Walk();
-	}
-}
+//void AEnemyClass::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+//{
+//	if (OtherActor && (OtherActor != this) && OtherComp && static_cast<AMyRPGCharacter*>(OtherActor))
+//	{
+//		Targeted = true;
+//		Target = OtherActor;
+//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
+//		Walk();
+//	}
+//}
 
 void AEnemyClass::Rotate(float DeltaTime)
 {
