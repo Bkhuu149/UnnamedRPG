@@ -36,7 +36,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	FVector SpawnLocation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-	UAnimMontage* AttackAnim;
+	UAnimMontage* AttackAnimClose;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	UAnimMontage* AttackAnimRanged;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float Cooldown = 2.f;
 

@@ -50,6 +50,9 @@ void AEnemyClass::Tick(float DeltaTime)
 		Rotate(DeltaTime);
 		Attack();
 	}
+	else if (Target && FVector::Distance(Target->GetActorLocation(), GetActorLocation()) < 500.f) {
+		//RangeAttack();
+	}
 	//If Targeted, approach target. Else, walk to random point within spawn radius
 	if (Targeted) {
 		DelayTimer.Invalidate();
@@ -124,7 +127,7 @@ void AEnemyClass::Rotate(float DeltaTime)
 void AEnemyClass::Attack() 
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || CoolingDown) { return; }
-	PlayAnimMontage(AttackAnim);
+	PlayAnimMontage(AttackAnimClose);
 	CoolingDown = true;
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { CoolingDown = false; }, Cooldown, false);
 }
