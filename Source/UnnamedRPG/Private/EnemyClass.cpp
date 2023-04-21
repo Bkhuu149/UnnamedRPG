@@ -39,7 +39,11 @@ void AEnemyClass::BeginPlay()
 void AEnemyClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (IsDead) { return; }
+	if (IsDead || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+
+	//Use Pawn Sensing component to find player
+	//Set player as target if found
+	//Else, move randomly
 
 	// If already at target, stop and attack
 	if (FollowResult == EPathFollowingRequestResult::AlreadyAtGoal && CurrWalkState == FOLLOW) {

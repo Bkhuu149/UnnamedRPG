@@ -22,9 +22,6 @@ void ARPGBaseClass::BeginPlay()
 void ARPGBaseClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//Use Pawn Sensing component to find player
-	//Set player as target if found
-	//Else, move randomly
 
 }
 
