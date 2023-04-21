@@ -30,7 +30,10 @@ private:
 
 	FTimerHandle DisableColTimer;
 
-	void ResetInvincibility();
+	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
+	void StartInvincibility() { IsInvincible = true; }
+	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
+	void ResetInvincibility() { IsInvincible = false; }
 
 	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
 	void BeginSwordEvent();

@@ -45,7 +45,7 @@ void ARPGBaseClass::DamageChar(float val) {
 		return;
 	}
 	Health -= val;
-	IsInvincible = true;
+	StartInvincibility();
 	GetWorld()->GetTimerManager().SetTimer(InvincibiltyTimer, this, &ARPGBaseClass::ResetInvincibility, 0.2, false);
 
 }
@@ -57,10 +57,6 @@ void ARPGBaseClass::HealChar(float val) {
 		return;
 	}
 	Health += val;
-}
-
-void ARPGBaseClass::ResetInvincibility() {
-	IsInvincible = false;
 }
 
 void ARPGBaseClass::BeginSwordEvent() {
