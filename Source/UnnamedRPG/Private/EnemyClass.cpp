@@ -34,6 +34,11 @@ void AEnemyClass::BeginPlay()
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(ChosenWeapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
+
+	for (int i = 0; i < WalkPath.Num(); i++) {
+		WalkPath[i] = UKismetMathLibrary::ComposeTransforms(WalkPath[i], GetActorTransform());
+	}
+
 }
 
 void AEnemyClass::Tick(float DeltaTime)
@@ -91,11 +96,19 @@ void AEnemyClass::Walk() {
 		CurrWalkState = FOLLOW;
 		Location = Target->GetActorLocation();
 	} else {
-		if (!NavSys) { return; }
+		if (!NavSys || WalkPath.Num() == 0) { return; }
 		CurrWalkState = RANDOM;
-		FNavLocation ReachableLocation;
-		NavSys->GetRandomReachablePointInRadius(SpawnLocation, 1000.f, ReachableLocation);
-		Location = ReachableLocation.Location;
+
+		CurrentPathNode++;
+
+		if (CurrentPathNode >= WalkPath.Num()) {
+			CurrentPathNode = 0;
+		}
+
+		Location = WalkPath[CurrentPathNode].GetLocation();
+		//FNavLocation ReachableLocation;
+		//NavSys->GetRandomReachablePointInRadius(SpawnLocation, 1000.f, ReachableLocation);
+		//Location = ReachableLocation.Location;
 	}
 
 	//Walk to location

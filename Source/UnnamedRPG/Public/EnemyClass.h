@@ -25,8 +25,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	UPROPERTY(EditAnywhere)
-	TArray<FVector> WalkPath;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (MakeEditWidget = true))
+	TArray<FTransform> WalkPath;
+
+	int CurrentPathNode = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pawn Sense")
 	UPawnSensingComponent* PawnSensingComp;
