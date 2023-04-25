@@ -119,6 +119,7 @@ void AEnemyClass::Walk() {
 void AEnemyClass::ResetTarget() {
 	//Call to reset target values
 	Targeted = false;
+	MyController->StopMovement();
 	Target = nullptr;
 }
 

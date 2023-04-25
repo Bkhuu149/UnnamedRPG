@@ -47,8 +47,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float Cooldown = 2.f;
 
-private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTimerHandle DelayTimer;
+private:
 
 	FTimerHandle AttackTimer;
 
