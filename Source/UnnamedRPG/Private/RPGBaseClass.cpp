@@ -32,21 +32,22 @@ void ARPGBaseClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-void ARPGBaseClass::DamageChar(float val) {
+bool ARPGBaseClass::DamageChar(float val) {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Damage"));
 
-	if (IsDead || IsInvincible) { return; }
+	if (IsDead || IsInvincible) { return false; }
 	if (Health - val <= 0) {
 		Health = 0;
 		IsDead = true;
 		UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, DeathAnims.Num())];
 		PlayAnimMontage(DeathMontage);
 		GetWorld()->GetTimerManager().SetTimer(DisableColTimer, [&]() { SetActorEnableCollision(false); 	PrimaryActorTick.bCanEverTick = false;}, DeathMontage->GetPlayLength(), false);
-		return;
+		return true;
 	}
 	Health -= val;
 	StartInvincibility();
-	GetWorld()->GetTimerManager().SetTimer(InvincibiltyTimer, this, &ARPGBaseClass::ResetInvincibility, 0.2, false);
+	GetWorld()->GetTimerManager().SetTimer(InvincibiltyTimer, this, &ARPGBaseClass::ResetInvincibility, 0.5, false);
+	return true;
 
 }
 

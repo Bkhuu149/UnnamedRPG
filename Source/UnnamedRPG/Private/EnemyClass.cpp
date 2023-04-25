@@ -47,11 +47,20 @@ void AEnemyClass::Tick(float DeltaTime)
 
 	// If already at target, stop and attack
 	if (FollowResult == EPathFollowingRequestResult::AlreadyAtGoal && CurrWalkState == FOLLOW) {
-		Rotate(DeltaTime);
-		Attack();
-	}
-	else if (Target && FVector::Distance(Target->GetActorLocation(), GetActorLocation()) < 500.f) {
-		//RangeAttack();
+
+		int Chance = FMath::RandRange(0, 2);
+
+		switch (Chance) {
+			case 1:
+				Rotate(DeltaTime);
+				Attack();
+				break;
+			case 2:
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Range"));
+				break;
+				//RangeAttack()
+
+		}
 	}
 	//If Targeted, approach target. Else, walk to random point within spawn radius
 	if (Targeted) {

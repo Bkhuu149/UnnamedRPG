@@ -50,7 +50,7 @@ public:
 
 	//Handle Health
 	UFUNCTION(BlueprintCallable, Category = "Character Information")
-	virtual void DamageChar(float val);
+	virtual bool DamageChar(float val);
 
 	UFUNCTION(BlueprintCallable, Category = "Character Information")
 	virtual void HealChar(float val);

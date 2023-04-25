@@ -175,7 +175,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	//Handle Health
-	virtual void DamageChar(float val) override;
+	virtual bool DamageChar(float val) override;
 	virtual void HealChar(float val) override;
 
 	// Called to bind functionality to input
@@ -209,6 +209,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Character Information")
 	float GetManaMax() { return ManaMax; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+	void AddMana();
 
 	float GetForwardBackValue() { return ForwardBackInputValue; }
 	

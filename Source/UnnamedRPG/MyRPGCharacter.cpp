@@ -134,7 +134,7 @@ void AMyRPGCharacter::OnHealPressed() {
 		return;
 	}
 	Mana = 0.0;
-	HealChar(20.0);
+	HealChar(30.0);
 	IncrementMana();
 }
 
@@ -401,8 +401,8 @@ void AMyRPGCharacter::ResetTarget() {
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
-void AMyRPGCharacter::DamageChar(float val) {
-	Super::DamageChar(val);
+bool AMyRPGCharacter::DamageChar(float val) {
+	return Super::DamageChar(val);
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
 
 }
@@ -414,9 +414,8 @@ void AMyRPGCharacter::HealChar(float val) {
 }
 
 void AMyRPGCharacter::RestoreMana() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	if (Mana < ManaMax) {
-		Mana += .5;
+		Mana += .1;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Mana: %f"), Mana));
 	}
 	if (ManaTimer.IsValid() && ManaMax == Mana) {
@@ -427,4 +426,11 @@ void AMyRPGCharacter::RestoreMana() {
 
 void AMyRPGCharacter::IncrementMana() {
 	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AMyRPGCharacter::RestoreMana, .05f, true);
+}
+
+void AMyRPGCharacter::AddMana() {
+	Mana += 2 * (AttackCount+1);
+	if (Mana > ManaMax) {
+		Mana = 100;
+	}
 }
