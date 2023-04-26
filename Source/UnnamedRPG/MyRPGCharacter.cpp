@@ -30,9 +30,21 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 		FocusTarget(DeltaTime);
 	}
 
+
 	ForwardBackInputValue = GetInputAxisValue("ForwardBack");
 	RightLeftInputValue = GetInputAxisValue("RightLeft");
 
+	if (IsSprinting && (ForwardBackInputValue != 0 || RightLeftInputValue != 0)) {
+		CurrentStamina -= .5;
+	}
+	else {
+		CurrentStamina += .5;
+	}
+	CurrentStamina = FMath::Clamp(CurrentStamina, 0, StaminaMax);
+	if (CurrentStamina == 0) {
+		IsSprinting = false;
+		OnSprintReleased();
+	}
 }
 
 // Called to bind functionality to input

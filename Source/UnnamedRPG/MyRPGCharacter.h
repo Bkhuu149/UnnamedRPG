@@ -150,6 +150,10 @@ private:
 	void OnSprintReleased();
 	float SprintMultiplier = .5f;
 
+	//Stamina values
+	float CurrentStamina = 100;
+	float StaminaMax = 100;
+
 	//Handle Attack Pressed
 	void OnAttackPressed();
 	void ResetAttack();
@@ -204,14 +208,21 @@ public:
 
 	bool GetIsTargeted() { return Targeted; }
 
-	UFUNCTION(BlueprintCallable, Category = "Character Information")
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 	float GetMana() { return Mana; }
 
-	UFUNCTION(BlueprintCallable, Category = "Character Information")
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 	float GetManaMax() { return ManaMax; }
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 	void AddMana();
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		float GetStamina() { return CurrentStamina; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		float GetStaminaMax() { return StaminaMax; }
+
 
 	float GetForwardBackValue() { return ForwardBackInputValue; }
 	
