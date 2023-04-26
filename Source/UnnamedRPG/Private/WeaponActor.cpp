@@ -43,7 +43,7 @@ void AWeaponActor::WeaponLineTrace() {
 	AActor* tableinit[] = { Owner }; // Add self to ignore list
 	TArray<AActor*> IgnoreList;
 	IgnoreList.Append(tableinit);
-	bool bHit = UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
+	bool bHit = UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::None, OutHit, true);
 	AActor* Parent = this->GetAttachParentActor();
 	UGameplayStatics::ApplyDamage(OutHit.GetActor(), 10.f, NULL, Parent, NULL); // Apply 5 damage to the actor being hit
 
