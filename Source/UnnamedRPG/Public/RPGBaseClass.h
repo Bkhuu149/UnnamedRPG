@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Animation/AnimMontage.h"
 #include "WeaponActor.h"
 #include "RPGBaseClass.generated.h"
@@ -40,13 +41,14 @@ private:
 	UFUNCTION(BlueprintCallable, category = "MyRPGCharacter")
 	void EndSwordEvent();
 
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
 
 	//Handle Health
 	UFUNCTION(BlueprintCallable, Category = "Character Information")

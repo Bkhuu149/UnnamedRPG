@@ -69,3 +69,10 @@ void ARPGBaseClass::EndSwordEvent() {
 	CurrentWeapon->EndLineTrace();
 	CurrentWeapon->EndTrail();
 }
+
+void ARPGBaseClass::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) {
+	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+	if (GetCharacterMovement()->IsFalling()) {
+		return;
+	}
+}
