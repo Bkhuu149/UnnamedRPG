@@ -95,6 +95,8 @@ void AEnemyClass::Walk() {
 	{
 		CurrWalkState = FOLLOW;
 		Location = Target->GetActorLocation();
+		FollowResult = MyController->MoveToActor(Target, 50.f, true, true, false);
+
 	} else {
 		if (!NavSys || WalkPath.Num() == 0) { return; }
 		CurrWalkState = RANDOM;
@@ -109,10 +111,10 @@ void AEnemyClass::Walk() {
 		//FNavLocation ReachableLocation;
 		//NavSys->GetRandomReachablePointInRadius(SpawnLocation, 1000.f, ReachableLocation);
 		//Location = ReachableLocation.Location;
+		FollowResult = MyController->MoveToLocation(Location, 100.f);
 	}
 
 	//Walk to location
-	FollowResult = MyController->MoveToLocation(Location, 100.f);
 	DelayTimer.Invalidate();
 }
 
@@ -143,14 +145,15 @@ void AEnemyClass::Rotate(float DeltaTime)
 	CurrentLocation.Z = 0;
 	TargetLocation.Z = 0;
 	FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
-	FRotator CharacterRInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 20.f);
+	FRotator CharacterRInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 10.f);
 	SetActorRotation(CharacterRInterpVal);
 }
 
 void AEnemyClass::Attack() 
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || CoolingDown) { return; }
-	PlayAnimMontage(AttackAnimClose);
+	int AttackIndex = FMath::RandRange(0, AttackAnimClose.Num()-1);
+	PlayAnimMontage(AttackAnimClose[AttackIndex]);
 	CoolingDown = true;
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { CoolingDown = false; }, Cooldown, false);
 }

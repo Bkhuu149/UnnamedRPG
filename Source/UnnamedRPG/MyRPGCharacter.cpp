@@ -427,7 +427,7 @@ void AMyRPGCharacter::HealChar(float val) {
 
 void AMyRPGCharacter::RestoreMana() {
 	if (Mana < ManaMax) {
-		Mana += .1;
+		Mana += .01;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Mana: %f"), Mana));
 	}
 	if (ManaTimer.IsValid() && ManaMax == Mana) {

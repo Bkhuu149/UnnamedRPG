@@ -41,9 +41,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	FVector SpawnLocation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-	UAnimMontage* AttackAnimClose;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-	UAnimMontage* AttackAnimRanged;
+	TArray<UAnimMontage*> AttackAnimClose;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float Cooldown = 2.f;
 
@@ -53,13 +51,15 @@ private:
 
 	FTimerHandle AttackTimer;
 
+	FTimerHandle CirclingTimer;
+
 	AAIController* MyController;
 
 	UNavigationSystemV1* NavSys;
 
 	EPathFollowingRequestResult::Type FollowResult;
 
-	enum WalkState { IDLE, FOLLOW, RANDOM };
+	enum WalkState { IDLE, FOLLOW, RANDOM};
 	WalkState CurrWalkState = IDLE;
 
 	bool CoolingDown = false;
