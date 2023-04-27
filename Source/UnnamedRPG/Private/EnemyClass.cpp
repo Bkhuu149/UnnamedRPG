@@ -34,6 +34,7 @@ void AEnemyClass::BeginPlay()
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(ChosenWeapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
+	CurrentWeapon->SetDamage(Damage);
 
 	for (int i = 0; i < WalkPath.Num(); i++) {
 		WalkPath[i] = UKismetMathLibrary::ComposeTransforms(WalkPath[i], GetActorTransform());

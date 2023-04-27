@@ -39,6 +39,10 @@ struct FAttackStruct : public FTableRowBase
 	bool IsFinisher = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UClass* Weapon = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float Damage = 5;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float StaminaDrain = 25;
 
 };
 

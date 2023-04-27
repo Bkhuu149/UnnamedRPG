@@ -32,6 +32,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	float Damage = 10.f;
+	void SetDamage(float NewDamage) { Damage = NewDamage; }
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UNiagaraSystem* Trail;
 

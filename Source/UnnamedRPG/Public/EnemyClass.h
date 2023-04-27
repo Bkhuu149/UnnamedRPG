@@ -44,6 +44,8 @@ protected:
 	TArray<UAnimMontage*> AttackAnimClose;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float Cooldown = 2.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	float Damage = 10.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTimerHandle DelayTimer;

@@ -35,9 +35,9 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 	RightLeftInputValue = GetInputAxisValue("RightLeft");
 
 	if (IsSprinting && (ForwardBackInputValue != 0 || RightLeftInputValue != 0)) {
-		CurrentStamina -= .5;
+		CurrentStamina -= .25;
 	}
-	else {
+	else if (!GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() && CurrentStamina != StaminaMax ){
 		CurrentStamina += .5;
 	}
 	CurrentStamina = FMath::Clamp(CurrentStamina, 0, StaminaMax);
@@ -151,9 +151,15 @@ void AMyRPGCharacter::OnHealPressed() {
 }
 
 void AMyRPGCharacter::OnDodgePressed() {
-	if (GetCharacterMovement()->IsFalling() || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
+	if (GetCharacterMovement()->IsFalling() || 
+		GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || 
+		IsInteracting || 
+		CurrentStamina - 30 < 0
+		) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
 	IsDodging = true;
+	CurrentStamina -= 30;
+	FMath::Clamp(CurrentStamina, 0, StaminaMax);
 	float duration = PlayAnimMontage(DodgeAnim);
 	GetWorld()->GetTimerManager().SetTimer(DodgeTimer, this, &AMyRPGCharacter::DodgeFinished, duration, false);
 	if (ForwardBackInputValue < 0) {
@@ -232,6 +238,9 @@ void AMyRPGCharacter::OnAttackPressed() {
 	
 	FAttackStruct* TestAttack = AbilityTab->FindRow<FAttackStruct>(AttackCombo[AttackCount], "");
 	
+	if (TestAttack->StaminaDrain > CurrentStamina) { return; }
+
+	CurrentStamina -= TestAttack->StaminaDrain; 
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(TestAttack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
@@ -251,6 +260,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 
 	IsAttacking = true;
 	AttackCount++;
+	CurrentWeapon->SetDamage(TestAttack->Damage * (AttackCount));
 
 	if (AttackTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
@@ -275,8 +285,9 @@ void AMyRPGCharacter::DoFinisher() {
 
 	FAttackStruct* FinisherAttack = AbilityTab->FindRow<FAttackStruct>(Finisher, "");
 	//If the attack is not a finisher, return for safety
-	if (!FinisherAttack->IsFinisher) { return; }
-
+	if (!FinisherAttack->IsFinisher || (FinisherAttack->StaminaDrain > CurrentStamina)) { return; }
+	
+	CurrentStamina -= FinisherAttack->StaminaDrain;
 	FTimerHandle AnimTimer;
 	GetWorld()->GetTimerManager().SetTimer(AnimTimer, [&]() {
 		if (CurrentWeapon != nullptr) {
@@ -290,6 +301,7 @@ void AMyRPGCharacter::DoFinisher() {
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(FinisherAttack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
+	CurrentWeapon->SetDamage((AttackCount) * CurrentWeapon->Damage);
 
 	FGameplayAbilitySpec FinalAttack = FGameplayAbilitySpec(FinisherAttack->Attack.GetDefaultObject(), 1, 0);
 	IsAttacking = true;
@@ -414,9 +426,25 @@ void AMyRPGCharacter::ResetTarget() {
 }
 
 bool AMyRPGCharacter::DamageChar(float val) {
-	return Super::DamageChar(val);
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
+	if (IsBlocking) {
+		//If blocking, the do percentage of value
+		val *= .5f;
+	}
+	bool bHit = Super::DamageChar(val);
 
+	if (IsBlocking && bHit) {
+		//if blocking and got hit, lose stamina
+		CurrentStamina -= val * 2.f;
+		CurrentStamina = FMath::Clamp(CurrentStamina, 0, StaminaMax);
+		//if out of stamina, then release block
+		if (CurrentStamina == 0) {
+			IsBlocking = false;
+			StopAnimMontage(BlockAnim);
+		}
+	}
+
+	return bHit;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
 }
 
 void AMyRPGCharacter::HealChar(float val) {
