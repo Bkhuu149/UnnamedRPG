@@ -34,6 +34,7 @@ EPosition ALadderActor::FindClosestPushTransformIndex(FVector CharacterLocation)
 
 	float DistanceToTop = FVector::DistSquared(Top, CharacterLocation);
 	float DistanceToBottom = FVector::DistSquared(Bottom, CharacterLocation);
+	//Check if we are close to the bottom or top of the ladder
 	if (DistanceToTop < pow(200.f, 2) || DistanceToBottom < pow(200.f, 2)) {
 
 		if (DistanceToTop < DistanceToBottom) {

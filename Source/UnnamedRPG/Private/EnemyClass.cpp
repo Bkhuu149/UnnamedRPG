@@ -62,7 +62,7 @@ void AEnemyClass::Tick(float DeltaTime)
 				Attack();
 				break;
 			case 2:
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Range"));
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Circle"));
 				break;
 				//RangeAttack()
 
@@ -140,6 +140,7 @@ void AEnemyClass::ResetTarget() {
 
 void AEnemyClass::Rotate(float DeltaTime)
 {
+	//Slowly rotate enemy towards character
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector CurrentLocation = GetActorLocation();
 	FVector TargetLocation = Target->GetActorLocation();
@@ -152,6 +153,7 @@ void AEnemyClass::Rotate(float DeltaTime)
 
 void AEnemyClass::Attack() 
 {
+	//Performs random attack in AttackAnimClose array
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || CoolingDown) { return; }
 	int AttackIndex = FMath::RandRange(0, AttackAnimClose.Num()-1);
 	PlayAnimMontage(AttackAnimClose[AttackIndex]);

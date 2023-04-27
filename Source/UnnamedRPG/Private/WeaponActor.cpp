@@ -35,6 +35,7 @@ void AWeaponActor::EndTrail() {
 }
 
 void AWeaponActor::WeaponLineTrace() {
+	//Draw a trace from weapon hilt to tip of weapon defined by sockets in mesh
 	UActorComponent* WeaponComponent = GetComponentByClass(UStaticMeshComponent::StaticClass());
 	UStaticMeshComponent* WeaponMesh = Cast<UStaticMeshComponent>(WeaponComponent);
 	FVector StartSocket = WeaponMesh->GetSocketLocation("Start");
@@ -50,10 +51,12 @@ void AWeaponActor::WeaponLineTrace() {
 }
 
 void AWeaponActor::StartLineTrace() {
+	//Start timer for weapon hit detection
 	GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AWeaponActor::WeaponLineTrace, 0.01, true);
 }
 
 void AWeaponActor::EndLineTrace() {
+	//End timer for weapon hit detection
 	if (ColTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(ColTimer);
 		ColTimer.Invalidate();

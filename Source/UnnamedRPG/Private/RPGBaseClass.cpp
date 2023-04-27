@@ -61,11 +61,13 @@ void ARPGBaseClass::HealChar(float val) {
 }
 
 void ARPGBaseClass::BeginSwordEvent() {
+	//This is called during the attack animation notify
 	CurrentWeapon->StartLineTrace();
 	CurrentWeapon->PlayTrail();
 }
 
 void ARPGBaseClass::EndSwordEvent() {
+	//This is called during the attack animation notify
 	CurrentWeapon->EndLineTrace();
 	CurrentWeapon->EndTrail();
 }

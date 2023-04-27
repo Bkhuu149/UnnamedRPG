@@ -27,6 +27,7 @@ void APushableActor::Tick(float DeltaTime)
 }
 
 int APushableActor::FindClosestPushTransformIndex1(FVector2D CharacterLocation, float PushRange){
+	//Find closest push index so we know where to attach actor if we can
 	int CurrentTransformIndex = 0;
 	int ClosestTransformIndex = -1;
 	float CurrentDistanceSq = 0.f;
