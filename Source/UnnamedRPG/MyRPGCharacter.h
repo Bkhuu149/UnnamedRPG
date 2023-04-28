@@ -143,6 +143,7 @@ private:
 	void OnHealPressed();
 	void IncrementMana();
 	void RestoreMana();
+	bool IsRegeningMana = false;
 	FTimerHandle ManaTimer;
 	float Mana = 100.0;
 	float ManaMax = 100.0;

@@ -114,21 +114,24 @@ void AMyRPGCharacter::MoveRightLeft(float value)
 }
 
 void AMyRPGCharacter::OnBlockPressed() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting || IsRegeningMana) { return; }
+	Mana -= 25;
+	Mana = FMath::Clamp(Mana, 0, ManaMax);
+	if (Mana == 0) {
+		IncrementMana();
+		IsRegeningMana = true;
+	}
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Blocked Pressed"));
 	PlayAnimMontage(ParryAnim);
 
 }
 
 void AMyRPGCharacter::OnHealPressed() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
-	if (Mana < 100.0) {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Not enough Mana"));
-		return;
-	}
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting || IsRegeningMana) { return; }
 	Mana = 0.0;
 	HealChar(30.0);
 	IncrementMana();
+	IsRegeningMana = true;
 }
 
 void AMyRPGCharacter::OnDodgePressed() {
@@ -422,24 +425,24 @@ void AMyRPGCharacter::HealChar(float val) {
 
 void AMyRPGCharacter::RestoreMana() {
 	if (Mana < ManaMax) {
-		Mana += .01;
+		Mana += .025;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Mana: %f"), Mana));
 	}
-	if (ManaTimer.IsValid() && ManaMax == Mana) {
+	if (Mana >= ManaMax) {
+		Mana = ManaMax;
+		IsRegeningMana = false;
 		GetWorld()->GetTimerManager().ClearTimer(ManaTimer);
 		ManaTimer.Invalidate();
 	}
 }
 
 void AMyRPGCharacter::IncrementMana() {
-	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AMyRPGCharacter::RestoreMana, .05f, true);
+	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AMyRPGCharacter::RestoreMana, .01f, true);
 }
 
 void AMyRPGCharacter::AddMana() {
-	Mana += 2 * (AttackCount+1);
-	if (Mana > ManaMax) {
-		Mana = 100;
-	}
+	Mana += 4 * (AttackCount+1);
+	Mana = FMath::Clamp(Mana, 0, ManaMax);
 }
 
 void AMyRPGCharacter::StartBarrier() {
