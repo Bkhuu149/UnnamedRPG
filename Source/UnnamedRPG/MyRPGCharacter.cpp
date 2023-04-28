@@ -60,7 +60,6 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAction(TEXT("Target"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnTargetPressed);
 
 	PlayerInputComponent->BindAction(TEXT("Block"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnBlockPressed);
-	PlayerInputComponent->BindAction(TEXT("Block"), EInputEvent::IE_Released, this, &AMyRPGCharacter::OnBlockReleased);
 
 	PlayerInputComponent->BindAction(TEXT("Heal"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnHealPressed);
 
@@ -117,25 +116,7 @@ void AMyRPGCharacter::MoveRightLeft(float value)
 void AMyRPGCharacter::OnBlockPressed() {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Blocked Pressed"));
-	//Start a timer to see how long this button was pressed to distinguish between blocking and parrying
-	IsBlocking = true;
-	PressedTime = FDateTime::Now().GetTicks();
-	PlayAnimMontage(BlockAnim);
-
-}
-
-void AMyRPGCharacter::OnBlockReleased() {
-	if (IsInteracting) { return; }
-	//Condiiton should check if timer is past a certain time limit. If true, then perform parry.  False would release block
-	int64 CurrentTime = FDateTime::Now().GetTicks();
-
-	if ((CurrentTime - PressedTime)/1000 <= PARRY_THRESH) {
-		PlayAnimMontage(ParryAnim);
-	}
-	StopAnimMontage(BlockAnim);
-
-	IsBlocking = false;
-	return;
+	PlayAnimMontage(ParryAnim);
 
 }
 
@@ -426,22 +407,8 @@ void AMyRPGCharacter::ResetTarget() {
 }
 
 bool AMyRPGCharacter::DamageChar(float val) {
-	if (IsBlocking) {
-		//If blocking, the do percentage of value
-		val *= .5f;
-	}
+	
 	bool bHit = Super::DamageChar(val);
-
-	if (IsBlocking && bHit) {
-		//if blocking and got hit, lose stamina
-		CurrentStamina -= val * 2.f;
-		CurrentStamina = FMath::Clamp(CurrentStamina, 0, StaminaMax);
-		//if out of stamina, then release block
-		if (CurrentStamina == 0) {
-			IsBlocking = false;
-			StopAnimMontage(BlockAnim);
-		}
-	}
 
 	return bHit;
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
@@ -475,6 +442,11 @@ void AMyRPGCharacter::AddMana() {
 	}
 }
 
-void AMyRPGCharacter::StartBarrier() {}
+void AMyRPGCharacter::StartBarrier() {
+	Barrier = GetWorld()->SpawnActor<AActor>(BarrierClass, GetActorTransform());
+	Barrier->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+}
 
-void AMyRPGCharacter::EndBarrier() {}
+void AMyRPGCharacter::EndBarrier() {
+	GetWorld()->DestroyActor(Barrier);
+}

@@ -74,8 +74,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool IsJumping = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
-		bool IsBlocking = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool IsDodging = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool IsSprinting = false;
@@ -101,6 +99,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	UClass* WeaponClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UClass* BarrierClass;
+
 	//Data Tables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UDataTable* AbilityTab;
@@ -111,8 +112,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* ParryAnim;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
-	UAnimMontage* BlockAnim;
 
 	UFUNCTION(BlueprintCallable)
 		void StartBarrier();
@@ -138,9 +137,7 @@ private:
 
 	//Handle Block Inputs
 	void OnBlockPressed();
-	void OnBlockReleased();
-	int64 PressedTime = 0;
-	const int PARRY_THRESH = 2000;
+	AActor* Barrier;
 
 	//Handle Healing Inputs
 	void OnHealPressed();
@@ -200,8 +197,6 @@ public:
 
 	void MoveRightLeft(float value);
 	
-	bool GetIsBlocking() { return IsBlocking; }
-
 	bool GetIsDodging() { return IsDodging; }
 
 	bool GetIsSprinting() { return IsSprinting; }

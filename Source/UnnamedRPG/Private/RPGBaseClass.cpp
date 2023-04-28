@@ -39,7 +39,7 @@ bool ARPGBaseClass::DamageChar(float val) {
 	if (Health - val <= 0) {
 		Health = 0;
 		IsDead = true;
-		UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, DeathAnims.Num())];
+		UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, DeathAnims.Num()-1)];
 		PlayAnimMontage(DeathMontage);
 		GetWorld()->GetTimerManager().SetTimer(DisableColTimer, [&]() { SetActorEnableCollision(false); 	PrimaryActorTick.bCanEverTick = false;}, DeathMontage->GetPlayLength(), false);
 		return true;
@@ -81,7 +81,7 @@ void ARPGBaseClass::CheckSpeed(float FallDamage) {
 	if (GetCharacterMovement()->IsFalling()) {
 		FVector ZVelocity = FVector(0, 0, GetVelocity().Z);
 		FallDamage = FMath::GetMappedRangeValueClamped(FVector2D(1500.f, 2000.f), FVector2D(0.f, 100.f), float(ZVelocity.Size()));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fall: %f"), FallDamage));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fall: %f"), FallDamage));
 		FTimerDelegate Delegate;
 		Delegate.BindUObject(this, &ARPGBaseClass::CheckSpeed, FallDamage);
 		GetWorld()->GetTimerManager().SetTimer(CheckSpeedTimer, Delegate, 0.001, false);
