@@ -74,7 +74,18 @@ void ARPGBaseClass::EndSwordEvent() {
 
 void ARPGBaseClass::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) {
 	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+	if (GetCharacterMovement()->IsFalling()) { CheckSpeed(); }
+}
+
+void ARPGBaseClass::CheckSpeed(float FallDamage) {
 	if (GetCharacterMovement()->IsFalling()) {
-		return;
+		FVector ZVelocity = FVector(0, 0, GetVelocity().Z);
+		FallDamage = FMath::GetMappedRangeValueClamped(FVector2D(1500.f, 2000.f), FVector2D(0.f, 100.f), float(ZVelocity.Size()));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Fall: %f"), FallDamage));
+		FTimerDelegate Delegate;
+		Delegate.BindUObject(this, &ARPGBaseClass::CheckSpeed, FallDamage);
+		GetWorld()->GetTimerManager().SetTimer(CheckSpeedTimer, Delegate, 0.001, false);
+	} else {
+		DamageChar(FallDamage);
 	}
 }

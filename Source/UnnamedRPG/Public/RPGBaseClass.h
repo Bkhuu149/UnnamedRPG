@@ -31,6 +31,8 @@ private:
 
 	FTimerHandle DisableColTimer;
 
+	FTimerHandle CheckSpeedTimer;
+
 	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
 	void StartInvincibility() { IsInvincible = true; }
 	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
@@ -49,6 +51,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
+
+	virtual void CheckSpeed(float FallDamage = 0.f);
 
 	//Handle Health
 	UFUNCTION(BlueprintCallable, Category = "Character Information")
