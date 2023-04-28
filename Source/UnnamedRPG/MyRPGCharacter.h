@@ -113,6 +113,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* BlockAnim;
+
+	UFUNCTION(BlueprintCallable)
+		void StartBarrier();
+
+	UFUNCTION(BlueprintCallable)
+		void EndBarrier();
+
 private:
 	//TO BE REMOVED LATER, LEFT IN FOR TESTING DAMAGE
 	void KILL();

@@ -474,3 +474,7 @@ void AMyRPGCharacter::AddMana() {
 		Mana = 100;
 	}
 }
+
+void AMyRPGCharacter::StartBarrier() {}
+
+void AMyRPGCharacter::EndBarrier() {}
