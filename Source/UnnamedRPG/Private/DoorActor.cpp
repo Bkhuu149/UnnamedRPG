@@ -40,7 +40,6 @@ bool ADoorActor::CheckDistance(FVector CharacterLocation, float PushRange) {
 	return false;
 }
 
-
 void ADoorActor::HandleInteraction(ACharacter* Character) {
 	
 	if (!Door) {
