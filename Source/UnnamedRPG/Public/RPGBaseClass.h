@@ -55,10 +55,13 @@ public:
 	virtual void CheckSpeed(float FallDamage = 0.f);
 
 	//Handle Health
-	UFUNCTION(BlueprintCallable, Category = "Character Information")
+	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual bool DamageChar(float val);
 
-	UFUNCTION(BlueprintCallable, Category = "Character Information")
+	UFUNCTION(BlueprintCallable, Category = "Character")
+	void KillCharacter();
+
+	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void HealChar(float val);
 
 	bool IsInvincible = false;

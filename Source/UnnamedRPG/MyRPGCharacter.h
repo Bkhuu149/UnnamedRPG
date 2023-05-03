@@ -112,6 +112,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* ParryAnim;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UParticleSystem* BarrierParticle;
+
 
 	UFUNCTION(BlueprintCallable)
 		void StartBarrier();
@@ -138,6 +141,7 @@ private:
 	//Handle Block Inputs
 	void OnBlockPressed();
 	AActor* Barrier;
+	bool BarrierHit = false;
 
 	//Handle Healing Inputs
 	void OnHealPressed();

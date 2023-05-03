@@ -413,6 +413,10 @@ bool AMyRPGCharacter::DamageChar(float val) {
 	
 	bool bHit = Super::DamageChar(val);
 
+	if (Barrier && !bHit) {
+		BarrierHit = true;
+	}
+
 	return bHit;
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
 }
@@ -451,5 +455,20 @@ void AMyRPGCharacter::StartBarrier() {
 }
 
 void AMyRPGCharacter::EndBarrier() {
+	if (BarrierHit){
+		BarrierHit = false;
+
+		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = { EObjectTypeQuery::ObjectTypeQuery3 };
+		TArray<AActor*> IgnoreList = { this };
+		TArray<AActor*> OutHits;
+		UKismetSystemLibrary::SphereOverlapActors(GetWorld(), Barrier->GetActorLocation(), 300, ObjectTypes, NULL, IgnoreList, OutHits);
+		//DrawDebugSphere(GetWorld(), Barrier->GetActorLocation(), 300, 12, FColor::Blue, true, 10, 0, 2);
+		for (AActor* Enemy: OutHits) {
+			UGameplayStatics::ApplyDamage(Enemy, 10, NULL, this, NULL);
+		}
+		FTransform ParticleSpawnTransform = FTransform(GetActorRotation(), GetActorLocation(), FVector(.5, .5, .5));
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BarrierParticle, ParticleSpawnTransform);
+
+	}
 	GetWorld()->DestroyActor(Barrier);
 }

@@ -37,11 +37,7 @@ bool ARPGBaseClass::DamageChar(float val) {
 
 	if (IsDead || IsInvincible) { return false; }
 	if (Health - val <= 0) {
-		Health = 0;
-		IsDead = true;
-		UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, DeathAnims.Num()-1)];
-		PlayAnimMontage(DeathMontage);
-		GetWorld()->GetTimerManager().SetTimer(DisableColTimer, [&]() { SetActorEnableCollision(false); 	PrimaryActorTick.bCanEverTick = false;}, DeathMontage->GetPlayLength(), false);
+		KillCharacter();
 		return true;
 	}
 	Health -= val;
@@ -49,6 +45,14 @@ bool ARPGBaseClass::DamageChar(float val) {
 	GetWorld()->GetTimerManager().SetTimer(InvincibiltyTimer, this, &ARPGBaseClass::ResetInvincibility, 0.5, false);
 	return true;
 
+}
+
+void ARPGBaseClass::KillCharacter() {
+	Health = 0;
+	IsDead = true;
+	UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, DeathAnims.Num() - 1)];
+	PlayAnimMontage(DeathMontage);
+	GetWorld()->GetTimerManager().SetTimer(DisableColTimer, [&]() { SetActorEnableCollision(false); 	PrimaryActorTick.bCanEverTick = false;}, DeathMontage->GetPlayLength(), false);
 }
 
 void ARPGBaseClass::HealChar(float val) {
@@ -85,7 +89,12 @@ void ARPGBaseClass::CheckSpeed(float FallDamage) {
 		FTimerDelegate Delegate;
 		Delegate.BindUObject(this, &ARPGBaseClass::CheckSpeed, FallDamage);
 		GetWorld()->GetTimerManager().SetTimer(CheckSpeedTimer, Delegate, 0.001, false);
-	} else {
-		DamageChar(FallDamage);
+	} else if (FallDamage > 0){
+		//DamageChar(FallDamage);
+		if (Health - FallDamage <= 0) {
+			KillCharacter();
+			return;
+		}
+		Health -= FallDamage;
 	}
 }
