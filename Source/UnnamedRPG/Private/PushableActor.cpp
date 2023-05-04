@@ -23,7 +23,8 @@ void APushableActor::BeginPlay()
 void APushableActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	DrawDebugBox(GetWorld(), GetActorLocation(), FVector(100, 100, 100), FColor::Red, false, 0.1f, 0.f, 1.f);
+	
 }
 
 int APushableActor::FindClosestPushTransformIndex1(FVector2D CharacterLocation, float PushRange){

@@ -53,8 +53,8 @@ void UMyInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 			FVector Test1 = OwningCharacter->GetActorLocation();
 			FVector Test2 = CurrentLadder->GetLadderTop().GetLocation();
 
-			UE_LOG(LogTemp, Log, TEXT("Actor location: %s"), *Test1.ToString());
-			UE_LOG(LogTemp, Log, TEXT("Actor location: %s"), *Test2.ToString());
+			//UE_LOG(LogTemp, Log, TEXT("Actor location: %s"), *Test1.ToString());
+			//UE_LOG(LogTemp, Log, TEXT("Actor location: %s"), *Test2.ToString());
 			EndInteract();
 		}
 		Player->GetCharacterMovement()->Velocity = FVector::ZeroVector;
@@ -90,6 +90,7 @@ void UMyInteractComponent::BeginPush(APushableActor* Pushable) {
 	
 	//Set bool value
 	Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(true);
+	OwningCharacter->GetCharacterMovement()->Velocity = FVector(0, 0, 0);
 }
 void UMyInteractComponent::EndInteract() {
 	//Checking if Character is valid

@@ -38,11 +38,11 @@ EPosition ALadderActor::FindClosestPushTransformIndex(FVector CharacterLocation)
 	if (DistanceToTop < pow(200.f, 2) || DistanceToBottom < pow(200.f, 2)) {
 
 		if (DistanceToTop < DistanceToBottom) {
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Top"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Top"));
 
 			return EPosition::T_Top;
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bottom"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bottom"));
 
 		return EPosition::T_Bottom;
 	}
@@ -51,17 +51,17 @@ EPosition ALadderActor::FindClosestPushTransformIndex(FVector CharacterLocation)
 }
 
 void ALadderActor::HandleInteraction(ACharacter* Character) {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Ladder Interact"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Ladder Interact"));
 	EPosition Test = FindClosestPushTransformIndex(Character->GetActorLocation());
 
 	FTransform ClosestTransformLocal;
 
 	if (Test == EPosition::T_None) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("None"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("None"));
 		return;
 	}
 	else if (Test == EPosition::T_Top) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Top"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Top"));
 		ClosestTransformLocal = LadderTop;
 		FTransform ClosestTransformGlobal = UKismetMathLibrary::ComposeTransforms(ClosestTransformLocal, GetActorTransform());
 
@@ -69,7 +69,7 @@ void ALadderActor::HandleInteraction(ACharacter* Character) {
 		Character->SetActorTransform(ClosestTransformGlobal);
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bottom"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Bottom"));
 		ClosestTransformLocal = LadderBottom;
 		FTransform ClosestTransformGlobal = UKismetMathLibrary::ComposeTransforms(ClosestTransformLocal, GetActorTransform());
 
