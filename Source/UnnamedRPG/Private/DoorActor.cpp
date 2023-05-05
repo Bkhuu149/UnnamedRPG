@@ -43,29 +43,29 @@ bool ADoorActor::CheckDistance(FVector CharacterLocation, float PushRange) {
 void ADoorActor::HandleInteraction(ACharacter* Character) {
 	
 	if (!Door) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("No door to open")));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("No door to open")));
 
 		return;
 	}
 	if (!Character) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character not valid")));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character not valid")));
 		return;
 	}
 
 	//Do distance calculations here
 	UMyInteractComponent* InteractComp = Cast<UMyInteractComponent>(Character->GetComponentByClass(UMyInteractComponent::StaticClass()));
 	if (!InteractComp) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character does not have push component")));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character does not have push component")));
 		return;
 	}
 
 	if (!CheckDistance(Character->GetActorLocation(), InteractComp->PushRange)) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character too far away")));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character too far away")));
 		return;
 	}
 	
 	if (IsOpen) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, (TEXT("Door already open!")));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, (TEXT("Door already open!")));
 		return;
 	}
 
@@ -73,18 +73,18 @@ void ADoorActor::HandleInteraction(ACharacter* Character) {
 
 	switch (DoorType){
 		case EDoorType::Swivel:
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("A Swivel Door"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("A Swivel Door"));
 			RotateDoor();
 			break;
 
 		case EDoorType::Bridge:
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("A Bridge Door"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("A Bridge Door"));
 			LowerBridge();
 			break;
 
 
 		case EDoorType::Gate:
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Opening Gate Door"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Opening Gate Door"));
 			RaiseGate();
 			break;
 
@@ -96,7 +96,7 @@ void ADoorActor::HandleInteraction(ACharacter* Character) {
 void ADoorActor::RaiseGate() {
 	FTransform DoorTransform = Door->GetRelativeTransform();
 	if (DoorTransform.GetLocation().Z >= TargetTransform.GetLocation().Z) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Done Opening!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Done Opening!"));
 		return;
 	}
 	Door->AddLocalOffset(FVector(0,0, 3));
@@ -111,7 +111,7 @@ void ADoorActor::LowerBridge() {
 
 	//Need to convert to float for some reason
 	if ((float)TargetVector.Dot(CurrentVector) == 1) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Done Opening!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Done Opening!"));
 		return;
 	}
 	Door->AddLocalRotation(FRotator(1, 0, 0));
@@ -126,7 +126,7 @@ void ADoorActor::RotateDoor() {
 
 	//Need to convert to float for some reason
 	if ((float)TargetVector.Dot(CurrentVector) == 1) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Done Opening!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Done Opening!"));
 		return;
 	}
 	Door->AddLocalRotation(FRotator(0, 1, 0));
