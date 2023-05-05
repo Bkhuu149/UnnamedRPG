@@ -28,5 +28,7 @@ void ASavePoint::Tick(float DeltaTime)
 
 void ASavePoint::HandleInteraction(ACharacter* Character)
 {
-	Cast<AMyRPGCharacter>(Character)->HealChar(Cast<AMyRPGCharacter>(Character)->GetHealthMax());
+	AMyRPGCharacter* RPGCharacter = Cast<AMyRPGCharacter>(Character);
+	RPGCharacter->RestoreChar();
+	RPGCharacter->SaveGame();
 }

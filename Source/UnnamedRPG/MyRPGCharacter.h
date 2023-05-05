@@ -195,6 +195,8 @@ public:
 	virtual bool DamageChar(float val) override;
 	virtual void HealChar(float val) override;
 
+	virtual void RestoreChar();
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
@@ -239,6 +241,8 @@ public:
 	
 	float GetRightLeftValue() { return RightLeftInputValue; }
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void SaveGame();
 
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
 	UMyInteractComponent* GetInteractComponent() const { return InteractComp; }

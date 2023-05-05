@@ -440,6 +440,12 @@ void AMyRPGCharacter::RestoreMana() {
 	}
 }
 
+void AMyRPGCharacter::RestoreChar() {
+	Mana = GetManaMax();
+	HealChar(GetHealthMax());
+	CurrentStamina = GetStaminaMax();
+}
+
 void AMyRPGCharacter::IncrementMana() {
 	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AMyRPGCharacter::RestoreMana, .01f, true);
 }
