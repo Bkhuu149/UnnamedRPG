@@ -42,6 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void HandleInteraction(ACharacter* Character) override;
 
+	void PushActor(float Strength, FVector Direction, float PushSpeed = 200.f, float Duration = 5.f);
 
-
+private: 
+	FTimerHandle PushTimer;
+	bool IsMoving = false;
 };

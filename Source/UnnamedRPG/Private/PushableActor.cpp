@@ -23,8 +23,7 @@ void APushableActor::BeginPlay()
 void APushableActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	DrawDebugBox(GetWorld(), GetActorLocation(), FVector(100, 100, 100), FColor::Red, false, 0.1f, 0.f, 1.f);
-	
+	AddActorWorldOffset(GetActorUpVector() * -1, true);
 }
 
 int APushableActor::FindClosestPushTransformIndex1(FVector2D CharacterLocation, float PushRange){
@@ -137,6 +136,17 @@ void APushableActor::HandleInteraction(ACharacter* Character) {
 	InteractComp->BeginPush(this);
 
 	return;
+}
+
+void APushableActor::PushActor(float Strength, FVector Direction, float PushSpeed, float Duration) {
+
+	if (PushTimer.IsValid()) {
+		return;
+	}
+	//start a timer that pushes box
+	FVector DeltaLocation = Direction * (UKismetMathLibrary::FCeil(Strength) * PushSpeed);
+	AddActorWorldOffset(DeltaLocation, true);
+
 }
 
 

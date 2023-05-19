@@ -41,8 +41,11 @@ void UMyInteractComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	case EInteractType::None:
 		return;
 	case EInteractType::Pushing:
-		DeltaLocation = Player->GetActorForwardVector() * (UKismetMathLibrary::FCeil(Player->GetForwardBackValue()) * PushSpeed);
-		CurrentPushable->AddActorWorldOffset(DeltaLocation, true);
+		
+		//DeltaLocation = Player->GetActorForwardVector() * (UKismetMathLibrary::FCeil(Player->GetForwardBackValue()) * PushSpeed);
+		//CurrentPushable->AddActorWorldOffset(DeltaLocation, true);
+		if (Player->GetForwardBackValue() == 0.f) { return; }
+		CurrentPushable->PushActor(Player->GetForwardBackValue(), Player->GetActorForwardVector(), PushSpeed);
 		break;
 	case EInteractType::Climbing:
 		FTransform Top = UKismetMathLibrary::ComposeTransforms(CurrentLadder->GetLadderTop(), CurrentLadder->GetActorTransform());
