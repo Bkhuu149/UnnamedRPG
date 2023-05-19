@@ -21,6 +21,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	const FString SaveName = FString("slot1");
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
