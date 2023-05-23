@@ -158,6 +158,21 @@ void APushableActor::PushActor(float Strength, FVector Direction, float PushSpee
 		PushTimer.Invalidate();
 		TArray<class AActor*> ActorsAttached;
 		GetAttachedActors(ActorsAttached, false);
+		FCollisionShape Shape = FCollisionShape::MakeBox(FVector(50, 50, 50));
+		TArray<AActor*> IgnoreList;
+		FHitResult Outhit;
+		bool bhit = UKismetSystemLibrary::BoxTraceSingle(
+			GetWorld(), 
+			GetActorLocation(), 
+			GetActorLocation() - FVector(0, 0, 10), 
+			FVector(50, 50, 50), 
+			FRotator::ZeroRotator, 
+			TraceTypeQuery2, false, 
+			IgnoreList, 
+			EDrawDebugTrace::Type::ForDuration, 
+			Outhit, 
+			true);
+		if (bhit) { return; }
 		UMyInteractComponent* InteractComp = Cast<UMyInteractComponent>(ActorsAttached[0]->GetComponentByClass(UMyInteractComponent::StaticClass()));
 		if (!InteractComp) {
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Character does not have push component")));
