@@ -42,9 +42,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void HandleInteraction(ACharacter* Character) override;
 
-	void PushActor(float Strength, FVector Direction, float PushSpeed = 200.f, float Duration = 5.f);
+	void PushActor(float Strength, FVector Direction, float PushSpeed = 2.f, float Duration = 5.f);
 
 private: 
 	FTimerHandle PushTimer;
+	FTimerHandle StopPushTimer;
 	bool IsMoving = false;
+
+	FVector PlayerDirection;
 };

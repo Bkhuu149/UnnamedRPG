@@ -23,7 +23,7 @@ void APushableActor::BeginPlay()
 void APushableActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AddActorWorldOffset(GetActorUpVector() * -1, true);
+	//AddActorWorldOffset(GetActorUpVector() * -1, true);
 }
 
 int APushableActor::FindClosestPushTransformIndex1(FVector2D CharacterLocation, float PushRange){
@@ -140,12 +140,31 @@ void APushableActor::HandleInteraction(ACharacter* Character) {
 
 void APushableActor::PushActor(float Strength, FVector Direction, float PushSpeed, float Duration) {
 
-	if (PushTimer.IsValid()) {
+	if (PushTimer.IsValid() || Strength == 0.f) {
 		return;
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Want to push")));
+	PlayerDirection = Direction;
 	//start a timer that pushes box
-	FVector DeltaLocation = Direction * (UKismetMathLibrary::FCeil(Strength) * PushSpeed);
-	AddActorWorldOffset(DeltaLocation, true);
+	GetWorld()->GetTimerManager().SetTimer(PushTimer, [&]() {
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Pushing")));
+		FVector DeltaLocation = PlayerDirection * (UKismetMathLibrary::FCeil(1) * 2);
+		AddActorWorldOffset(DeltaLocation, false);
+		}, .02f, true);
+
+	GetWorld()->GetTimerManager().SetTimer(StopPushTimer, [&]() {
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Stop Pushing")));
+		GetWorld()->GetTimerManager().ClearTimer(PushTimer);
+		PushTimer.Invalidate();
+		TArray<class AActor*> ActorsAttached;
+		GetAttachedActors(ActorsAttached, false);
+		UMyInteractComponent* InteractComp = Cast<UMyInteractComponent>(ActorsAttached[0]->GetComponentByClass(UMyInteractComponent::StaticClass()));
+		if (!InteractComp) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Character does not have push component")));
+			return;
+		}
+		InteractComp->EndInteract();
+		}, .1f, false, 2.f);
 
 }
 
