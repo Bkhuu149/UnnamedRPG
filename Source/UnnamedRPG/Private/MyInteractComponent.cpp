@@ -132,6 +132,7 @@ void UMyInteractComponent::EndInteract() {
 		CurrentLadder = nullptr;
 		break;
 	case EInteractType::Pushing:
+		if (CurrentPushable->GetIsMoving()) { return; }
 		CurrentPushable = nullptr;
 		break;
 	}

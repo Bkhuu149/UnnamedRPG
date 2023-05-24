@@ -51,6 +51,8 @@ int APushableActor::FindClosestPushTransformIndex1(FVector2D CharacterLocation, 
 
 void APushableActor::HandleInteraction(ACharacter* Character) {
 
+	if (!IsPushable) { return; }
+
 	if (!Character) {
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Character not valid")));
 		return;
@@ -145,42 +147,59 @@ void APushableActor::PushActor(float Strength, FVector Direction, float PushSpee
 	}
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Want to push")));
 	PlayerDirection = Direction;
+	PlayerPushStrength = Strength;
+	PlayerPushSpeed = PushSpeed;
+
+	TArray<class AActor*> ActorsAttached;
+	GetAttachedActors(ActorsAttached, false);
+	ACharacter* Player = Cast<ACharacter>(ActorsAttached[0]);
+	if (!Player) { return; }
+	IsMoving = true;
 	//start a timer that pushes box
 	GetWorld()->GetTimerManager().SetTimer(PushTimer, [&]() {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Pushing")));
-		FVector DeltaLocation = PlayerDirection * (UKismetMathLibrary::FCeil(1) * 2);
+		FVector DeltaLocation = PlayerDirection * (UKismetMathLibrary::FCeil(PlayerPushStrength) * PlayerPushSpeed);
 		AddActorWorldOffset(DeltaLocation, false);
 		}, .02f, true);
 
-	GetWorld()->GetTimerManager().SetTimer(StopPushTimer, [&]() {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Stop Pushing")));
-		GetWorld()->GetTimerManager().ClearTimer(PushTimer);
-		PushTimer.Invalidate();
-		TArray<class AActor*> ActorsAttached;
-		GetAttachedActors(ActorsAttached, false);
-		FCollisionShape Shape = FCollisionShape::MakeBox(FVector(50, 50, 50));
-		TArray<AActor*> IgnoreList;
-		FHitResult Outhit;
-		bool bhit = UKismetSystemLibrary::BoxTraceSingle(
-			GetWorld(), 
-			GetActorLocation(), 
-			GetActorLocation() - FVector(0, 0, 10), 
-			FVector(50, 50, 50), 
-			FRotator::ZeroRotator, 
-			TraceTypeQuery2, false, 
-			IgnoreList, 
-			EDrawDebugTrace::Type::ForDuration, 
-			Outhit, 
-			true);
-		if (bhit) { return; }
-		UMyInteractComponent* InteractComp = Cast<UMyInteractComponent>(ActorsAttached[0]->GetComponentByClass(UMyInteractComponent::StaticClass()));
-		if (!InteractComp) {
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Character does not have push component")));
-			return;
-		}
-		InteractComp->EndInteract();
-		}, .1f, false, 2.f);
+	GetWorld()->GetTimerManager().SetTimer(StopPushTimer, this, &APushableActor::StopPush, .1f, false, 2.f);
 
 }
 
+void APushableActor::StopPush() {
+	GetWorld()->GetTimerManager().ClearTimer(PushTimer);
+	PushTimer.Invalidate();
+	TArray<class AActor*> ActorsAttached;
+	GetAttachedActors(ActorsAttached, false);
+	FCollisionShape Shape = FCollisionShape::MakeBox(FVector(50, 50, 50));
+	TArray<AActor*> IgnoreList = { this };
+	FHitResult Outhit;
+	bool bhit = UKismetSystemLibrary::BoxTraceSingle(
+		GetWorld(),
+		GetActorLocation(),
+		GetActorLocation() - FVector(0, 0, 20),
+		FVector(50, 50, 50),
+		FRotator::ZeroRotator,
+		TraceTypeQuery2,
+		false,
+		IgnoreList,
+		EDrawDebugTrace::Type::ForDuration,
+		Outhit,
+		true);
+	ACharacter* Player = Cast<ACharacter>(ActorsAttached[0]);
+	if (!Player) { return; }
+	IsMoving = false;
+	if (bhit) {
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Outhit.GetActor()->GetName());
+		return;
+	}
+	UMyInteractComponent* InteractComp = Cast<UMyInteractComponent>(ActorsAttached[0]->GetComponentByClass(UMyInteractComponent::StaticClass()));
+	if (!InteractComp) {
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Character does not have push component")));
+		return;
+	}
+	InteractComp->EndInteract();
+	IsPushable = false;
+	AddActorWorldOffset(GetActorUpVector() * -100, true);
+}
 
