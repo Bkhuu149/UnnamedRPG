@@ -49,6 +49,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsOpen = false;
+
 private:
 
 	FTimerHandle OpenTimer;
