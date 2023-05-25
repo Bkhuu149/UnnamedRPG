@@ -156,14 +156,22 @@ void APushableActor::PushActor(float Strength, FVector Direction, float PushSpee
 	if (!Player) { return; }
 	IsMoving = true;
 	//start a timer that pushes box
-	GetWorld()->GetTimerManager().SetTimer(PushTimer, [&]() {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Pushing")));
-		FVector DeltaLocation = PlayerDirection * (UKismetMathLibrary::FCeil(PlayerPushStrength) * PlayerPushSpeed);
-		AddActorWorldOffset(DeltaLocation, false);
-		}, .02f, true);
+	GetWorld()->GetTimerManager().SetTimer(PushTimer, this, &APushableActor::MoveActor, .02f, true);
 
 	GetWorld()->GetTimerManager().SetTimer(StopPushTimer, this, &APushableActor::StopPush, .1f, false, 2.f);
 
+}
+
+void APushableActor::MoveActor() {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Moving")));
+
+	FVector DeltaLocation = PlayerDirection * (UKismetMathLibrary::FCeil(PlayerPushStrength) * PlayerPushSpeed);
+	FHitResult* Outhit = nullptr;
+	AddActorWorldOffset(DeltaLocation, true, Outhit);
+	if (Outhit) {
+		StopPush();
+		GetWorld()->GetTimerManager().ClearTimer(StopPushTimer);
+	}
 }
 
 void APushableActor::StopPush() {

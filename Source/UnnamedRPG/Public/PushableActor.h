@@ -52,6 +52,7 @@ private:
 	bool IsMoving = false;
 
 	void StopPush();
+	void MoveActor();
 
 	FVector PlayerDirection;
 	float PlayerPushSpeed;
