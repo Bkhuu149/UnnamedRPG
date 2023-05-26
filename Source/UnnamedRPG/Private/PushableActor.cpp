@@ -163,7 +163,7 @@ void APushableActor::PushActor(float Strength, FVector Direction, float PushSpee
 }
 
 void APushableActor::MoveActor() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Moving")));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Moving")));
 
 	FVector DeltaLocation = PlayerDirection * (UKismetMathLibrary::FCeil(PlayerPushStrength) * PlayerPushSpeed);
 	FHitResult* Outhit = nullptr;
