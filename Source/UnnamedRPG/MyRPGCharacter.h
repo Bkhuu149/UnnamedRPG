@@ -32,7 +32,9 @@ struct FAttackStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 Index = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<class UGameplayAbility_Montage> Attack;
+	TSubclassOf<class UGameplayAbility_Montage> FemaleAttack;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<class UGameplayAbility_Montage> MaleAttack;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool Unlocked = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -66,6 +68,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interacts")
 		UMyInteractComponent* InteractComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+		bool IsFemale = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool Targeted;

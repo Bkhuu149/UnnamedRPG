@@ -220,18 +220,32 @@ void AMyRPGCharacter::OnAttackPressed() {
 		return;
 	}
 	
-	FAttackStruct* TestAttack = AbilityTab->FindRow<FAttackStruct>(AttackCombo[AttackCount], "");
+	FAttackStruct* AttackRow = AbilityTab->FindRow<FAttackStruct>(AttackCombo[AttackCount], "");
 	
-	if (TestAttack->StaminaDrain > CurrentStamina) { return; }
+	if (AttackRow->StaminaDrain > CurrentStamina) { return; }
 
-	CurrentStamina -= TestAttack->StaminaDrain; 
+	CurrentStamina -= AttackRow->StaminaDrain; 
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
-	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(TestAttack->Weapon, WeaponTransform));
+	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(AttackRow->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
 
-	FGameplayAbilitySpec Test = FGameplayAbilitySpec(TestAttack->Attack.GetDefaultObject(), 1, 0);
-	AbilityComp->GiveAbilityAndActivateOnce(Test);
+	FGameplayAbilitySpec Attack;
+	float AttackLength = 0.1f;
+	
+	if (IsFemale) {
+		Attack = FGameplayAbilitySpec(AttackRow->FemaleAttack.GetDefaultObject(), 1, 0);
+		AttackLength = AttackRow->FemaleAttack.GetDefaultObject()->MontageToPlay->GetPlayLength();
+	}
+	else {
+		Attack = FGameplayAbilitySpec(AttackRow->MaleAttack.GetDefaultObject(), 1, 0);
+		AttackLength = AttackRow->MaleAttack.GetDefaultObject()->MontageToPlay->GetPlayLength();
+
+	}
+
+	//FGameplayAbilitySpec Test = (IsFemale) ?  FGameplayAbilitySpec(TestAttack->FemaleAttack.GetDefaultObject(), 1, 0): FGameplayAbilitySpec(TestAttack->MaleAttack.GetDefaultObject(), 1, 0);
+	
+	AbilityComp->GiveAbilityAndActivateOnce(Attack);
 
 	FTimerHandle AnimTimer;
 	GetWorld()->GetTimerManager().SetTimer(AnimTimer, [&]() {
@@ -240,17 +254,17 @@ void AMyRPGCharacter::OnAttackPressed() {
 		}
 		GetWorld()->GetTimerManager().ClearTimer(AnimTimer);
 		AnimTimer.Invalidate();
-	}, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() * 0.9, false);
-
+	}, AttackLength * 0.9f, false);
+	
 	IsAttacking = true;
 	AttackCount++;
-	CurrentWeapon->SetDamage(TestAttack->Damage * (AttackCount));
+	CurrentWeapon->SetDamage(AttackRow->Damage * (AttackCount));
 
 	if (AttackTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
 		AttackTimer.Invalidate();
 	}
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, TestAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() + 2.f, false);
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength + 2.f, false);
 }
 
 void AMyRPGCharacter::ResetAttack() {
@@ -271,6 +285,19 @@ void AMyRPGCharacter::DoFinisher() {
 	//If the attack is not a finisher, return for safety
 	if (!FinisherAttack->IsFinisher || (FinisherAttack->StaminaDrain > CurrentStamina)) { return; }
 	
+	FGameplayAbilitySpec Attack;
+	float AttackLength = 0.1;
+
+	if (IsFemale) {
+		Attack = FGameplayAbilitySpec(FinisherAttack->FemaleAttack.GetDefaultObject(), 1, 0);
+		AttackLength = FinisherAttack->FemaleAttack.GetDefaultObject()->MontageToPlay->GetPlayLength();
+	}
+	else {
+		Attack = FGameplayAbilitySpec(FinisherAttack->MaleAttack.GetDefaultObject(), 1, 0);
+		AttackLength = FinisherAttack->MaleAttack.GetDefaultObject()->MontageToPlay->GetPlayLength();
+
+	}
+
 	CurrentStamina -= FinisherAttack->StaminaDrain;
 	FTimerHandle AnimTimer;
 	GetWorld()->GetTimerManager().SetTimer(AnimTimer, [&]() {
@@ -279,18 +306,16 @@ void AMyRPGCharacter::DoFinisher() {
 		}
 		GetWorld()->GetTimerManager().ClearTimer(AnimTimer);
 		AnimTimer.Invalidate();
-	}, FinisherAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength() * 0.9, false);
+	}, AttackLength * 0.9, false);
 
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(FinisherAttack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
 	CurrentWeapon->SetDamage((AttackCount) * CurrentWeapon->Damage);
-
-	FGameplayAbilitySpec FinalAttack = FGameplayAbilitySpec(FinisherAttack->Attack.GetDefaultObject(), 1, 0);
 	IsAttacking = true;
-	AbilityComp->GiveAbilityAndActivateOnce(FinalAttack);
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, FinisherAttack->Attack.GetDefaultObject()->MontageToPlay->GetPlayLength(), false);
+	AbilityComp->GiveAbilityAndActivateOnce(Attack);
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
 
 	//ResetAttack();
 }
