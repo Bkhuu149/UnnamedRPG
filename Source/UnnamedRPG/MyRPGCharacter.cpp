@@ -35,7 +35,7 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 	RightLeftInputValue = GetInputAxisValue("RightLeft");
 
 	if (IsSprinting && (ForwardBackInputValue != 0 || RightLeftInputValue != 0)) {
-		CurrentStamina -= .25;
+		CurrentStamina -= .1;
 	}
 	else if (!GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() && CurrentStamina != StaminaMax ){
 		CurrentStamina += .5;

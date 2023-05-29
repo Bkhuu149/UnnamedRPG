@@ -208,6 +208,6 @@ void APushableActor::StopPush() {
 	}
 	InteractComp->EndInteract();
 	IsPushable = false;
-	AddActorWorldOffset(GetActorUpVector() * -100, true);
+	AddActorWorldOffset(GetActorUpVector() * -1000, true);
 }
 
