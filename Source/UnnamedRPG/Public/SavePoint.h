@@ -28,6 +28,9 @@ public:
 
 	virtual void HandleInteraction(ACharacter* Character) override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void BlueprintSave();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTransform InteractableLocation;
 };

@@ -19,7 +19,24 @@ ADoorActor::ADoorActor()
 void ADoorActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (IsOpen) {
+		switch (DoorType) {
+
+		case EDoorType::Swivel:
+			Door->AddLocalRotation(FRotator(0, 90, 0));
+			break;
+
+		case EDoorType::Bridge:
+			Door->AddLocalRotation(FRotator(90, 0, 0));
+			break;
+
+		case EDoorType::Gate:
+			float DoorTargetZ = TargetTransform.GetLocation().Z;
+			Door->AddLocalOffset(FVector(0, 0, DoorTargetZ));
+			break;
+		}
+	}
 }
 
 // Called every frame
@@ -40,8 +57,8 @@ bool ADoorActor::CheckDistance(FVector CharacterLocation, float PushRange) {
 	return false;
 }
 
-void ADoorActor::HandleInteraction(ACharacter* Character) {
-	
+void ADoorActor::HandleInteraction(ACharacter* Character) 
+{	
 	if (!Door) {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("No door to open")));
 

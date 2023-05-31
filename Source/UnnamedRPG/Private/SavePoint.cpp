@@ -29,6 +29,7 @@ void ASavePoint::Tick(float DeltaTime)
 void ASavePoint::HandleInteraction(ACharacter* Character)
 {
 	AMyRPGCharacter* RPGCharacter = Cast<AMyRPGCharacter>(Character);
+	BlueprintSave();
 	RPGCharacter->RestoreChar();
 	RPGCharacter->SaveGame();
 }

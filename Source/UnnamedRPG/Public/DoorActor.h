@@ -50,6 +50,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsOpen = false;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void SaveDoor();
+
 private:
 
 	FTimerHandle OpenTimer;
