@@ -49,11 +49,13 @@ public:
 
 	void BeginClimb(ALadderActor* Ladder);
 	
+
 	UFUNCTION(BlueprintCallable)
 	void EndInteract();
 
+	//Pushing
 	UFUNCTION(BlueprintCallable)
-		bool IsPushingObject();
+	bool IsPushingObject();
 
 	UFUNCTION(BlueprintCallable)
 	float GetPushableHeight();
@@ -62,6 +64,8 @@ public:
 	float PushSpeed = 2.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")
 	float PushRange = 120.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")
+	float PushDirection = 0.f;
 
 	EInteractType GetInteractType() { return CurrentType; }
 

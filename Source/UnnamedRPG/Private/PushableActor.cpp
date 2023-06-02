@@ -160,6 +160,13 @@ void APushableActor::PushActor(float Strength, FVector Direction, float PushSpee
 
 	GetWorld()->GetTimerManager().SetTimer(StopPushTimer, this, &APushableActor::StopPush, .1f, false, 2.f);
 
+	UMyInteractComponent* InteractComp = Cast<UMyInteractComponent>(ActorsAttached[0]->GetComponentByClass(UMyInteractComponent::StaticClass()));
+	if (!InteractComp) {
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Character does not have push component")));
+		return;
+	}
+	InteractComp->PushDirection = Strength;
+
 }
 
 void APushableActor::MoveActor() {
@@ -197,13 +204,14 @@ void APushableActor::StopPush() {
 	ACharacter* Player = Cast<ACharacter>(ActorsAttached[0]);
 	if (!Player) { return; }
 	IsMoving = false;
-	if (bhit) {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Outhit.GetActor()->GetName());
-		return;
-	}
 	UMyInteractComponent* InteractComp = Cast<UMyInteractComponent>(ActorsAttached[0]->GetComponentByClass(UMyInteractComponent::StaticClass()));
 	if (!InteractComp) {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, (TEXT("Character does not have push component")));
+		return;
+	}
+	InteractComp->PushDirection = 0.f;
+	if (bhit) {
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, Outhit.GetActor()->GetName());
 		return;
 	}
 	InteractComp->EndInteract();

@@ -33,9 +33,7 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	}
 
 	if (IsPushing) {
-		FVector2D PlayerDirection = (FVector2D)Character->GetActorForwardVector();
-		FVector2d Velocity2D = (FVector2D)Character->GetVelocity();
-		PushingDirection = Velocity2D.Dot(PlayerDirection);
+		PushingDirection = InteractComp->PushDirection;
 		PushHeight = Character->GetInteractComponent()->GetPushableHeight();
 	}
 	
