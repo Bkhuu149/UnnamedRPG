@@ -174,7 +174,7 @@ void APushableActor::MoveActor() {
 
 	FVector DeltaLocation = PlayerDirection * (UKismetMathLibrary::FCeil(PlayerPushStrength) * PlayerPushSpeed);
 	FHitResult* Outhit = nullptr;
-	AddActorWorldOffset(DeltaLocation, true, Outhit);
+	AddActorWorldOffset(DeltaLocation, true, Outhit, ETeleportType::None);
 	if (Outhit) {
 		StopPush();
 		GetWorld()->GetTimerManager().ClearTimer(StopPushTimer);
