@@ -141,7 +141,7 @@ void AEnemyClass::ResetTarget() {
 void AEnemyClass::Rotate(float DeltaTime)
 {
 	//Slowly rotate enemy towards character
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || !Targeted) { return; }
 	FVector CurrentLocation = GetActorLocation();
 	FVector TargetLocation = Target->GetActorLocation();
 	CurrentLocation.Z = 0;

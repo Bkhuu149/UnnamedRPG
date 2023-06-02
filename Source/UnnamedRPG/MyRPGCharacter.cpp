@@ -30,6 +30,11 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 		FocusTarget(DeltaTime);
 	}
 
+	if (IsInteracting) {
+		FRotator CameraRotation = GetController()->GetControlRotation();
+		FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, GetActorForwardVector().ToOrientationRotator(), DeltaTime, 10.f);
+		GetController()->SetControlRotation(RinterpVal);
+	}
 
 	ForwardBackInputValue = GetInputAxisValue("ForwardBack");
 	RightLeftInputValue = GetInputAxisValue("RightLeft");
@@ -228,6 +233,8 @@ void AMyRPGCharacter::OnAttackPressed() {
 	
 	FAttackStruct* AttackRow = AbilityTab->FindRow<FAttackStruct>(AttackCombo[AttackCount], "");
 	
+	if (!AttackRow) { return; }
+
 	if (AttackRow->StaminaDrain > CurrentStamina) { return; }
 
 	CurrentStamina -= AttackRow->StaminaDrain; 
@@ -333,6 +340,8 @@ void AMyRPGCharacter::OnInteractPressed() {
 		InteractComp->EndInteract();
 		return;
 	}
+
+	if (Targeted) { return; }
 
 	FVector Center = GetActorLocation();
 	Center.Z -= GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
