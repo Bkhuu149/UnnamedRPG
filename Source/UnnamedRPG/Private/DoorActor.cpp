@@ -106,7 +106,7 @@ void ADoorActor::HandleInteraction(ACharacter* Character)
 			break;
 
 	}
-
+	SaveDoor();
 
 }
 
