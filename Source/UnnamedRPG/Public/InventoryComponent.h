@@ -54,15 +54,13 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int InventorySize = 10;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<FSlotStruct> Content;
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void AddToInventory(FName ItemId, int Quantity);
+	void AddToInventory(FName ItemId);
 
 	void RemoveFromInventory();
 
@@ -70,12 +68,11 @@ public:
 	UDataTable* ItemTab;
 
 private: 
-	int FindSlots(FName ItemId, bool& ItemFound);
+	int FindItemSlot(FName ItemId, bool& ItemFound);
 
 	int GetMaxStackSize(FName ItemId);
 
-	void AddToStack(int Index, int Quantity);
+	void AddToStack(int Index);
 
-	int FindNextEmptySlot();
 		
 };

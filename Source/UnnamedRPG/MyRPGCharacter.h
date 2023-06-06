@@ -188,13 +188,13 @@ private:
 
 	//Handle Interact Pressed
 	void OnInteractPressed();
-	
-	//Handle Menu Pressed
-	void OnMenuPressed();
 
 	//Handle Inventory Pressed
 	void OnInventoryPressed();
 
+	//Handle Menu Pressed
+	void OnMenuPressed();
+	
 
 public:	
 	// Called every frame

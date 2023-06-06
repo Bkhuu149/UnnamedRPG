@@ -88,7 +88,8 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 }
 
 void AMyRPGCharacter::KILL() {
-	DamageChar(10);
+	InventoryComp->AddToInventory(FName("HealthPotion"));
+
 }
 
 void AMyRPGCharacter::MoveForwardBack(float value) 
@@ -380,8 +381,6 @@ void AMyRPGCharacter::OnMenuPressed() {
 }
 
 void AMyRPGCharacter::OnInventoryPressed() {
-
-	InventoryComp->AddToInventory(FName("HealthPotion"), 1);
 
 	/*
 	InInventory = !InInventory;
