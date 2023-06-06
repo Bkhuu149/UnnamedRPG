@@ -18,6 +18,7 @@
 #include "GameplayAbilitySpec.h"
 #include "AbilitySystemComponent.h"
 #include "Public/MyInteractComponent.h"
+#include "Public/InventoryComponent.h"
 
 #include "Engine/GameEngine.h"
 #include "Engine/DataTable.h"
@@ -68,6 +69,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interacts")
 		UMyInteractComponent* InteractComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interacts")
+		UInventoryComponent* InventoryComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
 		bool IsFemale = false;
@@ -251,5 +255,6 @@ public:
 
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
 	UMyInteractComponent* GetInteractComponent() const { return InteractComp; }
+	UInventoryComponent* GetInventoryComponent() const { return InventoryComp; }
 };
 

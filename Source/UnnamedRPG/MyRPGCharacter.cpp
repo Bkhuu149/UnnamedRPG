@@ -11,6 +11,7 @@ AMyRPGCharacter::AMyRPGCharacter()
 
 	AbilityComp = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	InteractComp = CreateDefaultSubobject<UMyInteractComponent>(TEXT("Interact Component"));
+	InventoryComp = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory Component"));
 }
 
 // Called when the game starts or when spawned
@@ -379,13 +380,17 @@ void AMyRPGCharacter::OnMenuPressed() {
 }
 
 void AMyRPGCharacter::OnInventoryPressed() {
+
+	InventoryComp->AddToInventory(FName("HealthPotion"), 1);
+
+	/*
 	InInventory = !InInventory;
 	if (InInventory) {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Open Inventory"));
 	}
 	else {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Close Inventory"));
-	}
+	}*/
 }
 
 void AMyRPGCharacter::OnSprintPressed() {
