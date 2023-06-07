@@ -78,14 +78,14 @@ void UInventoryComponent::AddToInventory(FName ItemId) {
 	//Check if item to be added is valid
 	FItemStruct* ItemData = GetItemInformation(ItemId);
 	if (!ItemData) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Attempted to add nonexistant item: " + ItemId.ToString()));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Attempted to add nonexistant item: " + ItemId.ToString()));
 		return;
 	}
 	bool Found = false;
 	int Index = FindItemSlot(ItemId, Found);
 	if (!Found) {
 		//Item was not in inventory
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item not in inventory"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item not in inventory"));
 		//Find empty slot to add item to
 		FSlotStruct NewItem = FSlotStruct();
 		NewItem.ItemId = ItemId;
@@ -99,31 +99,34 @@ void UInventoryComponent::AddToInventory(FName ItemId) {
 	FSlotStruct InventorySpace = Content[Index];
 	if (InventorySpace.Quantity >= ItemData->StackSize) {
 		//Stack Full, cannot add more
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item in inventory but cannot add more"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item in inventory but cannot add more"));
 
 		return;
 	}
 	//Stack has space, add to stack
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Added item successfully"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Added item successfully"));
 	AddToStack(Index);
 
 }
 
-void UInventoryComponent::RemoveFromInventory(FName ItemId) {
+bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 	bool Found = false;
 	int Index = FindItemSlot(ItemId, Found);
 	if (!Found) {
 		//Item not found, do nothing
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item not in inventory"));
-		return;
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item not in inventory"));
+		return Found;
 	}
 
 	//Decriment item quantity in inventory, if zero do nothing
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item in inventory, decrimenting"));
+	if (Content[Index].Quantity == 0) {
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item in inventory but 0 quantity, do nothing"));
+		return false;
+	}
 
-	return;
-	
-
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item in inventory, decrimenting"));
+	Content[Index].Quantity--;
+	return Found;
 
 }
 

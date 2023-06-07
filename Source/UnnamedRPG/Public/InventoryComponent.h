@@ -70,7 +70,7 @@ public:
 	void AddToInventory(FName ItemId);
 
 	UFUNCTION(BlueprintCallable)
-	void RemoveFromInventory(FName ItemId);
+	bool RemoveFromInventory(FName ItemId);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemDatabase")
 	UDataTable* ItemTab;
