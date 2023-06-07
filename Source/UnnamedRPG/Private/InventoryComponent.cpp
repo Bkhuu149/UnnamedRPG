@@ -69,7 +69,10 @@ void UInventoryComponent::AddToInventory(FName ItemId) {
 		NewItem.ItemId = ItemId;
 		NewItem.Quantity = 1;
 
-		Content.Add(NewItem);
+		//Insert into correct position, assuming Content is already sorted
+		//which it should be, insortion sort but just inserting into a sorted array.
+		Content.Add(NewItem);	
+		
 		return;
 	}
 	//Item was found in inventory, need to check if there is space
@@ -84,12 +87,20 @@ void UInventoryComponent::AddToInventory(FName ItemId) {
 	//Stack has space, add all
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Added item successfully"));
 	AddToStack(Index);
-	return;
-
 
 }
 
-void UInventoryComponent::RemoveFromInventory() {
+void UInventoryComponent::RemoveFromInventory(FName ItemId) {
+	bool Found = false;
+	int Index = FindItemSlot(ItemId, Found);
+	if (Found) {
+		//Decriment item quantity in inventory, if zero do nothing
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item in inventory, decrimenting"));
+
+		return;
+	}
+	//Item not found, do nothing
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item not in inventory"));
 
 }
 

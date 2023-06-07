@@ -68,6 +68,10 @@ void ADoorActor::HandleInteraction(ACharacter* Character)
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character not valid")));
 		return;
 	}
+	if (IsOpen) {
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, (TEXT("Door already open!")));
+		return;
+	}
 
 	//Do distance calculations here
 	UMyInteractComponent* InteractComp = Cast<UMyInteractComponent>(Character->GetComponentByClass(UMyInteractComponent::StaticClass()));
@@ -78,11 +82,6 @@ void ADoorActor::HandleInteraction(ACharacter* Character)
 
 	if (!CheckDistance(Character->GetActorLocation(), InteractComp->PushRange)) {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character too far away")));
-		return;
-	}
-	
-	if (IsOpen) {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, (TEXT("Door already open!")));
 		return;
 	}
 

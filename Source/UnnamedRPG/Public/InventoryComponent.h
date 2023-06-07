@@ -56,13 +56,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<FSlotStruct> Content;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TArray<FSlotStruct> Hotbar;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void AddToInventory(FName ItemId);
 
-	void RemoveFromInventory();
+	void RemoveFromInventory(FName ItemId);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemDatabase")
 	UDataTable* ItemTab;
