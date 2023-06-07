@@ -23,6 +23,8 @@ struct FItemStruct : public FTableRowBase
 	UTexture2D*	Thumbnail;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int StackSize = 99;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int Group = 0;
 
 
 };
@@ -37,6 +39,8 @@ struct FSlotStruct
 	FName ItemId;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int Quantity;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int Group;
 
 };
 
@@ -65,6 +69,7 @@ public:
 
 	void AddToInventory(FName ItemId);
 
+	UFUNCTION(BlueprintCallable)
 	void RemoveFromInventory(FName ItemId);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemDatabase")
@@ -73,9 +78,11 @@ public:
 private: 
 	int FindItemSlot(FName ItemId, bool& ItemFound);
 
-	int GetMaxStackSize(FName ItemId);
+	FItemStruct* GetItemInformation(FName ItemId);
 
 	void AddToStack(int Index);
+
+	void InsertIntoContent(FSlotStruct& Item);
 
 		
 };

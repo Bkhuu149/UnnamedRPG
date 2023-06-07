@@ -31,12 +31,11 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-int UInventoryComponent::GetMaxStackSize(FName ItemId) {
-
+FItemStruct* UInventoryComponent::GetItemInformation(FName ItemId) {
 	FItemStruct* ItemRow = ItemTab->FindRow<FItemStruct>(ItemId, "");
-	if (!ItemRow) { return -1; }
-	return ItemRow->StackSize;
+	return ItemRow;
 }
+
 
 int UInventoryComponent::FindItemSlot(FName ItemId, bool& ItemFound) {
 	//Find index in inventory where item exists.  
@@ -55,36 +54,56 @@ void UInventoryComponent::AddToStack(int Index) {
 	Content[Index].Quantity++;
 }
 
+void UInventoryComponent::InsertIntoContent(FSlotStruct& Item) {
+	//If first item in inventory, then just add it
+	if (Content.Num() == 0) {
+		Content.Add(Item);
+		return;
+	}
+	//Find where to insert the new item into inventory
+	for (int i = 0; i < Content.Num(); i++) {
+		if (Item.Group < Content[i].Group) {
+			Content.Insert(Item, i);
+			return;
+		}
+	}
+	//Item should go at the end of inventory
+	Content.Add(Item);
+}
+
+
 
 
 void UInventoryComponent::AddToInventory(FName ItemId) {
+	//Check if item to be added is valid
+	FItemStruct* ItemData = GetItemInformation(ItemId);
+	if (!ItemData) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Attempted to add nonexistant item: " + ItemId.ToString()));
+		return;
+	}
 	bool Found = false;
 	int Index = FindItemSlot(ItemId, Found);
 	if (!Found) {
 		//Item was not in inventory
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item not in inventory"));
 		//Find empty slot to add item to
-
 		FSlotStruct NewItem = FSlotStruct();
 		NewItem.ItemId = ItemId;
 		NewItem.Quantity = 1;
+		NewItem.Group = ItemData->Group;
 
-		//Insert into correct position, assuming Content is already sorted
-		//which it should be, insortion sort but just inserting into a sorted array.
-		Content.Add(NewItem);	
-		
+		InsertIntoContent(NewItem);
 		return;
 	}
 	//Item was found in inventory, need to check if there is space
 	FSlotStruct InventorySpace = Content[Index];
-	int ItemMaxStack = GetMaxStackSize(ItemId);
-	if (InventorySpace.Quantity >= ItemMaxStack) {
+	if (InventorySpace.Quantity >= ItemData->StackSize) {
 		//Stack Full, cannot add more
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item in inventory but cannot add more"));
 
 		return;
 	}
-	//Stack has space, add all
+	//Stack has space, add to stack
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Added item successfully"));
 	AddToStack(Index);
 
@@ -93,14 +112,18 @@ void UInventoryComponent::AddToInventory(FName ItemId) {
 void UInventoryComponent::RemoveFromInventory(FName ItemId) {
 	bool Found = false;
 	int Index = FindItemSlot(ItemId, Found);
-	if (Found) {
-		//Decriment item quantity in inventory, if zero do nothing
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item in inventory, decrimenting"));
-
+	if (!Found) {
+		//Item not found, do nothing
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item not in inventory"));
 		return;
 	}
-	//Item not found, do nothing
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item not in inventory"));
+
+	//Decriment item quantity in inventory, if zero do nothing
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item in inventory, decrimenting"));
+
+	return;
+	
+
 
 }
 
