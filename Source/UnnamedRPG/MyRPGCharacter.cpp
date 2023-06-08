@@ -110,11 +110,14 @@ void AMyRPGCharacter::KILL() {
 	InventoryComp->AddToInventory(FName("ManaPotion"));
 	InventoryComp->AddToInventory(FName("TeleportScroll"));
 
+	InventoryComp->AddToHotbar(0, 0);
+
 
 }
 
 void AMyRPGCharacter::OnItemUsedOne() {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Use item: 1"));
+	InventoryComp->UseItem(0);
 
 }
 

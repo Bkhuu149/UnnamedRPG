@@ -36,13 +36,14 @@ struct FSlotStruct
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FName ItemId;
+	FName ItemId = FName("Empty");
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int Quantity;
+	int Quantity = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int Group;
+	int Group = 0;
 
 };
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNNAMEDRPG_API UInventoryComponent : public UActorComponent
@@ -61,7 +62,7 @@ protected:
 	TArray<FSlotStruct> Content;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TArray<FSlotStruct> Hotbar;
+	TArray<FName> Hotbar;
 
 public:	
 	// Called every frame
@@ -72,8 +73,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool RemoveFromInventory(FName ItemId);
 
+	UFUNCTION(BlueprintCallable)
+	FSlotStruct GetItemFromInventory(FName ItemId);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemDatabase")
 	UDataTable* ItemTab;
+
+	void AddToHotbar(int InventoryIndex, int HotbarIndex);
+
+	void UseItem(int HotbarIndex);
+
 
 private: 
 	int FindItemSlot(FName ItemId, bool& ItemFound);

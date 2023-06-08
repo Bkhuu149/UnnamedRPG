@@ -9,7 +9,6 @@ UInventoryComponent::UInventoryComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
 	// ...
 }
 
@@ -18,6 +17,37 @@ UInventoryComponent::UInventoryComponent()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	FSlotStruct Temp = FSlotStruct();
+	Temp.Group = 1000;
+	Temp.Quantity = 50;
+	Temp.ItemId = FName("HealthPotion");
+	Content.Add(Temp);
+
+	FSlotStruct Temp2 = FSlotStruct();
+	Temp2.Group = 1001;
+	Temp2.Quantity = 50;
+	Temp2.ItemId = FName("ManaPotion");
+	Content.Add(Temp2);
+
+	FSlotStruct Temp3 = FSlotStruct();
+	Temp3.Group = 1002;
+	Temp3.Quantity = 50;
+	Temp3.ItemId = FName("TeleportScroll");
+	Content.Add(Temp3);
+
+	FSlotStruct Temp4 = FSlotStruct();
+	Temp4.Group = 2000;
+	Temp4.Quantity = 50;
+	Temp4.ItemId = FName("AttackFood");
+	Content.Add(Temp4);
+
+	Hotbar.Add(FName("HealthPotion"));
+	Hotbar.Add(FName("ManaPotion"));
+	Hotbar.Add(FName("TeleportScroll"));
+	Hotbar.Add(FName("AttackFood"));
+
+
 	// ...
 	
 }
@@ -129,4 +159,38 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 	return Found;
 
 }
+
+void UInventoryComponent::AddToHotbar(int InventoryIndex, int HotbarIndex) {
+	if (!(HotbarIndex <= 0 && HotbarIndex < 4)) {
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Attempted to add item to hotbar outside of max size"));
+		return;
+	}
+	
+	if (Hotbar.Num() == 0) {
+		Hotbar.Add(Content[InventoryIndex].ItemId);
+	}
+
+}
+
+void UInventoryComponent::UseItem(int HotbarSlotIndex) {
+	FName ItemId = Hotbar[HotbarSlotIndex];
+	bool IsItemConsumed = RemoveFromInventory(ItemId);
+	if (!IsItemConsumed) {
+		//Item wasn't consumed, do nothing
+		return;
+	}
+	//Item consumed, do what item says
+
+
+}
+
+FSlotStruct UInventoryComponent::GetItemFromInventory(FName ItemId) {
+	bool Found = false;
+	int Index = FindItemSlot(ItemId, Found);
+	if (!Found) {
+		return FSlotStruct();
+	}
+	return Content[Index];
+}
+
 
