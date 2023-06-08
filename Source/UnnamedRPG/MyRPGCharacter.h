@@ -192,6 +192,11 @@ private:
 	//Handle Inventory Pressed
 	void OnInventoryPressed();
 
+	void OnItemUsedOne();
+	void OnItemUsedTwo();
+	void OnItemUsedThree();
+	void OnItemUsedFour();
+
 	//Handle Menu Pressed
 	void OnMenuPressed();
 	
