@@ -45,10 +45,12 @@ public:
 	void PushActor(float Strength, FVector Direction, float PushSpeed = 2.f, float Duration = 5.f);
 	bool GetIsMoving() { return IsMoving; }
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsPushable = true;
+
 private: 
 	FTimerHandle PushTimer;
 	FTimerHandle StopPushTimer;
-	bool IsPushable = true;
 	bool IsMoving = false;
 
 	void StopPush();

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "InteractableInterface.h"
+#include "EnemyClass.h"
 #include "SavePoint.generated.h"
 
 UCLASS()
@@ -30,6 +31,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void BlueprintSave();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ResetLevel();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTransform InteractableLocation;

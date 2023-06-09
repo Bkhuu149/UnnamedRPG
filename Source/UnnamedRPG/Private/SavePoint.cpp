@@ -32,4 +32,5 @@ void ASavePoint::HandleInteraction(ACharacter* Character)
 	BlueprintSave();
 	RPGCharacter->RestoreChar();
 	RPGCharacter->SaveGame();
+	ResetLevel();
 }
