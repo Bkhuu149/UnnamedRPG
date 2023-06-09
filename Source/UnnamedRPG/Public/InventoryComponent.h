@@ -76,12 +76,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FSlotStruct GetItemFromInventory(FName ItemId);
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ItemDatabase")
 	UDataTable* ItemTab;
 
+	UFUNCTION(BlueprintCallable)
 	void AddToHotbar(int InventoryIndex, int HotbarIndex);
 
-	void UseItem(int HotbarIndex);
+	UFUNCTION(BlueprintCallable)
+	int UseItem(int HotbarIndex);
+
+	UFUNCTION(BlueprintCallable)
+	int FindItemInHotbar(FName ItemId, bool& ItemFound);
 
 
 private: 

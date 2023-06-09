@@ -80,6 +80,19 @@ int UInventoryComponent::FindItemSlot(FName ItemId, bool& ItemFound) {
 	return -1;
 }
 
+int UInventoryComponent::FindItemInHotbar(FName ItemId, bool& ItemFound) {
+	//Find index in inventory where item exists.  
+	//If item not in inventory then return -1
+	for (int i = 0; i < Hotbar.Num(); i++) {
+		if (Content[i].ItemId == ItemId) {
+			ItemFound = true;
+			return i;
+		}
+	}
+	ItemFound = false;
+	return -1;
+}
+
 void UInventoryComponent::AddToStack(int Index) {
 	Content[Index].Quantity++;
 }
@@ -172,16 +185,15 @@ void UInventoryComponent::AddToHotbar(int InventoryIndex, int HotbarIndex) {
 
 }
 
-void UInventoryComponent::UseItem(int HotbarSlotIndex) {
+int UInventoryComponent::UseItem(int HotbarSlotIndex) {
 	FName ItemId = Hotbar[HotbarSlotIndex];
 	bool IsItemConsumed = RemoveFromInventory(ItemId);
 	if (!IsItemConsumed) {
 		//Item wasn't consumed, do nothing
-		return;
+		return -1;
 	}
 	//Item consumed, do what item says
-
-
+	return HotbarSlotIndex;
 }
 
 FSlotStruct UInventoryComponent::GetItemFromInventory(FName ItemId) {

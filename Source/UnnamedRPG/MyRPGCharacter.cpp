@@ -86,10 +86,6 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	PlayerInputComponent->BindAction(TEXT("TEMPKILL"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::KILL);
 	
-	PlayerInputComponent->BindAction(TEXT("UseItem1"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnItemUsedOne);
-	PlayerInputComponent->BindAction(TEXT("UseItem2"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnItemUsedTwo);
-	PlayerInputComponent->BindAction(TEXT("UseItem3"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnItemUsedThree);
-	PlayerInputComponent->BindAction(TEXT("UseItem4"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnItemUsedFour);
 
 
 }
@@ -112,29 +108,6 @@ void AMyRPGCharacter::KILL() {
 
 	InventoryComp->AddToHotbar(0, 0);
 
-
-}
-
-void AMyRPGCharacter::OnItemUsedOne() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Use item: 1"));
-	InventoryComp->UseItem(0);
-
-}
-
-void AMyRPGCharacter::OnItemUsedTwo() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Use item: 2"));
-
-}
-
-
-void AMyRPGCharacter::OnItemUsedThree() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Use item: 3"));
-
-}
-
-
-void AMyRPGCharacter::OnItemUsedFour() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Use item: 4"));
 
 }
 
