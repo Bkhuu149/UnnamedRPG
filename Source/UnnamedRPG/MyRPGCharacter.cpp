@@ -91,22 +91,7 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 }
 
 void AMyRPGCharacter::KILL() {
-	InventoryComp->AddToInventory(FName("EarthScroll"));
-	InventoryComp->AddToInventory(FName("Blanket"));
-	InventoryComp->AddToInventory(FName("Duster"));
-	InventoryComp->AddToInventory(FName("AttackFood"));
-	InventoryComp->AddToInventory(FName("StaminaFood"));
-	InventoryComp->AddToInventory(FName("HealthPotion"));
-	InventoryComp->AddToInventory(FName("WaterScroll"));
-	InventoryComp->AddToInventory(FName("FireScroll"));
-	InventoryComp->AddToInventory(FName("WindScroll"));
-	InventoryComp->AddToInventory(FName("DefenseFood"));
-	InventoryComp->AddToInventory(FName("StaticRemover"));
-	InventoryComp->AddToInventory(FName("EyeDrop"));
-	InventoryComp->AddToInventory(FName("ManaPotion"));
-	InventoryComp->AddToInventory(FName("TeleportScroll"));
-
-	InventoryComp->AddToHotbar(0, 0);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Currently Not Mapped to something"));
 
 
 }

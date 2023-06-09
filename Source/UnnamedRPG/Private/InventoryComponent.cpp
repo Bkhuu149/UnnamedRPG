@@ -42,10 +42,18 @@ void UInventoryComponent::BeginPlay()
 	Temp4.ItemId = FName("AttackFood");
 	Content.Add(Temp4);
 
+	
+	/*
 	Hotbar.Add(FName("HealthPotion"));
 	Hotbar.Add(FName("ManaPotion"));
 	Hotbar.Add(FName("TeleportScroll"));
 	Hotbar.Add(FName("AttackFood"));
+	*/
+	Hotbar.Add(FName("Empty"));
+	Hotbar.Add(FName("Empty"));
+	Hotbar.Add(FName("Empty"));
+	Hotbar.Add(FName("Empty"));
+
 
 
 	// ...
@@ -84,7 +92,7 @@ int UInventoryComponent::FindItemInHotbar(FName ItemId, bool& ItemFound) {
 	//Find index in inventory where item exists.  
 	//If item not in inventory then return -1
 	for (int i = 0; i < Hotbar.Num(); i++) {
-		if (Content[i].ItemId == ItemId) {
+		if (Hotbar[i] == ItemId) {
 			ItemFound = true;
 			return i;
 		}
@@ -173,27 +181,25 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 
 }
 
-void UInventoryComponent::AddToHotbar(int InventoryIndex, int HotbarIndex) {
-	if (!(HotbarIndex <= 0 && HotbarIndex < 4)) {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Attempted to add item to hotbar outside of max size"));
+void UInventoryComponent::SetItemInHotbar(FName ItemId, int HotbarIndex) {
+	if (HotbarIndex >= 0 && HotbarIndex < 4) {
+		Hotbar[HotbarIndex] = ItemId;
 		return;
 	}
-	
-	if (Hotbar.Num() == 0) {
-		Hotbar.Add(Content[InventoryIndex].ItemId);
-	}
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Attempted to add item to hotbar outside of max size"));
+
 
 }
 
-int UInventoryComponent::UseItem(int HotbarSlotIndex) {
+void UInventoryComponent::UseItem(int HotbarSlotIndex) {
 	FName ItemId = Hotbar[HotbarSlotIndex];
 	bool IsItemConsumed = RemoveFromInventory(ItemId);
 	if (!IsItemConsumed) {
 		//Item wasn't consumed, do nothing
-		return -1;
+		return;
 	}
 	//Item consumed, do what item says
-	return HotbarSlotIndex;
+	return;
 }
 
 FSlotStruct UInventoryComponent::GetItemFromInventory(FName ItemId) {

@@ -81,10 +81,10 @@ public:
 	UDataTable* ItemTab;
 
 	UFUNCTION(BlueprintCallable)
-	void AddToHotbar(int InventoryIndex, int HotbarIndex);
+	void SetItemInHotbar(FName ItemId, int HotbarIndex);
 
 	UFUNCTION(BlueprintCallable)
-	int UseItem(int HotbarIndex);
+	void UseItem(int HotbarIndex);
 
 	UFUNCTION(BlueprintCallable)
 	int FindItemInHotbar(FName ItemId, bool& ItemFound);
