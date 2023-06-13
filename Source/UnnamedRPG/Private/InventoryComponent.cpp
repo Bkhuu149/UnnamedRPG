@@ -2,6 +2,7 @@
 
 
 #include "InventoryComponent.h"
+#include "../MyRPGCharacter.h"
 
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
@@ -20,13 +21,13 @@ void UInventoryComponent::BeginPlay()
 
 	FSlotStruct Temp = FSlotStruct();
 	Temp.Group = 1000;
-	Temp.Quantity = 50;
+	Temp.Quantity = 5;
 	Temp.ItemId = FName("HealthPotion");
 	Content.Add(Temp);
 
 	FSlotStruct Temp2 = FSlotStruct();
 	Temp2.Group = 1001;
-	Temp2.Quantity = 50;
+	Temp2.Quantity = 5;
 	Temp2.ItemId = FName("ManaPotion");
 	Content.Add(Temp2);
 
@@ -199,6 +200,29 @@ void UInventoryComponent::UseItem(int HotbarSlotIndex) {
 		return;
 	}
 	//Item consumed, do what item says
+	FItemStruct* Item = GetItemInformation(ItemId);
+	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(GetOwner());
+
+	switch (Item->ItemEffect) {
+
+	case EItemEffect::Restore:
+		
+		switch (Item->StatAffected) {
+		case EStatAffected::Health:
+			Player->HealChar(50);
+			return;
+		case EStatAffected::Mana:
+			Player->AddMana(50);
+			return;
+		}
+
+
+		return;
+
+	case EItemEffect::Buff:
+		return;
+
+	}
 	return;
 }
 

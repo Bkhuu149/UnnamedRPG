@@ -237,7 +237,10 @@ public:
 	float GetManaMax() { return ManaMax; }
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
-	void AddMana();
+	void AddManaAttacking();
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+	void AddMana(float Amount);
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 		float GetStamina() { return CurrentStamina; }

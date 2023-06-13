@@ -135,7 +135,7 @@ void AMyRPGCharacter::OnBlockPressed() {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting || IsRegeningMana) { return; }
 	Mana -= 25;
 	Mana = FMath::Clamp(Mana, 0, ManaMax);
-	if (Mana == 0) {
+	if (Mana <= 0) {
 		IncrementMana();
 		IsRegeningMana = true;
 	}
@@ -490,7 +490,7 @@ void AMyRPGCharacter::RestoreMana() {
 }
 
 void AMyRPGCharacter::RestoreChar() {
-	Mana = GetManaMax();
+	AddMana(GetManaMax());
 	HealChar(GetHealthMax());
 	CurrentStamina = GetStaminaMax();
 }
@@ -499,10 +499,16 @@ void AMyRPGCharacter::IncrementMana() {
 	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AMyRPGCharacter::RestoreMana, .01f, true);
 }
 
-void AMyRPGCharacter::AddMana() {
+void AMyRPGCharacter::AddManaAttacking() {
 	Mana += 4 * (AttackCount+1);
 	Mana = FMath::Clamp(Mana, 0, ManaMax);
 }
+
+void AMyRPGCharacter::AddMana(float Amount) {
+	Mana += Amount;
+	Mana = FMath::Clamp(Mana, 0, ManaMax);
+}
+
 
 void AMyRPGCharacter::StartBarrier() {
 	Barrier = GetWorld()->SpawnActor<AActor>(BarrierClass, GetActorTransform());

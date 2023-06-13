@@ -9,6 +9,25 @@
 
 #include "InventoryComponent.generated.h"
 
+UENUM(BlueprintType)
+enum class EStatAffected : uint8 {
+	None		UMETA(DisplayName = "None"),
+	Health		UMETA(DisplayName = "Health"),
+	Mana		UMETA(DisplayName = "Mana"),
+	Stamina		UMETA(DisplayName = "Stammina"),
+	Defense		UMETA(DisplayName = "Defense"),
+	Damage		UMETA(DisplayName = "Damage"),
+	Attack		UMETA(DisplayName = "Attack"),
+	Vision		UMETA(DisplayName = "Vision"),
+	Movement	UMETA(DisplayName = "Movement")
+};
+
+UENUM(BlueprintType)
+enum class EItemEffect : uint8 {
+	None		UMETA(DisplayName = "None"),
+	Restore		UMETA(DisplayName = "Restore"),
+	Buff		UMETA(DisplayName = "Buff")
+};
 
 USTRUCT(BlueprintType)
 struct FItemStruct : public FTableRowBase
@@ -25,8 +44,10 @@ struct FItemStruct : public FTableRowBase
 	int StackSize = 99;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int Group = 0;
-
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	EStatAffected StatAffected = EStatAffected::None;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	EItemEffect ItemEffect = EItemEffect::None;
 };
 
 
