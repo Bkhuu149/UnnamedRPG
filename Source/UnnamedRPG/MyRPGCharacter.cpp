@@ -41,7 +41,7 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 	RightLeftInputValue = GetInputAxisValue("RightLeft");
 
 	if (IsSprinting && (ForwardBackInputValue != 0 || RightLeftInputValue != 0)) {
-		CurrentStamina -= .1;
+		CurrentStamina -= .1 * StaminaDrainMultiplier;
 	}
 	else if (!GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() && CurrentStamina != StaminaMax ){
 		CurrentStamina += .5;
@@ -81,8 +81,6 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnInteractPressed);
 
 	PlayerInputComponent->BindAction(TEXT("Menu"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnMenuPressed);
-
-	PlayerInputComponent->BindAction(TEXT("Inventory"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnInventoryPressed);
 
 	PlayerInputComponent->BindAction(TEXT("TEMPKILL"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::KILL);
 	
@@ -242,9 +240,9 @@ void AMyRPGCharacter::OnAttackPressed() {
 	
 	if (!AttackRow) { return; }
 
-	if (AttackRow->StaminaDrain > CurrentStamina) { return; }
+	if (AttackRow->StaminaDrain * StaminaDrainMultiplier > CurrentStamina) { return; }
 
-	CurrentStamina -= AttackRow->StaminaDrain; 
+	CurrentStamina -= AttackRow->StaminaDrain * StaminaDrainMultiplier; 
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(AttackRow->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
@@ -303,7 +301,7 @@ void AMyRPGCharacter::DoFinisher() {
 
 	FAttackStruct* FinisherAttack = AbilityTab->FindRow<FAttackStruct>(Finisher, "");
 	//If the attack is not a finisher, return for safety
-	if (!FinisherAttack->IsFinisher || (FinisherAttack->StaminaDrain > CurrentStamina)) { return; }
+	if (!FinisherAttack->IsFinisher || (FinisherAttack->StaminaDrain * StaminaDrainMultiplier > CurrentStamina)) { return; }
 	
 	FGameplayAbilitySpec Attack;
 	float AttackLength = 0.1;
@@ -318,7 +316,7 @@ void AMyRPGCharacter::DoFinisher() {
 
 	}
 
-	CurrentStamina -= FinisherAttack->StaminaDrain;
+	CurrentStamina -= FinisherAttack->StaminaDrain * StaminaDrainMultiplier;
 	FTimerHandle AnimTimer;
 	GetWorld()->GetTimerManager().SetTimer(AnimTimer, [&]() {
 		if (CurrentWeapon != nullptr) {
@@ -385,17 +383,6 @@ void AMyRPGCharacter::OnMenuPressed() {
 	}
 }
 
-void AMyRPGCharacter::OnInventoryPressed() {
-
-	/*
-	InInventory = !InInventory;
-	if (InInventory) {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Open Inventory"));
-	}
-	else {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Close Inventory"));
-	}*/
-}
 
 void AMyRPGCharacter::OnSprintPressed() {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }

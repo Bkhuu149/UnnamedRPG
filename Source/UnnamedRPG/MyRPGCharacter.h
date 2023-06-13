@@ -73,31 +73,34 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interacts")
 		UInventoryComponent* InventoryComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool IsFemale = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool Targeted;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		ARPGBaseClass* Target;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool IsJumping = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool IsDodging = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool IsSprinting = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		int AttackCount = 0;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool IsInteracting;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool InMenu;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool InInventory;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		float ForwardBackInputValue;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		float RightLeftInputValue;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	float StaminaDrainMultiplier = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TArray<FName> AttackCombo;
@@ -189,9 +192,6 @@ private:
 	//Handle Interact Pressed
 	void OnInteractPressed();
 
-	//Handle Inventory Pressed
-	void OnInventoryPressed();
-
 	//Handle Menu Pressed
 	void OnMenuPressed();
 	
@@ -247,6 +247,15 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 		float GetStaminaMax() { return StaminaMax; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		float GetStaminaDrainMultiplier() { return StaminaDrainMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void SetStaminaDrainMultiplier(float NewMultiplier) { StaminaDrainMultiplier = NewMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void ResetStaminaDrainMultiplier() { StaminaDrainMultiplier = 1.f; };
 
 
 	float GetForwardBackValue() { return ForwardBackInputValue; }

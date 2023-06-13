@@ -39,21 +39,28 @@ void UInventoryComponent::BeginPlay()
 
 	FSlotStruct Temp4 = FSlotStruct();
 	Temp4.Group = 2000;
-	Temp4.Quantity = 50;
+	Temp4.Quantity = 5;
 	Temp4.ItemId = FName("AttackFood");
 	Content.Add(Temp4);
 
+	FSlotStruct Temp5 = FSlotStruct();
+	Temp5.Group = 2001;
+	Temp5.Quantity = 5;
+	Temp5.ItemId = FName("StaminaFood");
+	Content.Add(Temp5);
+
+	FSlotStruct Temp6 = FSlotStruct();
+	Temp6.Group = 2002;
+	Temp6.Quantity = 5;
+	Temp6.ItemId = FName("DefenseFood");
+	Content.Add(Temp6);
+
 	
-	/*
-	Hotbar.Add(FName("HealthPotion"));
-	Hotbar.Add(FName("ManaPotion"));
-	Hotbar.Add(FName("TeleportScroll"));
-	Hotbar.Add(FName("AttackFood"));
-	*/
 	Hotbar.Add(FName("Empty"));
 	Hotbar.Add(FName("Empty"));
 	Hotbar.Add(FName("Empty"));
 	Hotbar.Add(FName("Empty"));
+
 
 
 
@@ -220,6 +227,11 @@ void UInventoryComponent::UseItem(int HotbarSlotIndex) {
 		return;
 
 	case EItemEffect::Buff:
+		switch (Item->StatAffected) {
+		case EStatAffected::Stamina:
+			Player->SetStaminaDrainMultiplier(.5);
+			return;
+		}
 		return;
 
 	}
