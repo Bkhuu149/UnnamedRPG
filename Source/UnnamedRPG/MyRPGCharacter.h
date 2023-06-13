@@ -101,6 +101,10 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	float StaminaDrainMultiplier = 1.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	float AttackDamageMultiplier = 1.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	float EnemyDamageMultiplier = 1.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	TArray<FName> AttackCombo;
@@ -256,6 +260,24 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 		void ResetStaminaDrainMultiplier() { StaminaDrainMultiplier = 1.f; };
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		float GetAttackDamageMultiplier() { return AttackDamageMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void SetAttackDamageMultiplier(float NewMultiplier) { AttackDamageMultiplier = NewMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void ResetAttackDamageMultiplier() { AttackDamageMultiplier = 1.f; };
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		float GetEnemyDamageMultiplier() { return EnemyDamageMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void SetEnemyDamageMultiplier(float NewMultiplier) { EnemyDamageMultiplier = NewMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void ResetEnemyDamageMultiplier() { EnemyDamageMultiplier = 1.f; };
 
 
 	float GetForwardBackValue() { return ForwardBackInputValue; }

@@ -185,8 +185,38 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Item in inventory, decrimenting"));
 	Content[Index].Quantity--;
-	return Found;
 
+	FItemStruct* Item = GetItemInformation(ItemId);
+	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(GetOwner());
+
+	switch (Item->ItemEffect) {
+
+	case EItemEffect::Restore:
+
+		switch (Item->StatAffected) {
+		case EStatAffected::Health:
+			Player->HealChar(50);
+			return true;
+		case EStatAffected::Mana:
+			Player->AddMana(50);
+			return true;
+		}
+	case EItemEffect::Buff:
+		switch (Item->StatAffected) {
+		case EStatAffected::Stamina:
+			Player->SetStaminaDrainMultiplier(.5);
+			return true;
+
+		case EStatAffected::Attack:
+			Player->SetAttackDamageMultiplier(1.4);
+			return true;
+
+		case EStatAffected::Defense:
+			Player->SetEnemyDamageMultiplier(.7);
+			return true;
+		}
+	}
+	return Found;
 }
 
 void UInventoryComponent::SetItemInHotbar(FName ItemId, int HotbarIndex) {
@@ -201,41 +231,7 @@ void UInventoryComponent::SetItemInHotbar(FName ItemId, int HotbarIndex) {
 
 void UInventoryComponent::UseItem(int HotbarSlotIndex) {
 	FName ItemId = Hotbar[HotbarSlotIndex];
-	bool IsItemConsumed = RemoveFromInventory(ItemId);
-	if (!IsItemConsumed) {
-		//Item wasn't consumed, do nothing
-		return;
-	}
-	//Item consumed, do what item says
-	FItemStruct* Item = GetItemInformation(ItemId);
-	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(GetOwner());
-
-	switch (Item->ItemEffect) {
-
-	case EItemEffect::Restore:
-		
-		switch (Item->StatAffected) {
-		case EStatAffected::Health:
-			Player->HealChar(50);
-			return;
-		case EStatAffected::Mana:
-			Player->AddMana(50);
-			return;
-		}
-
-
-		return;
-
-	case EItemEffect::Buff:
-		switch (Item->StatAffected) {
-		case EStatAffected::Stamina:
-			Player->SetStaminaDrainMultiplier(.5);
-			return;
-		}
-		return;
-
-	}
-	return;
+	RemoveFromInventory(ItemId);
 }
 
 FSlotStruct UInventoryComponent::GetItemFromInventory(FName ItemId) {

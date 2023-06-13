@@ -16,7 +16,6 @@ enum class EStatAffected : uint8 {
 	Mana		UMETA(DisplayName = "Mana"),
 	Stamina		UMETA(DisplayName = "Stamina"),
 	Defense		UMETA(DisplayName = "Defense"),
-	Damage		UMETA(DisplayName = "Damage"),
 	Attack		UMETA(DisplayName = "Attack"),
 	Vision		UMETA(DisplayName = "Vision"),
 	Movement	UMETA(DisplayName = "Movement")

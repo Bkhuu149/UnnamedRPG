@@ -98,6 +98,7 @@ void AMyRPGCharacter::KILL() {
 void AMyRPGCharacter::MoveForwardBack(float value) 
 {
 	if (IsInteracting) { return; }
+	if (!GetCharacterMovement()->IsMovingOnGround()) { return; }
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	if (value != 0 && IsAttacking) {
 		IsAttacking = false;
@@ -116,6 +117,7 @@ void AMyRPGCharacter::MoveForwardBack(float value)
 void AMyRPGCharacter::MoveRightLeft(float value)
 {
 	if (IsInteracting) { return; }
+	if (!GetCharacterMovement()->IsMovingOnGround()) { return; }
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	if (value != 0 && IsAttacking) {
 		IsAttacking = false;
@@ -276,7 +278,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 	
 	IsAttacking = true;
 	AttackCount++;
-	CurrentWeapon->SetDamage(AttackRow->Damage * (AttackCount));
+	CurrentWeapon->SetDamage(AttackRow->Damage * (AttackCount) * AttackDamageMultiplier);
 
 	if (AttackTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
@@ -330,7 +332,7 @@ void AMyRPGCharacter::DoFinisher() {
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(FinisherAttack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
-	CurrentWeapon->SetDamage((AttackCount) * CurrentWeapon->Damage);
+	CurrentWeapon->SetDamage((AttackCount) * FinisherAttack->Damage * AttackDamageMultiplier);
 	IsAttacking = true;
 	AbilityComp->GiveAbilityAndActivateOnce(Attack);
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
@@ -447,7 +449,7 @@ void AMyRPGCharacter::ResetTarget() {
 
 bool AMyRPGCharacter::DamageChar(float val) {
 	
-	bool bHit = Super::DamageChar(val);
+	bool bHit = Super::DamageChar(EnemyDamageMultiplier * val);
 
 	if (Barrier && !bHit) {
 		BarrierHit = true;
