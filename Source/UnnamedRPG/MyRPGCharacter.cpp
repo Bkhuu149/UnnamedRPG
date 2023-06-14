@@ -12,6 +12,7 @@ AMyRPGCharacter::AMyRPGCharacter()
 	AbilityComp = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	InteractComp = CreateDefaultSubobject<UMyInteractComponent>(TEXT("Interact Component"));
 	InventoryComp = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory Component"));
+	AttackSkillComp = CreateDefaultSubobject<UAttackSkillComponent>(TEXT("Attack Skill Component"));
 }
 
 // Called when the game starts or when spawned
