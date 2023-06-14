@@ -85,10 +85,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Database")
 		UDataTable* AttackTab;
 
+	void AddAttack(FName AttackID);
+
 private:
 	int FindComboInInventory(FName AttackId, bool& ItemFound);
 	int FindFinisherInInventory(FName AttackId, bool& ItemFound);
 
-	FAttackStruct GetAttackInformation(FName AttackId);
+	FAttackStruct* GetAttackInformation(FName AttackId);
+
+	void AddAttackToFinishers(FAttackSlotStruct Attack);
+	void AddAttackToCombos(FAttackSlotStruct Attack);
+
+
 
 };

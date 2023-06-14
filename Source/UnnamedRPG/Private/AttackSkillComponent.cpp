@@ -10,15 +10,6 @@ UAttackSkillComponent::UAttackSkillComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
-}
-
-
-// Called when the game starts
-void UAttackSkillComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
 	FAttackSlotStruct Temp = FAttackSlotStruct();
 	Temp.AttackId = FName("SwordAttack3");
 	Temp.WeaponGroup = 1002;
@@ -45,6 +36,15 @@ void UAttackSkillComponent::BeginPlay()
 	Hotbar.Add(FName("SwordAttack5"));
 
 	Finisher = FName("SwordAttack2");
+	// ...
+}
+
+
+// Called when the game starts
+void UAttackSkillComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
 	// ...
 	
 }
@@ -80,9 +80,72 @@ int UAttackSkillComponent::FindFinisherInInventory(FName AttackId, bool& Found) 
 	return -1;
 }
 
-FAttackStruct UAttackSkillComponent::GetAttackInformation(FName AttackId) {
+FAttackStruct* UAttackSkillComponent::GetAttackInformation(FName AttackId) {
+	FAttackStruct* AttackRow = AttackTab->FindRow<FAttackStruct>(AttackId, "");
+	return AttackRow;
+}
+
+void UAttackSkillComponent::AddAttackToFinishers(FAttackSlotStruct Attack) {
+	//Finisher inventory is empty then just add it to the array
+	if(FinishersInventory.Num() == 0) {
+		FinishersInventory.Add(Attack);
+		return;
+	}
+
+	//Find where to insert attack into array
+	for (int i = 0; i < FinishersInventory.Num(); i++) {
+		if (Attack.WeaponGroup < FinishersInventory[i].WeaponGroup) {
+			FinishersInventory.Insert(Attack, i);
+			return;
+		}
+	}
+	//Attack should go at the end of inventory
+	FinishersInventory.Add(Attack);
+}
+
+void UAttackSkillComponent::AddAttackToCombos(FAttackSlotStruct Attack) {
+	//Combo inventory is empty then just add it to the array
+	if (ComboInventory.Num() == 0) {
+		ComboInventory.Add(Attack);
+		return;
+	}
+
+	//Find where to insert attack into array
+	for (int i = 0; i < ComboInventory.Num(); i++) {
+		if (Attack.WeaponGroup < ComboInventory[i].WeaponGroup) {
+			ComboInventory.Insert(Attack, i);
+			return;
+		}
+	}
+	//Attack should go at the end of inventory
+	ComboInventory.Add(Attack);
+}
 
 
-	return FAttackStruct();
+void UAttackSkillComponent::AddAttack(FName AttackId) {
+	FAttackStruct* AttackToBeAdded = GetAttackInformation(AttackId);
+	if (!AttackToBeAdded) { return; }
+
+	bool Found = false;
+	int Index = -1;
+
+	FAttackSlotStruct Attack = FAttackSlotStruct();
+	Attack.AttackId = AttackId;
+	Attack.WeaponGroup = AttackToBeAdded->WeaponGroup;
+	switch (AttackToBeAdded->IsFinisher)
+	{
+	case (true):
+		Index = FindFinisherInInventory(AttackId, Found);
+		//Attack already in finisher inventory, don't add it
+		if (Found) { return; }
+		AddAttackToFinishers(Attack);
+		return;
+
+	case (false):
+		Index = FindComboInInventory(AttackId, Found);
+		if (Found) { return; }
+		AddAttackToCombos(Attack);
+		return;
+	}
 }
 

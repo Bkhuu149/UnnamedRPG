@@ -11,6 +11,12 @@ UInventoryComponent::UInventoryComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	// ...
+
+	Hotbar.Add(FName("Empty"));
+	Hotbar.Add(FName("Empty"));
+	Hotbar.Add(FName("Empty"));
+	Hotbar.Add(FName("Empty"));
+
 }
 
 
@@ -54,12 +60,6 @@ void UInventoryComponent::BeginPlay()
 	Temp6.Quantity = 5;
 	Temp6.ItemId = FName("DefenseFood");
 	Content.Add(Temp6);
-
-	
-	Hotbar.Add(FName("Empty"));
-	Hotbar.Add(FName("Empty"));
-	Hotbar.Add(FName("Empty"));
-	Hotbar.Add(FName("Empty"));
 
 
 
