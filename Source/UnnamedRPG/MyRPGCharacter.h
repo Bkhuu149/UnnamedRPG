@@ -26,29 +26,7 @@
 #include "MyRPGCharacter.generated.h"
 
 
-USTRUCT(BlueprintType)
-struct FAttackStruct : public FTableRowBase
-{
-	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 Index = 0;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<class UGameplayAbility_Montage> FemaleAttack;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<class UGameplayAbility_Montage> MaleAttack;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool Unlocked = false;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool IsFinisher = false;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UClass* Weapon = nullptr;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float Damage = 5;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float StaminaDrain = 25;
-
-};
 
 class InteractableInterface;
 
