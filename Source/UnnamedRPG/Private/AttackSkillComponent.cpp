@@ -149,3 +149,7 @@ void UAttackSkillComponent::AddAttack(FName AttackId) {
 	}
 }
 
+void UAttackSkillComponent::SetComboInHotbar(FName AttackId, int Index) {
+	
+}
+

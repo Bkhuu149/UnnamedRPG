@@ -87,6 +87,8 @@ public:
 
 	void AddAttack(FName AttackID);
 
+	void SetComboInHotbar(FName AttackId, int Index);
+
 private:
 	int FindComboInInventory(FName AttackId, bool& ItemFound);
 	int FindFinisherInInventory(FName AttackId, bool& ItemFound);
