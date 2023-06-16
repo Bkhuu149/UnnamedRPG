@@ -24,46 +24,6 @@ UInventoryComponent::UInventoryComponent()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	/*
-	FSlotStruct Temp = FSlotStruct();
-	Temp.Group = 1000;
-	Temp.Quantity = 5;
-	Temp.ItemId = FName("HealthPotion");
-	Content.Add(Temp);
-
-	FSlotStruct Temp2 = FSlotStruct();
-	Temp2.Group = 1001;
-	Temp2.Quantity = 5;
-	Temp2.ItemId = FName("ManaPotion");
-	Content.Add(Temp2);
-
-	FSlotStruct Temp3 = FSlotStruct();
-	Temp3.Group = 1002;
-	Temp3.Quantity = 50;
-	Temp3.ItemId = FName("TeleportScroll");
-	Content.Add(Temp3);
-
-	FSlotStruct Temp4 = FSlotStruct();
-	Temp4.Group = 2000;
-	Temp4.Quantity = 5;
-	Temp4.ItemId = FName("AttackFood");
-	Content.Add(Temp4);
-
-	FSlotStruct Temp5 = FSlotStruct();
-	Temp5.Group = 2001;
-	Temp5.Quantity = 5;
-	Temp5.ItemId = FName("StaminaFood");
-	Content.Add(Temp5);
-
-	FSlotStruct Temp6 = FSlotStruct();
-	Temp6.Group = 2002;
-	Temp6.Quantity = 5;
-	Temp6.ItemId = FName("DefenseFood");
-	Content.Add(Temp6);
-	*/
-
-
-
 	// ...
 	
 }
@@ -73,7 +33,6 @@ void UInventoryComponent::BeginPlay()
 void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
 	// ...
 }
 

@@ -88,21 +88,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	float EnemyDamageMultiplier = 1.f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	TArray<FName> AttackCombo;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	FName Finisher;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	UClass* WeaponClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UClass* BarrierClass;
-
-	//Data Tables
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
-	UDataTable* AbilityTab;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* DodgeAnim;
