@@ -108,6 +108,12 @@ void AMyRPGCharacter::KILL() {
 	AttackSkillComp->AddAttack(FName("SpearAttack1"));
 	AttackSkillComp->AddAttack(FName("SpearAttack2"));
 
+	InventoryComp->AddToInventory(FName("HealthPotion"));
+	InventoryComp->AddToInventory(FName("ManaPotion"));
+	InventoryComp->AddToInventory(FName("AttackFood"));
+	InventoryComp->AddToInventory(FName("StaminaFood"));
+	InventoryComp->AddToInventory(FName("DefenseFood"));
+
 
 }
 
