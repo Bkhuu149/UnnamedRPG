@@ -158,3 +158,19 @@ void UAttackSkillComponent::SetComboInHotbar(FName AttackId, int HotbarIndex) {
 	}
 }
 
+void UAttackSkillComponent::SetFinisher(FName AttackId) {
+	Finisher = AttackId;
+}
+
+int UAttackSkillComponent::FindAttackInCombo(FName AttackId, bool& Found) {
+
+	for (int i = 0; i < Hotbar.Num(); i++) {
+		if (Hotbar[i] == AttackId) {
+			Found = true;
+			return i;
+		}
+	}
+	Found = false;
+	return -1;
+}
+

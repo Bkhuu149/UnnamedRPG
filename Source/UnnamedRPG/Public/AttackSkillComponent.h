@@ -91,7 +91,14 @@ public:
 
 	void SetComboInHotbar(FName AttackId, int HotbarIndex);
 
-	void IncreaseCombo();
+	void IncreaseCombo() {}; //To be built later
+
+	UFUNCTION(BlueprintCallable)
+	void SetFinisher(FName AttackId);
+
+	UFUNCTION(BlueprintCallable)
+	int FindAttackInCombo(FName AttackId, bool& Found);
+
 
 private:
 	int FindComboInInventory(FName AttackId, bool& ItemFound);
@@ -101,7 +108,4 @@ private:
 
 	void AddAttackToFinishers(FAttackSlotStruct Attack);
 	void AddAttackToCombos(FAttackSlotStruct Attack);
-
-
-
 };
