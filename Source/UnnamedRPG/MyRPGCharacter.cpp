@@ -255,7 +255,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 		return;
 	}
 	
-	FAttackStruct* AttackRow = AbilityTab->FindRow<FAttackStruct>(AttackCombo[AttackCount], "");
+	FAttackStruct* AttackRow = AttackSkillComp->GetComboAttack(AttackCount);
 	
 	if (!AttackRow) { return; }
 
@@ -318,7 +318,7 @@ void AMyRPGCharacter::DoFinisher() {
 	
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Finisher Pressed"));
 
-	FAttackStruct* FinisherAttack = AbilityTab->FindRow<FAttackStruct>(Finisher, "");
+	FAttackStruct* FinisherAttack = AttackSkillComp->GetFinisherAttack();
 	//If the attack is not a finisher, return for safety
 	if (!FinisherAttack->IsFinisher || (FinisherAttack->StaminaDrain * StaminaDrainMultiplier > CurrentStamina)) { return; }
 	

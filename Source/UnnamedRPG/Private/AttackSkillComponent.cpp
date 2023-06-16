@@ -174,3 +174,10 @@ int UAttackSkillComponent::FindAttackInCombo(FName AttackId, bool& Found) {
 	return -1;
 }
 
+FAttackStruct* UAttackSkillComponent::GetComboAttack(int HotbarIndex) {
+	return GetAttackInformation(Hotbar[HotbarIndex]);
+}
+
+FAttackStruct* UAttackSkillComponent::GetFinisherAttack() {
+	return GetAttackInformation(Finisher);
+}
