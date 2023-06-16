@@ -109,6 +109,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int FindItemInHotbar(FName ItemId, bool& ItemFound);
 
+	UFUNCTION(BlueprintCallable)
+	void SetContent(TArray<FSlotStruct> SavedContent) { Content = SavedContent; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetHotbar(TArray<FName> SavedHotbar) { Hotbar = SavedHotbar; }
 
 private: 
 	int FindItemSlot(FName ItemId, bool& ItemFound);

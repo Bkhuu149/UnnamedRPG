@@ -24,7 +24,7 @@ UInventoryComponent::UInventoryComponent()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	/*
 	FSlotStruct Temp = FSlotStruct();
 	Temp.Group = 1000;
 	Temp.Quantity = 5;
@@ -60,7 +60,7 @@ void UInventoryComponent::BeginPlay()
 	Temp6.Quantity = 5;
 	Temp6.ItemId = FName("DefenseFood");
 	Content.Add(Temp6);
-
+	*/
 
 
 
