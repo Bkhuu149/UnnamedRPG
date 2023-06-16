@@ -90,7 +90,23 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 }
 
 void AMyRPGCharacter::KILL() {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Currently Not Mapped to something"));
+	AttackSkillComp->AddAttack(FName("SwordAttack1"));
+	AttackSkillComp->AddAttack(FName("SwordAttack2"));
+	AttackSkillComp->AddAttack(FName("SwordAttack3"));
+	AttackSkillComp->AddAttack(FName("SwordAttack4"));
+	AttackSkillComp->AddAttack(FName("SwordAttack5"));
+
+	AttackSkillComp->AddAttack(FName("AxeAttack1"));
+	AttackSkillComp->AddAttack(FName("AxeAttack2"));
+	AttackSkillComp->AddAttack(FName("AxeAttack3"));
+
+	AttackSkillComp->AddAttack(FName("GreatSwordAttack1"));
+	AttackSkillComp->AddAttack(FName("GreatSwordAttack2"));
+	AttackSkillComp->AddAttack(FName("GreatSwordAttack3"));
+	AttackSkillComp->AddAttack(FName("GreatSwordAttack4"));
+
+	AttackSkillComp->AddAttack(FName("SpearAttack1"));
+	AttackSkillComp->AddAttack(FName("SpearAttack2"));
 
 
 }
@@ -377,23 +393,6 @@ void AMyRPGCharacter::OnInteractPressed() {
 }
 
 void AMyRPGCharacter::OnMenuPressed() {
-	AttackSkillComp->AddAttack(FName("SwordAttack1"));
-	AttackSkillComp->AddAttack(FName("SwordAttack2"));
-	AttackSkillComp->AddAttack(FName("SwordAttack3"));
-	AttackSkillComp->AddAttack(FName("SwordAttack4"));
-	AttackSkillComp->AddAttack(FName("SwordAttack5"));
-
-	AttackSkillComp->AddAttack(FName("AxeAttack1"));
-	AttackSkillComp->AddAttack(FName("AxeAttack2"));
-	AttackSkillComp->AddAttack(FName("AxeAttack3"));
-
-	AttackSkillComp->AddAttack(FName("GreatSwordAttack1"));
-	AttackSkillComp->AddAttack(FName("GreatSwordAttack2"));
-	AttackSkillComp->AddAttack(FName("GreatSwordAttack3"));
-	AttackSkillComp->AddAttack(FName("GreatSwordAttack4"));
-
-	AttackSkillComp->AddAttack(FName("SpearAttack1"));
-	AttackSkillComp->AddAttack(FName("SpearAttack2"));
 
 }
 

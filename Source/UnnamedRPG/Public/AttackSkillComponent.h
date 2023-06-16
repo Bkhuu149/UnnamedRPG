@@ -78,6 +78,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FName Finisher;
 
+	int ComboMaxSize = 3;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -87,7 +89,9 @@ public:
 
 	void AddAttack(FName AttackID);
 
-	void SetComboInHotbar(FName AttackId, int Index);
+	void SetComboInHotbar(FName AttackId, int HotbarIndex);
+
+	void IncreaseCombo();
 
 private:
 	int FindComboInInventory(FName AttackId, bool& ItemFound);

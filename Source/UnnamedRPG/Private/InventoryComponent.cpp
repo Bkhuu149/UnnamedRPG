@@ -220,9 +220,11 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 }
 
 void UInventoryComponent::SetItemInHotbar(FName ItemId, int HotbarIndex) {
+	bool Found = false;
+	int InventoryIndex = FindItemSlot(ItemId, Found);
+	if (!Found) { return; }
 	if (HotbarIndex >= 0 && HotbarIndex < 4) {
 		Hotbar[HotbarIndex] = ItemId;
-		return;
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Attempted to add item to hotbar outside of max size"));
 

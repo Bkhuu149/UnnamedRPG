@@ -149,7 +149,12 @@ void UAttackSkillComponent::AddAttack(FName AttackId) {
 	}
 }
 
-void UAttackSkillComponent::SetComboInHotbar(FName AttackId, int Index) {
-	
+void UAttackSkillComponent::SetComboInHotbar(FName AttackId, int HotbarIndex) {
+	bool Found = false;
+	int InventoryIndex = FindComboInInventory(AttackId, Found);
+	if (!Found) { return; }
+	if (HotbarIndex >= 0 && HotbarIndex < ComboMaxSize) {
+		Hotbar[HotbarIndex] = AttackId;
+	}
 }
 
