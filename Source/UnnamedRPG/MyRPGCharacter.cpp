@@ -121,7 +121,6 @@ void AMyRPGCharacter::KILL() {
 void AMyRPGCharacter::MoveForwardBack(float value) 
 {
 	if (IsInteracting) { return; }
-	if (!GetCharacterMovement()->IsMovingOnGround()) { return; }
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	if (value != 0 && IsAttacking) {
 		IsAttacking = false;
@@ -140,7 +139,6 @@ void AMyRPGCharacter::MoveForwardBack(float value)
 void AMyRPGCharacter::MoveRightLeft(float value)
 {
 	if (IsInteracting) { return; }
-	if (!GetCharacterMovement()->IsMovingOnGround()) { return; }
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	if (value != 0 && IsAttacking) {
 		IsAttacking = false;
@@ -169,6 +167,7 @@ void AMyRPGCharacter::OnBlockPressed() {
 
 void AMyRPGCharacter::OnHealPressed() {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting || IsRegeningMana) { return; }
+	PlayAnimMontage(HealAnim);
 	Mana = 0.0;
 	HealChar(30.0);
 	IncrementMana();
@@ -179,11 +178,11 @@ void AMyRPGCharacter::OnDodgePressed() {
 	if (GetCharacterMovement()->IsFalling() || 
 		GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || 
 		IsInteracting || 
-		CurrentStamina - 30 < 0
+		30 * StaminaDrainMultiplier > CurrentStamina
 		) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
 	IsDodging = true;
-	CurrentStamina -= 30;
+	CurrentStamina -= 30 * StaminaDrainMultiplier;
 	FMath::Clamp(CurrentStamina, 0, StaminaMax);
 	float duration = PlayAnimMontage(DodgeAnim);
 	GetWorld()->GetTimerManager().SetTimer(DodgeTimer, this, &AMyRPGCharacter::DodgeFinished, duration, false);
@@ -477,7 +476,6 @@ bool AMyRPGCharacter::DamageChar(float val) {
 }
 
 void AMyRPGCharacter::HealChar(float val) {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	Super::HealChar(val);
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Healed: %f"), Health));
 }

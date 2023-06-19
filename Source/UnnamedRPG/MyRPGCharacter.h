@@ -101,6 +101,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* ParryAnim;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
+	UAnimMontage* HealAnim;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UParticleSystem* BarrierParticle;
 
