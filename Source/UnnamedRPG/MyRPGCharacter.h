@@ -166,6 +166,8 @@ private:
 	int CurrentMaxAttackCount = 3;
 	bool IsAttacking = false;
 
+	float PerformAttack(FAttackStruct* Attack);
+
 	//Handle Finisher Pressed
 	void DoFinisher();
 
