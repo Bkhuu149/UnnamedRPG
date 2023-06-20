@@ -114,6 +114,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void EndBarrier();
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateAttackBar();
+
 private:
 	//TO BE REMOVED LATER, LEFT IN FOR TESTING DAMAGE
 	void KILL();

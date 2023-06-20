@@ -261,6 +261,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 	if (!AttackRow) { return; }
 	float AttackLength = PerformAttack(AttackRow);
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength + 2.f, false);
+	UpdateAttackBar();
 }
 
 void AMyRPGCharacter::ResetAttack() {
@@ -270,6 +271,7 @@ void AMyRPGCharacter::ResetAttack() {
 	}
 	AttackCount = 0;
 	IsAttacking = false;
+	UpdateAttackBar();
 }
 
 void AMyRPGCharacter::DoFinisher() {
