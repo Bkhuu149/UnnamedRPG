@@ -154,10 +154,10 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 
 		switch (Item->StatAffected) {
 		case EStatAffected::Health:
-			Player->HealChar(50);
+			Player->HealChar(30);
 			return true;
 		case EStatAffected::Mana:
-			Player->AddMana(50);
+			Player->AddMana(30);
 			return true;
 		}
 	case EItemEffect::Buff:

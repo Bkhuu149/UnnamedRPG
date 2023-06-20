@@ -169,7 +169,7 @@ void AMyRPGCharacter::OnHealPressed() {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting || IsRegeningMana) { return; }
 	PlayAnimMontage(HealAnim);
 	Mana = 0.0;
-	HealChar(30.0);
+	HealChar(GetHealthMax());
 	IncrementMana();
 	IsRegeningMana = true;
 }
