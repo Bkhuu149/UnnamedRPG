@@ -8,19 +8,32 @@
 #include "Perception/PawnSensingComponent.h"
 #include "../MyRPGCharacter.h"
 #include "NavigationSystem.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "EnemyClass.generated.h"
+
+
+UENUM(BlueprintType)
+enum class EEnemyState : uint8 {
+	IDLE			UMETA(DisplayName = "Idle"), //Default, not doing anything
+	PATH_WALKING	UMETA(DisplayName = "Path Walking"), //Currently following a set path
+	CHASE_CLOSE		UMETA(DisplayName = "Chase Close"), //Following target closely
+	CHASE_FAR		UMETA(DisplayName = "Chase Far"), //Has a target but staying a distance away
+	ATTACK			UMETA(DisplayName = "Attack"), //Performing an attack
+	STAGGERED			UMETA(DisplayName = "Staggered"), //Being damaged
+	DEAD			UMETA(DisplayName = "Dead") //Dead
+};
 
 UCLASS()
 class UNNAMEDRPG_API AEnemyClass : public ARPGBaseClass
 {
 	GENERATED_BODY()
 
-	//UPROPERTY(VisibleAnywhere, Category = "Trigger Capsule")
-	//class USphereComponent* TriggerSphere;
-
 public: 
 	// Sets default values for this character's properties
 	AEnemyClass();
+
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -43,7 +56,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	TArray<UAnimMontage*> AttackAnimClose;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-	float Cooldown = 2.f;
+	float CooldownTime = 2.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float Damage = 10.f;
 
@@ -64,24 +77,48 @@ private:
 	enum WalkState { IDLE, FOLLOW, RANDOM};
 	WalkState CurrWalkState = IDLE;
 
-	bool CoolingDown = false;
+	EEnemyState CurrentEnemyState = EEnemyState::IDLE;
+
+	bool Interruptable = false;
+
+	bool Staggered = false;
+
+	bool IsCoolingDown = false;
 
 	void Walk();
 
 	void ResetTarget();
 
-	void Attack();
-
 	void Rotate(float DeltaTime);
+
+	virtual void Attack();
+
+	virtual void TickStateMachine();
+
+	void SetState(EEnemyState NewState) { CurrentEnemyState = NewState; };
+
+	virtual void StateIdle();
+
+	virtual void StatePathWalking();
+
+	virtual void StateChaseClose();
+
+	virtual void StateChaseFar();
+
+	virtual void StateAttack();
+
+	virtual void StateStaggered();
+
+	virtual void StateDead();
+
 
 public: 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	bool GetIsTargeted() { return Targeted; }
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	//UFUNCTION()
-	//void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	bool GetIsTargeted() { return Targeted; }
 
 
 };

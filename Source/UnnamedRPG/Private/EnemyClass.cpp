@@ -2,7 +2,6 @@
 
 
 #include "EnemyClass.h"
-#include "Components/SphereComponent.h"
 
 // Called to bind functionality to input
 AEnemyClass::AEnemyClass()
@@ -11,14 +10,7 @@ AEnemyClass::AEnemyClass()
 	PrimaryActorTick.bCanEverTick = true;
 
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("Pawn Sensing Component"));
-	
-	//TriggerSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Trigger Sphere"));
-	//TriggerSphere->InitSphereRadius(500.f);
-	//TriggerSphere->SetCollisionProfileName(TEXT("Trigger"));
-	//TriggerSphere->SetupAttachment(RootComponent);
-
-	//TriggerSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemyClass::OnOverlapBegin);
-
+	Interruptable = true;
 
 }
 
@@ -40,6 +32,8 @@ void AEnemyClass::BeginPlay()
 		WalkPath[i] = UKismetMathLibrary::ComposeTransforms(WalkPath[i], GetActorTransform());
 	}
 
+	CurrentEnemyState = EEnemyState::IDLE;
+
 }
 
 void AEnemyClass::Tick(float DeltaTime)
@@ -47,31 +41,22 @@ void AEnemyClass::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (IsDead || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 
+	TickStateMachine();
+	Rotate(DeltaTime);
 	//Use Pawn Sensing component to find player
 	//Set player as target if found
 	//Else, move randomly
 
 	// If already at target, stop and attack
+	/*
 	if (FollowResult == EPathFollowingRequestResult::AlreadyAtGoal && CurrWalkState == FOLLOW) {
-
-		int Chance = FMath::RandRange(0, 2);
-
-		switch (Chance) {
-			case 1:
-				Rotate(DeltaTime);
-				Attack();
-				break;
-			case 2:
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Circle"));
-				break;
-				//RangeAttack()
-
-		}
+		Rotate(DeltaTime);
+		Attack();
 	}
 	//If Targeted, approach target. Else, walk to random point within spawn radius
 	if (Targeted) {
 		DelayTimer.Invalidate();
-		if (FVector::Distance(Target->GetActorLocation(), SpawnLocation) > 1000.f) {
+		if (FVector::Distance(Target->GetActorLocation(), WalkPath[CurrentPathNode].GetLocation()) > 1000.f) {
 			ResetTarget();
 			return;
 		}
@@ -80,8 +65,84 @@ void AEnemyClass::Tick(float DeltaTime)
 		if (!DelayTimer.IsValid()){
 			GetWorld()->GetTimerManager().SetTimer(DelayTimer, this, &AEnemyClass::Walk, 10.f, false);
 		}
+	}*/
+}
+
+void AEnemyClass::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent){
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void AEnemyClass::TickStateMachine() {
+	switch (CurrentEnemyState) {
+	case EEnemyState::IDLE:
+		StateIdle();
+		break;
+	case EEnemyState::PATH_WALKING:
+		StatePathWalking();
+		break;
+	case EEnemyState::CHASE_CLOSE:
+		StateChaseClose();
+		break;
+	case EEnemyState::CHASE_FAR:
+		StateChaseFar();
+		break;
+	case EEnemyState::ATTACK:
+		StateAttack();
+		break;
+	case EEnemyState::STAGGERED:
+		StateStaggered();
+		break;
+	case EEnemyState::DEAD:
+		StateDead();
+		break;
 	}
 }
+
+void AEnemyClass::StateIdle() {
+	if (Targeted) {
+		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
+	}
+}
+
+void AEnemyClass::StatePathWalking() {
+
+}
+
+void AEnemyClass::StateChaseClose() { 
+	
+	if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 125)
+	{
+		FVector PlayerDirection = Target->GetActorLocation() - GetActorLocation();
+		float LookingDirection = GetActorForwardVector().Dot(PlayerDirection.GetSafeNormal());
+		if (LookingDirection > 0.90f && !IsCoolingDown && !Staggered) {
+			Attack();
+		}
+	}
+	else
+	{
+		FVector Location = Target->GetActorLocation();
+		FollowResult = MyController->MoveToActor(Target, 50.f, true, true, false);
+	}
+}
+
+void AEnemyClass::StateChaseFar() {
+
+}
+
+void AEnemyClass::StateAttack() {
+
+}
+
+void AEnemyClass::StateStaggered() {
+
+}
+
+void AEnemyClass::StateDead() {
+
+}
+
+
+
 
 void AEnemyClass::Walk() {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Walk"));
@@ -109,9 +170,6 @@ void AEnemyClass::Walk() {
 		}
 
 		Location = WalkPath[CurrentPathNode].GetLocation();
-		//FNavLocation ReachableLocation;
-		//NavSys->GetRandomReachablePointInRadius(SpawnLocation, 1000.f, ReachableLocation);
-		//Location = ReachableLocation.Location;
 		FollowResult = MyController->MoveToLocation(Location, 100.f);
 	}
 
@@ -125,18 +183,6 @@ void AEnemyClass::ResetTarget() {
 	MyController->StopMovement();
 	Target = nullptr;
 }
-
-
-//void AEnemyClass::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-//{
-//	if (OtherActor && (OtherActor != this) && OtherComp && static_cast<AMyRPGCharacter*>(OtherActor))
-//	{
-//		Targeted = true;
-//		Target = OtherActor;
-//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
-//		Walk();
-//	}
-//}
 
 void AEnemyClass::Rotate(float DeltaTime)
 {
@@ -154,9 +200,10 @@ void AEnemyClass::Rotate(float DeltaTime)
 void AEnemyClass::Attack() 
 {
 	//Performs random attack in AttackAnimClose array
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || CoolingDown) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsCoolingDown) { return; }
+	MyController->StopMovement();
 	int AttackIndex = FMath::RandRange(0, AttackAnimClose.Num()-1);
 	PlayAnimMontage(AttackAnimClose[AttackIndex]);
-	CoolingDown = true;
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { CoolingDown = false; }, Cooldown, false);
+	IsCoolingDown = true;
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false);
 }
