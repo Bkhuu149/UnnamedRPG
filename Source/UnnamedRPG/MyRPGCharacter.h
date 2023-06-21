@@ -169,6 +169,13 @@ private:
 	int CurrentMaxAttackCount = 3;
 	bool IsAttacking = false;
 
+	//Handle Combat Timer
+	FTimerHandle CombatTimer;
+	float CombatTimerLength = 10;
+	void StartCombatTimer(); // Starts or Resets combat timer
+	void CombatTimerEnd(); // Runs at the end of combat timer
+	bool InCombat = false;
+
 	float PerformAttack(FAttackStruct* Attack);
 
 	//Handle Finisher Pressed

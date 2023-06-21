@@ -491,3 +491,15 @@ void AMyRPGCharacter::EndBarrier() {
 	}
 	GetWorld()->DestroyActor(Barrier);
 }
+
+void AMyRPGCharacter::StartCombatTimer() {
+	if (GetWorld()->GetTimerManager().IsTimerActive(CombatTimer)) {
+		GetWorld()->GetTimerManager().ClearTimer(CombatTimer);
+	}
+	InCombat = true;
+	GetWorld()->GetTimerManager().SetTimer(CombatTimer, this, &AMyRPGCharacter::CombatTimerEnd, CombatTimerLength, false);
+}
+
+void AMyRPGCharacter::CombatTimerEnd() {
+	InCombat = false;
+}

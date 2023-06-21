@@ -95,15 +95,23 @@ public:
 	void IncreaseCombo() {}; //To be built later
 
 	UFUNCTION(BlueprintCallable)
-	void SetFinisher(FName AttackId);
-
-	UFUNCTION(BlueprintCallable)
 	int FindAttackInCombo(FName AttackId, bool& Found);
 
 	FAttackStruct* GetComboAttack(int HotbarIndex);
 
 	FAttackStruct* GetFinisherAttack();
 
+	UFUNCTION(BlueprintCallable)
+	void SetComboInventory(TArray<FAttackSlotStruct> SavedCombo) { ComboInventory = SavedCombo; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetFinishersInventory(TArray<FAttackSlotStruct> SavedFinishers) { FinishersInventory = SavedFinishers; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetHotbar(TArray<FName> SavedHotbar) { Hotbar = SavedHotbar; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetFinisher(FName AttackId);
 
 private:
 	int FindComboInInventory(FName AttackId, bool& ItemFound);
