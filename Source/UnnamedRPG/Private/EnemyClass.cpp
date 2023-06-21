@@ -101,11 +101,35 @@ void AEnemyClass::TickStateMachine() {
 void AEnemyClass::StateIdle() {
 	if (Targeted) {
 		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
+		return;
 	}
+	StatePathWalking();
 }
 
 void AEnemyClass::StatePathWalking() {
+	if (!NavSys || WalkPath.Num() == 0) { return; }
+	if (DelayTimer.IsValid()) {
+		return;
+	}
+	if (Targeted) {
+		DelayTimer.Invalidate();
+		MyController->StopMovement();
+		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
+		return;
+	}
+	CurrentEnemyState = EEnemyState::PATH_WALKING;
 
+	if (!MyController->IsFollowingAPath()) {
+		CurrentEnemyState = EEnemyState::IDLE;
+		CurrentPathNode++;
+		if (CurrentPathNode >= WalkPath.Num()) {
+			CurrentPathNode = 0;
+		}
+		FVector Location = WalkPath[CurrentPathNode].GetLocation();
+		FollowResult = MyController->MoveToLocation(Location, 100.f);
+		GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {DelayTimer.Invalidate();}, 10.f, false);
+
+	}
 }
 
 void AEnemyClass::StateChaseClose() { 
@@ -115,13 +139,15 @@ void AEnemyClass::StateChaseClose() {
 		FVector PlayerDirection = Target->GetActorLocation() - GetActorLocation();
 		float LookingDirection = GetActorForwardVector().Dot(PlayerDirection.GetSafeNormal());
 		if (LookingDirection > 0.90f && !IsCoolingDown && !Staggered) {
-			Attack();
+			CurrentEnemyState = EEnemyState::ATTACK;
 		}
 	}
 	else
 	{
 		FVector Location = Target->GetActorLocation();
-		FollowResult = MyController->MoveToActor(Target, 50.f, true, true, false);
+		if (!MyController->IsFollowingAPath()) {
+			MyController->MoveToActor(Target, 50.f, true, true, false);
+		}
 	}
 }
 
@@ -130,7 +156,12 @@ void AEnemyClass::StateChaseFar() {
 }
 
 void AEnemyClass::StateAttack() {
-
+	if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 125) {
+		Attack();
+	}
+	else {
+		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
+	}
 }
 
 void AEnemyClass::StateStaggered() {

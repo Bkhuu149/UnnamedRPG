@@ -41,6 +41,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (MakeEditWidget = true))
 	TArray<FTransform> WalkPath;
 
+	UPROPERTY(EditAnywhere)
 	int CurrentPathNode = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pawn Sense")
