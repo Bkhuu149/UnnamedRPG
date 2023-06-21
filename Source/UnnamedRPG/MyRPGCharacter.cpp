@@ -359,7 +359,7 @@ void AMyRPGCharacter::OnMenuPressed() {
 void AMyRPGCharacter::OnSprintPressed() {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Sprinting"));
-	SprintMultiplier = 3.f;
+	SprintMultiplier = 1.f;
 	IsSprinting = true;
 	//bUseControllerRotationYaw = false;
 	//GetCharacterMovement()->bOrientRotationToMovement = true;
