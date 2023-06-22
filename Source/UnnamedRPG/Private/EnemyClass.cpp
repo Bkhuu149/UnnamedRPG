@@ -27,6 +27,12 @@ void AEnemyClass::BeginPlay()
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
 	CurrentWeapon->SetDamage(Damage);
+	if (WalkPath.Num() == 0) {
+		WalkPath.Add(GetActorTransform());
+	}
+	else {
+		WalkPath[0] = GetActorTransform();
+	}
 
 	for (int i = 0; i < WalkPath.Num(); i++) {
 		WalkPath[i] = UKismetMathLibrary::ComposeTransforms(WalkPath[i], GetActorTransform());
@@ -99,8 +105,13 @@ void AEnemyClass::TickStateMachine() {
 }
 
 void AEnemyClass::StateIdle() {
+
 	if (Targeted) {
+		DelayTimer.Invalidate();
 		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
+		return;
+	}
+	if (DelayTimer.IsValid()) {
 		return;
 	}
 	StatePathWalking();
@@ -108,9 +119,6 @@ void AEnemyClass::StateIdle() {
 
 void AEnemyClass::StatePathWalking() {
 	if (!NavSys || WalkPath.Num() == 0) { return; }
-	if (DelayTimer.IsValid()) {
-		return;
-	}
 	if (Targeted) {
 		DelayTimer.Invalidate();
 		MyController->StopMovement();
@@ -118,7 +126,9 @@ void AEnemyClass::StatePathWalking() {
 		return;
 	}
 	CurrentEnemyState = EEnemyState::PATH_WALKING;
-
+	if (DelayTimer.IsValid()) {
+		return;
+	}
 	if (!MyController->IsFollowingAPath()) {
 		CurrentEnemyState = EEnemyState::IDLE;
 		CurrentPathNode++;
@@ -133,8 +143,15 @@ void AEnemyClass::StatePathWalking() {
 }
 
 void AEnemyClass::StateChaseClose() { 
-	
-	if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 125)
+	if (!Target) { return; }
+	/*if (FVector::Distance(Target->GetActorLocation(), WalkPath[CurrentPathNode].GetLocation()) > 1000) {
+		MyController->StopMovement();
+		ResetTarget();
+		CurrentEnemyState = EEnemyState::IDLE;
+		GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {DelayTimer.Invalidate();}, 10.f, false);
+
+	}
+	else */if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 125)
 	{
 		FVector PlayerDirection = Target->GetActorLocation() - GetActorLocation();
 		float LookingDirection = GetActorForwardVector().Dot(PlayerDirection.GetSafeNormal());
