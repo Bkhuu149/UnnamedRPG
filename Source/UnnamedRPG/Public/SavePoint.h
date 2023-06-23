@@ -27,6 +27,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	void InitialSave(ACharacter* Character);
+
 	virtual void HandleInteraction(ACharacter* Character) override;
 
 	UFUNCTION(BlueprintImplementableEvent)

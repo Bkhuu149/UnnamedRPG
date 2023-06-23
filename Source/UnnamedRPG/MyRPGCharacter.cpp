@@ -253,6 +253,7 @@ void AMyRPGCharacter::OnTargetPressed() {
 void AMyRPGCharacter::OnAttackPressed() {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
+	StartCombatTimer();
 	if (AttackCount >= CurrentMaxAttackCount) {
 		DoFinisher();
 		return;
@@ -324,6 +325,11 @@ void AMyRPGCharacter::OnInteractPressed() {
 	}
 
 	if (Targeted) { return; }
+	if (InCombat)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("Can't use: In combat"));
+		return;
+	}
 	if (GetCharacterMovement()->IsFalling()) { return; }
 
 	FVector Center = GetActorLocation();
@@ -432,6 +438,12 @@ void AMyRPGCharacter::HealChar(float val) {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Healed: %f"), Health));
 }
 
+void AMyRPGCharacter::KillCharacter() {
+	Super::KillCharacter();
+
+	SaveInventory();
+}
+
 void AMyRPGCharacter::RestoreMana() {
 	if (Mana < ManaMax) {
 		Mana += .025;
@@ -499,5 +511,8 @@ void AMyRPGCharacter::StartCombatTimer() {
 }
 
 void AMyRPGCharacter::CombatTimerEnd() {
+	if (GetWorld()->GetTimerManager().IsTimerActive(CombatTimer)) {
+		GetWorld()->GetTimerManager().ClearTimer(CombatTimer);
+	}
 	InCombat = false;
 }

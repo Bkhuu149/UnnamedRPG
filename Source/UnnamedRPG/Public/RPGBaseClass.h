@@ -63,7 +63,7 @@ public:
 	virtual bool DamageChar(float val);
 
 	UFUNCTION(BlueprintCallable, Category = "Character")
-	void KillCharacter();
+	virtual void KillCharacter();
 
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void HealChar(float val);

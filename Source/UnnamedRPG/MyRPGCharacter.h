@@ -175,6 +175,7 @@ private:
 	void StartCombatTimer(); // Starts or Resets combat timer
 	void CombatTimerEnd(); // Runs at the end of combat timer
 	bool InCombat = false;
+	//Activate Timer in Enemy blueprint on OnSeePawn (PawnSensingComp)
 
 	float PerformAttack(FAttackStruct* Attack);
 
@@ -195,6 +196,8 @@ public:
 	//Handle Health
 	virtual bool DamageChar(float val) override;
 	virtual void HealChar(float val) override;
+
+	virtual void KillCharacter() override;
 
 	virtual void RestoreChar();
 
@@ -221,6 +224,9 @@ public:
 	bool GetIsJumping() { return IsJumping; }
 
 	bool GetIsTargeted() { return Targeted; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+	bool GetIsInCombat() { return InCombat; }
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 	float GetMana() { return Mana; }
@@ -274,6 +280,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void SaveGame();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SaveInventory();
 
 	UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
 	UMyInteractComponent* GetInteractComponent() const { return InteractComp; }

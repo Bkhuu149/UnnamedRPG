@@ -26,11 +26,21 @@ void ASavePoint::Tick(float DeltaTime)
 
 }
 
+void ASavePoint::InitialSave(ACharacter* Character)
+{
+	AMyRPGCharacter* RPGCharacter = Cast<AMyRPGCharacter>(Character);
+	BlueprintSave();
+	RPGCharacter->RestoreChar();
+	RPGCharacter->SaveGame();
+	RPGCharacter->SaveInventory();
+}
+
 void ASavePoint::HandleInteraction(ACharacter* Character)
 {
 	AMyRPGCharacter* RPGCharacter = Cast<AMyRPGCharacter>(Character);
 	BlueprintSave();
 	RPGCharacter->RestoreChar();
 	RPGCharacter->SaveGame();
+	RPGCharacter->SaveInventory();
 	ResetLevel();
 }
