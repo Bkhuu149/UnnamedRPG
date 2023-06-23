@@ -8,7 +8,7 @@ ARPGBaseClass::ARPGBaseClass()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	Interruptable = true;
 }
 
 // Called when the game starts or when spawned
@@ -41,8 +41,9 @@ bool ARPGBaseClass::DamageChar(float val) {
 		return true;
 	}
 	Health -= val;
+	if (Interruptable) { PlayAnimMontage(HitReactAnim); }
 	StartInvincibility();
-	GetWorld()->GetTimerManager().SetTimer(InvincibiltyTimer, this, &ARPGBaseClass::ResetInvincibility, 0.5, false);
+	//GetWorld()->GetTimerManager().SetTimer(InvincibiltyTimer, this, &ARPGBaseClass::ResetInvincibility, 0.5, false);
 	return true;
 
 }

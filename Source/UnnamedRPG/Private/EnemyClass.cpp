@@ -10,7 +10,6 @@ AEnemyClass::AEnemyClass()
 	PrimaryActorTick.bCanEverTick = true;
 
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("Pawn Sensing Component"));
-	Interruptable = true;
 
 }
 
@@ -49,29 +48,6 @@ void AEnemyClass::Tick(float DeltaTime)
 
 	TickStateMachine();
 	Rotate(DeltaTime);
-	//Use Pawn Sensing component to find player
-	//Set player as target if found
-	//Else, move randomly
-
-	// If already at target, stop and attack
-	/*
-	if (FollowResult == EPathFollowingRequestResult::AlreadyAtGoal && CurrWalkState == FOLLOW) {
-		Rotate(DeltaTime);
-		Attack();
-	}
-	//If Targeted, approach target. Else, walk to random point within spawn radius
-	if (Targeted) {
-		DelayTimer.Invalidate();
-		if (FVector::Distance(Target->GetActorLocation(), WalkPath[CurrentPathNode].GetLocation()) > 1000.f) {
-			ResetTarget();
-			return;
-		}
-		Walk();
-	} else {
-		if (!DelayTimer.IsValid()){
-			GetWorld()->GetTimerManager().SetTimer(DelayTimer, this, &AEnemyClass::Walk, 10.f, false);
-		}
-	}*/
 }
 
 void AEnemyClass::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent){
@@ -144,14 +120,14 @@ void AEnemyClass::StatePathWalking() {
 
 void AEnemyClass::StateChaseClose() { 
 	if (!Target) { return; }
-	/*if (FVector::Distance(Target->GetActorLocation(), WalkPath[CurrentPathNode].GetLocation()) > 1000) {
+	if (FVector::Distance(Target->GetActorLocation(), WalkPath[CurrentPathNode].GetLocation()) > 1000) {
 		MyController->StopMovement();
 		ResetTarget();
 		CurrentEnemyState = EEnemyState::IDLE;
 		GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {DelayTimer.Invalidate();}, 10.f, false);
 
 	}
-	else */if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 125)
+	else if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 125)
 	{
 		FVector PlayerDirection = Target->GetActorLocation() - GetActorLocation();
 		float LookingDirection = GetActorForwardVector().Dot(PlayerDirection.GetSafeNormal());
@@ -254,4 +230,17 @@ void AEnemyClass::Attack()
 	PlayAnimMontage(AttackAnimClose[AttackIndex]);
 	IsCoolingDown = true;
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false);
+}
+
+bool AEnemyClass::DamageChar(float val) {
+	/*
+	if (Interruptable && GetHealth() - val > 0) {
+		PlayAnimMontage(HitReactAnim);
+		GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false);
+
+	}*/
+	bool bHit = Super::DamageChar(val);
+	if (bHit) { GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false); }
+	return bHit;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
 }

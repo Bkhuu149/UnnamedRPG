@@ -418,15 +418,13 @@ void AMyRPGCharacter::ResetTarget() {
 }
 
 bool AMyRPGCharacter::DamageChar(float val) {
-	
 	bool bHit = Super::DamageChar(EnemyDamageMultiplier * val);
-
 	if (Barrier && !bHit) {
 		BarrierHit = true;
 	}
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), GetHealth()));
 
 	return bHit;
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
 }
 
 void AMyRPGCharacter::HealChar(float val) {

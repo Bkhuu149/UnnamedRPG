@@ -22,10 +22,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
+		void StartInvincibility() { IsInvincible = true; }
+	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
+		void ResetInvincibility() { IsInvincible = false; }
+
 private: 
 
 	float Health = 100.0;
 	float HealthMax = 100.0;
+	bool Interruptable = false;
 
 	FTimerHandle InvincibiltyTimer;
 
@@ -33,11 +39,9 @@ private:
 
 	FTimerHandle CheckSpeedTimer;
 
-	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
-	void StartInvincibility() { IsInvincible = true; }
-	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
-	void ResetInvincibility() { IsInvincible = false; }
 
+	UFUNCTION(BlueprintCallable)
+		void SetInterruptable(bool IsInterruptable) { Interruptable = IsInterruptable; }
 	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
 	void BeginSwordEvent();
 	UFUNCTION(BlueprintCallable, category = "MyRPGCharacter")
@@ -64,6 +68,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void HealChar(float val);
 
+	UPROPERTY(EditAnywhere)
 	bool IsInvincible = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")

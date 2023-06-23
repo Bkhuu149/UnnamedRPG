@@ -63,6 +63,18 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTimerHandle DelayTimer;
+	
+	UPROPERTY(EditAnywhere)
+	EEnemyState CurrentEnemyState = EEnemyState::IDLE;
+
+	virtual bool DamageChar(float val) override;
+
+	
+	UFUNCTION(BlueprintCallable)
+	void SetState(EEnemyState NewState) { CurrentEnemyState = NewState; };
+
+	UFUNCTION(BlueprintCallable)
+		void SetStaggered(bool IsStaggered) { Staggered = IsStaggered; }
 private:
 
 	FTimerHandle AttackTimer;
@@ -78,10 +90,6 @@ private:
 	enum WalkState { IDLE, FOLLOW, RANDOM};
 	WalkState CurrWalkState = IDLE;
 
-	EEnemyState CurrentEnemyState = EEnemyState::IDLE;
-
-	bool Interruptable = false;
-
 	bool Staggered = false;
 
 	bool IsCoolingDown = false;
@@ -95,8 +103,6 @@ private:
 	virtual void Attack();
 
 	virtual void TickStateMachine();
-
-	void SetState(EEnemyState NewState) { CurrentEnemyState = NewState; };
 
 	virtual void StateIdle();
 
