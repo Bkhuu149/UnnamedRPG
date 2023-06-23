@@ -493,6 +493,8 @@ void AMyRPGCharacter::EndBarrier() {
 		UKismetSystemLibrary::SphereOverlapActors(GetWorld(), Barrier->GetActorLocation(), 300, ObjectTypes, NULL, IgnoreList, OutHits);
 		//DrawDebugSphere(GetWorld(), Barrier->GetActorLocation(), 300, 12, FColor::Blue, true, 10, 0, 2);
 		for (AActor* Enemy: OutHits) {
+			ARPGBaseClass* Temp = Cast<ARPGBaseClass>(Enemy);
+			if (Temp) { Temp->SetInterruptable(true); }
 			UGameplayStatics::ApplyDamage(Enemy, 10, NULL, this, NULL);
 		}
 		FTransform ParticleSpawnTransform = FTransform(GetActorRotation(), GetActorLocation(), FVector(.5, .5, .5));

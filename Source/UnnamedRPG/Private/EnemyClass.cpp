@@ -33,7 +33,7 @@ void AEnemyClass::BeginPlay()
 		WalkPath[0] = GetActorTransform();
 	}
 
-	for (int i = 0; i < WalkPath.Num(); i++) {
+	for (int i = 1; i < WalkPath.Num(); i++) {
 		WalkPath[i] = UKismetMathLibrary::ComposeTransforms(WalkPath[i], GetActorTransform());
 	}
 
@@ -135,6 +135,9 @@ void AEnemyClass::StateChaseClose() {
 			CurrentEnemyState = EEnemyState::ATTACK;
 		}
 	}
+	else if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 500) {
+		CurrentEnemyState = EEnemyState::CHASE_FAR;
+	}
 	else
 	{
 		FVector Location = Target->GetActorLocation();
@@ -144,17 +147,24 @@ void AEnemyClass::StateChaseClose() {
 	}
 }
 
-void AEnemyClass::StateChaseFar() {
-
-}
-
 void AEnemyClass::StateAttack() {
-	if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 125) {
+	if (!Target) { 
+		CurrentEnemyState = EEnemyState::CHASE_CLOSE; 
+		return; 
+	}
+	float Distance = FVector::Distance(GetActorLocation(), Target->GetActorLocation());
+	if (Distance < 125) {
 		Attack();
 	}
-	else {
+	else{
 		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
 	}
+}
+
+void AEnemyClass::StateChaseFar() {
+	MyController->StopMovement();
+	PlayAnimMontage(AttackAnimFar[0]);
+	CurrentEnemyState = EEnemyState::CHASE_CLOSE;
 }
 
 void AEnemyClass::StateStaggered() {

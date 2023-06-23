@@ -39,9 +39,6 @@ private:
 
 	FTimerHandle CheckSpeedTimer;
 
-
-	UFUNCTION(BlueprintCallable)
-		void SetInterruptable(bool IsInterruptable) { Interruptable = IsInterruptable; }
 	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
 	void BeginSwordEvent();
 	UFUNCTION(BlueprintCallable, category = "MyRPGCharacter")
@@ -50,6 +47,9 @@ private:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+		void SetInterruptable(bool IsInterruptable) { Interruptable = IsInterruptable; }
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

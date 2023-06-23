@@ -57,6 +57,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	TArray<UAnimMontage*> AttackAnimClose;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	TArray<UAnimMontage*> AttackAnimFar;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float CooldownTime = 2.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float Damage = 10.f;
