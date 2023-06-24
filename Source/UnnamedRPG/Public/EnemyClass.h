@@ -81,7 +81,7 @@ private:
 
 	FTimerHandle AttackTimer;
 
-	FTimerHandle CirclingTimer;
+	FTimerHandle DashTimer;
 
 	AAIController* MyController;
 
@@ -128,6 +128,12 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	bool GetIsTargeted() { return Targeted; }
+
+	UFUNCTION(BlueprintCallable)
+	void StartDash();
+	void DashTrace();
+	UFUNCTION(BlueprintCallable)
+	void EndDash();
 
 
 };

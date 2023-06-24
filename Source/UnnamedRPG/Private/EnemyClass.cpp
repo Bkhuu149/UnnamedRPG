@@ -135,15 +135,15 @@ void AEnemyClass::StateChaseClose() {
 			CurrentEnemyState = EEnemyState::ATTACK;
 		}
 	}
-	else if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 500) {
-		CurrentEnemyState = EEnemyState::CHASE_FAR;
-	}
-	else
+	else if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 500)
 	{
 		FVector Location = Target->GetActorLocation();
 		if (!MyController->IsFollowingAPath()) {
 			MyController->MoveToActor(Target, 50.f, true, true, false);
 		}
+	}
+	else{
+		CurrentEnemyState = EEnemyState::CHASE_FAR;
 	}
 }
 
@@ -163,8 +163,10 @@ void AEnemyClass::StateAttack() {
 
 void AEnemyClass::StateChaseFar() {
 	MyController->StopMovement();
-	PlayAnimMontage(AttackAnimFar[0]);
+	int AttackIndex = FMath::RandRange(0, AttackAnimFar.Num() - 1);
+	PlayAnimMontage(AttackAnimFar[AttackIndex]);
 	CurrentEnemyState = EEnemyState::CHASE_CLOSE;
+	
 }
 
 void AEnemyClass::StateStaggered() {
@@ -175,6 +177,29 @@ void AEnemyClass::StateDead() {
 
 }
 
+void AEnemyClass::StartDash() {
+	GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AEnemyClass::DashTrace, 0.2, true);
+}
+void AEnemyClass::DashTrace() {
+	
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = { EObjectTypeQuery::ObjectTypeQuery3 };
+	TArray<AActor*> IgnoreList = { this };
+	TArray<AActor*> OutHits;
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetActorLocation(), 300, ObjectTypes, NULL, IgnoreList, OutHits);
+	//DrawDebugSphere(GetWorld(), Barrier->GetActorLocation(), 300, 12, FColor::Blue, true, 10, 0, 2);
+	for (AActor* Enemy : OutHits) {
+		AMyRPGCharacter* Temp = Cast<AMyRPGCharacter>(Enemy);
+		if (Temp) {
+			UGameplayStatics::ApplyDamage(Enemy, 10, NULL, this, NULL);
+		}
+	}
+}
+void AEnemyClass::EndDash() {
+	if (DashTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(DashTimer);
+		DashTimer.Invalidate();
+	}
+}
 
 
 
