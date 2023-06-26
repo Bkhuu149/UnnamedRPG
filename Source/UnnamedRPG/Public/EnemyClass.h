@@ -19,9 +19,7 @@ enum class EEnemyState : uint8 {
 	PATH_WALKING	UMETA(DisplayName = "Path Walking"), //Currently following a set path
 	CHASE_CLOSE		UMETA(DisplayName = "Chase Close"), //Following target closely
 	CHASE_FAR		UMETA(DisplayName = "Chase Far"), //Has a target but staying a distance away
-	ATTACK			UMETA(DisplayName = "Attack"), //Performing an attack
-	STAGGERED			UMETA(DisplayName = "Staggered"), //Being damaged
-	DEAD			UMETA(DisplayName = "Dead") //Dead
+	ATTACK			UMETA(DisplayName = "Attack") //Performing an attack
 };
 
 UCLASS()
@@ -52,8 +50,6 @@ protected:
 	bool Targeted;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	AActor* Target;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-	FVector SpawnLocation;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	TArray<UAnimMontage*> AttackAnimClose;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
@@ -96,8 +92,6 @@ private:
 
 	bool IsCoolingDown = false;
 
-	void Walk();
-
 	void ResetTarget();
 
 	void Rotate(float DeltaTime);
@@ -115,10 +109,6 @@ private:
 	virtual void StateChaseFar();
 
 	virtual void StateAttack();
-
-	virtual void StateStaggered();
-
-	virtual void StateDead();
 
 
 public: 

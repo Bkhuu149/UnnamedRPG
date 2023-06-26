@@ -17,7 +17,6 @@ void AEnemyClass::BeginPlay()
 {
 	Super::BeginPlay();
 	//Set spawn location to get center of walk radius
-	SpawnLocation = GetActorLocation();
 	MyController = static_cast<AAIController*>(GetController());
 	NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
 
@@ -45,9 +44,12 @@ void AEnemyClass::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if (IsDead || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
-
+	//Enemy State Machine the determines what the enemy is doing
 	TickStateMachine();
-	Rotate(DeltaTime);
+	if (Target) {
+		//Rotate Enemy to player if targeted
+		Rotate(DeltaTime);
+	}
 }
 
 void AEnemyClass::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent){
@@ -71,18 +73,13 @@ void AEnemyClass::TickStateMachine() {
 	case EEnemyState::ATTACK:
 		StateAttack();
 		break;
-	case EEnemyState::STAGGERED:
-		StateStaggered();
-		break;
-	case EEnemyState::DEAD:
-		StateDead();
-		break;
 	}
 }
 
 void AEnemyClass::StateIdle() {
 
 	if (Targeted) {
+		//Exit idle state and move into chasing the player
 		DelayTimer.Invalidate();
 		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
 		return;
@@ -90,22 +87,27 @@ void AEnemyClass::StateIdle() {
 	if (DelayTimer.IsValid()) {
 		return;
 	}
+	//Go into path walking in order to determine what should the next state be
 	StatePathWalking();
 }
 
 void AEnemyClass::StatePathWalking() {
+	//If walkpath doesn't exist, then do nothing
 	if (!NavSys || WalkPath.Num() == 0) { return; }
 	if (Targeted) {
+		//If found target, then chase player
 		DelayTimer.Invalidate();
 		MyController->StopMovement();
 		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
 		return;
 	}
+	//Else, walk along the path
 	CurrentEnemyState = EEnemyState::PATH_WALKING;
 	if (DelayTimer.IsValid()) {
 		return;
 	}
 	if (!MyController->IsFollowingAPath()) {
+		//Not currently following a path, find next node in path and walk to it
 		CurrentEnemyState = EEnemyState::IDLE;
 		CurrentPathNode++;
 		if (CurrentPathNode >= WalkPath.Num()) {
@@ -119,8 +121,9 @@ void AEnemyClass::StatePathWalking() {
 }
 
 void AEnemyClass::StateChaseClose() { 
-	if (!Target) { return; }
+	if (!Target) { return; } //No target, return
 	if (FVector::Distance(Target->GetActorLocation(), WalkPath[CurrentPathNode].GetLocation()) > 1000) {
+		//Player moved too far away from current place along walk path, go back to path
 		MyController->StopMovement();
 		ResetTarget();
 		CurrentEnemyState = EEnemyState::IDLE;
@@ -129,6 +132,7 @@ void AEnemyClass::StateChaseClose() {
 	}
 	else if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 125)
 	{
+		//Player is close enough to perform melee attack
 		FVector PlayerDirection = Target->GetActorLocation() - GetActorLocation();
 		float LookingDirection = GetActorForwardVector().Dot(PlayerDirection.GetSafeNormal());
 		if (LookingDirection > 0.90f && !IsCoolingDown && !Staggered) {
@@ -137,31 +141,37 @@ void AEnemyClass::StateChaseClose() {
 	}
 	else if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 500)
 	{
+		//Player is medium distance away, try walking to player
 		FVector Location = Target->GetActorLocation();
 		if (!MyController->IsFollowingAPath()) {
 			MyController->MoveToActor(Target, 50.f, true, true, false);
 		}
 	}
 	else{
+		//Player is far away from enemy, perform chase attack
 		CurrentEnemyState = EEnemyState::CHASE_FAR;
 	}
 }
 
 void AEnemyClass::StateAttack() {
 	if (!Target) { 
+		//No Target or they moved away from enemy, try chasing
 		CurrentEnemyState = EEnemyState::CHASE_CLOSE; 
 		return; 
 	}
 	float Distance = FVector::Distance(GetActorLocation(), Target->GetActorLocation());
 	if (Distance < 125) {
+		//Target still close, attack
 		Attack();
 	}
 	else{
+		//Target far away, try following
 		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
 	}
 }
 
 void AEnemyClass::StateChaseFar() {
+	//Player is far away, perform ranged attack
 	MyController->StopMovement();
 	int AttackIndex = FMath::RandRange(0, AttackAnimFar.Num() - 1);
 	PlayAnimMontage(AttackAnimFar[AttackIndex]);
@@ -169,19 +179,12 @@ void AEnemyClass::StateChaseFar() {
 	
 }
 
-void AEnemyClass::StateStaggered() {
-
-}
-
-void AEnemyClass::StateDead() {
-
-}
-
 void AEnemyClass::StartDash() {
+	//Start dash hitbox timer
 	GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AEnemyClass::DashTrace, 0.2, true);
 }
 void AEnemyClass::DashTrace() {
-	
+	//Performs a sphere trace every couple of seconds for dash
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = { EObjectTypeQuery::ObjectTypeQuery3 };
 	TArray<AActor*> IgnoreList = { this };
 	TArray<AActor*> OutHits;
@@ -195,45 +198,11 @@ void AEnemyClass::DashTrace() {
 	}
 }
 void AEnemyClass::EndDash() {
+	//Stop dash hitbox timer
 	if (DashTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(DashTimer);
 		DashTimer.Invalidate();
 	}
-}
-
-
-
-void AEnemyClass::Walk() {
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Walk"));
-
-	if (IsDead) { return; }
-
-	//if Target, walk to target.  Else, go to random point
-	FVector Location;
-	
-	//Determine where the enemy should walk
-	if (Target)
-	{
-		CurrWalkState = FOLLOW;
-		Location = Target->GetActorLocation();
-		FollowResult = MyController->MoveToActor(Target, 50.f, true, true, false);
-
-	} else {
-		if (!NavSys || WalkPath.Num() == 0) { return; }
-		CurrWalkState = RANDOM;
-
-		CurrentPathNode++;
-
-		if (CurrentPathNode >= WalkPath.Num()) {
-			CurrentPathNode = 0;
-		}
-
-		Location = WalkPath[CurrentPathNode].GetLocation();
-		FollowResult = MyController->MoveToLocation(Location, 100.f);
-	}
-
-	//Walk to location
-	DelayTimer.Invalidate();
 }
 
 void AEnemyClass::ResetTarget() {
@@ -268,14 +237,8 @@ void AEnemyClass::Attack()
 }
 
 bool AEnemyClass::DamageChar(float val) {
-	/*
-	if (Interruptable && GetHealth() - val > 0) {
-		PlayAnimMontage(HitReactAnim);
-		GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false);
-
-	}*/
 	bool bHit = Super::DamageChar(val);
+	//Reset attack timer to allow player to finish their combo
 	if (bHit) { GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false); }
 	return bHit;
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), Health));
 }
