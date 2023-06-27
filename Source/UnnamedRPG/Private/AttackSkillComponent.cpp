@@ -175,6 +175,7 @@ int UAttackSkillComponent::FindAttackInCombo(FName AttackId, bool& Found) {
 }
 
 FAttackStruct* UAttackSkillComponent::GetComboAttack(int HotbarIndex) {
+	if (HotbarIndex >= Hotbar.Num()) { return GetFinisherAttack(); }
 	return GetAttackInformation(Hotbar[HotbarIndex]);
 }
 

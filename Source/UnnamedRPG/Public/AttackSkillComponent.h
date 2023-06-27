@@ -24,7 +24,11 @@ struct FAttackStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TSubclassOf<class UGameplayAbility_Montage> FemaleAttack;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UAnimMontage* FemaleAttackAnimMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TSubclassOf<class UGameplayAbility_Montage> MaleAttack;
+	UPROPERTY(EditANywhere, BlueprintReadOnly)
+		UAnimMontage* MaleAttackAnimMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		bool IsFinisher = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

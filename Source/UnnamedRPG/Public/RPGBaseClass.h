@@ -91,5 +91,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	UClass* ChosenWeapon;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AWeaponActor* CurrentWeapon;
 };

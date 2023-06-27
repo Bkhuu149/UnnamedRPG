@@ -106,6 +106,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UParticleSystem* BarrierParticle;
+	
+	UFUNCTION(BlueprintCallable)
+		void PerformSavedAttack();
 
 
 	UFUNCTION(BlueprintCallable)
@@ -168,6 +171,8 @@ private:
 	FTimerHandle AttackTimer; 
 	int CurrentMaxAttackCount = 3;
 	bool IsAttacking = false;
+	enum AttackQueuedType { NONE, COMBO, FINISHER };
+	AttackQueuedType SavedAttack = AttackQueuedType::NONE;
 
 	//Handle Combat Timer
 	FTimerHandle CombatTimer;

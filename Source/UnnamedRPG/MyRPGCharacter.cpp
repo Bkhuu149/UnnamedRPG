@@ -251,18 +251,49 @@ void AMyRPGCharacter::OnTargetPressed() {
 }
 
 void AMyRPGCharacter::OnAttackPressed() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
+	if ((GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting)&&!IsAttacking) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
 	StartCombatTimer();
-	if (AttackCount >= CurrentMaxAttackCount) {
-		DoFinisher();
-		return;
-	}
 	FAttackStruct* AttackRow = AttackSkillComp->GetComboAttack(AttackCount);	
 	if (!AttackRow) { return; }
+	if (AttackRow->StaminaDrain * StaminaDrainMultiplier > CurrentStamina){ return; }
+	if (IsAttacking) {
+		SavedAttack = AttackQueuedType::COMBO;
+		return;
+	}
 	float AttackLength = PerformAttack(AttackRow);
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength + 2.f, false);
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
 	UpdateAttackBar();
+}
+
+void AMyRPGCharacter::PerformSavedAttack() {
+	float AttackLength = 0.f;
+	FAttackStruct* AttackRow;
+	FAttackStruct* FinisherAttack;
+	switch (SavedAttack) {
+	case AttackQueuedType::NONE:
+		return;
+	case AttackQueuedType::COMBO:
+		SavedAttack = AttackQueuedType::NONE;
+		StartCombatTimer();
+		if (AttackCount >= CurrentMaxAttackCount) {
+			break;
+		}
+		AttackRow = AttackSkillComp->GetComboAttack(AttackCount);
+		if (!AttackRow) { return; }
+		AttackLength = PerformAttack(AttackRow);
+		GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
+		UpdateAttackBar();
+		return;
+	}
+	StartCombatTimer();
+	SavedAttack = AttackQueuedType::NONE;
+	FinisherAttack = AttackSkillComp->GetFinisherAttack();
+	if (!(FinisherAttack && FinisherAttack->IsFinisher)) { return; }
+	AttackLength = PerformAttack(FinisherAttack);
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
+	return;
+	
 }
 
 void AMyRPGCharacter::ResetAttack() {
@@ -272,14 +303,21 @@ void AMyRPGCharacter::ResetAttack() {
 	}
 	AttackCount = 0;
 	IsAttacking = false;
+	SavedAttack = AttackQueuedType::NONE;
 	UpdateAttackBar();
 }
 
 void AMyRPGCharacter::DoFinisher() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
+	if ((GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) && !IsAttacking) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Finisher Pressed"));
 	FAttackStruct* FinisherAttack = AttackSkillComp->GetFinisherAttack();
 	if (!(FinisherAttack && FinisherAttack->IsFinisher)) { return; }
+	if (FinisherAttack->StaminaDrain * StaminaDrainMultiplier > CurrentStamina) { return; }
+	if (IsAttacking) {
+		SavedAttack = AttackQueuedType::FINISHER;
+		return;
+	}
+
 	float AttackLength = PerformAttack(FinisherAttack);
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false); 
 }
@@ -292,19 +330,21 @@ float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 	if (IsFemale) {
 		AttackAbility = FGameplayAbilitySpec(Attack->FemaleAttack.GetDefaultObject(), 1, 0);
 		AttackLength = Attack->FemaleAttack.GetDefaultObject()->MontageToPlay->GetPlayLength();
+		PlayAnimMontage(Attack->FemaleAttackAnimMontage);
 	}
 	else {
 		AttackAbility = FGameplayAbilitySpec(Attack->MaleAttack.GetDefaultObject(), 1, 0);
 		AttackLength = Attack->MaleAttack.GetDefaultObject()->MontageToPlay->GetPlayLength();
+		PlayAnimMontage(Attack->MaleAttackAnimMontage);
 	}
 	FTimerHandle AnimTimer;
-	GetWorld()->GetTimerManager().SetTimer(AnimTimer, [&]() {
+	/*GetWorld()->GetTimerManager().SetTimer(AnimTimer, [&]() {
 		if (CurrentWeapon != nullptr) {
 			GetWorld()->DestroyActor(CurrentWeapon);
 		}
 		GetWorld()->GetTimerManager().ClearTimer(AnimTimer);
 		AnimTimer.Invalidate();
-		}, AttackLength * 0.9, false);
+		}, AttackLength * 0.9, false);*/
 	AttackCount++;
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(Attack->Weapon, WeaponTransform));
@@ -312,7 +352,7 @@ float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 	CurrentWeapon->SetOwner(this);
 	CurrentWeapon->SetDamage((AttackCount)*Attack->Damage * AttackDamageMultiplier);
 	IsAttacking = true;
-	AbilityComp->GiveAbilityAndActivateOnce(AttackAbility);
+	//AbilityComp->GiveAbilityAndActivateOnce(AttackAbility);
 	return AttackLength;
 }
 
