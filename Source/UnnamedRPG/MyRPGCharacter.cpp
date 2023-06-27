@@ -9,7 +9,7 @@ AMyRPGCharacter::AMyRPGCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	AbilityComp = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
+	//AbilityComp = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystem"));
 	InteractComp = CreateDefaultSubobject<UMyInteractComponent>(TEXT("Interact Component"));
 	InventoryComp = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory Component"));
 	AttackSkillComp = CreateDefaultSubobject<UAttackSkillComponent>(TEXT("Attack Skill Component"));
@@ -19,7 +19,7 @@ AMyRPGCharacter::AMyRPGCharacter()
 void AMyRPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	AbilityComp->InitAbilityActorInfo(this, this);
+	//AbilityComp->InitAbilityActorInfo(this, this);
 
 }
 
@@ -325,16 +325,16 @@ void AMyRPGCharacter::DoFinisher() {
 float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 	if ((Attack->StaminaDrain * StaminaDrainMultiplier > CurrentStamina)) { return 0; }
 	CurrentStamina -= Attack->StaminaDrain * StaminaDrainMultiplier;
-	FGameplayAbilitySpec AttackAbility;
+	//FGameplayAbilitySpec AttackAbility;
 	float AttackLength = 0.1;
 	if (IsFemale) {
-		AttackAbility = FGameplayAbilitySpec(Attack->FemaleAttack.GetDefaultObject(), 1, 0);
-		AttackLength = Attack->FemaleAttack.GetDefaultObject()->MontageToPlay->GetPlayLength();
+		//AttackAbility = FGameplayAbilitySpec(Attack->FemaleAttack.GetDefaultObject(), 1, 0);
+		AttackLength = Attack->FemaleAttackAnimMontage->GetPlayLength();
 		PlayAnimMontage(Attack->FemaleAttackAnimMontage);
 	}
 	else {
-		AttackAbility = FGameplayAbilitySpec(Attack->MaleAttack.GetDefaultObject(), 1, 0);
-		AttackLength = Attack->MaleAttack.GetDefaultObject()->MontageToPlay->GetPlayLength();
+		//AttackAbility = FGameplayAbilitySpec(Attack->MaleAttack.GetDefaultObject(), 1, 0);
+		AttackLength = Attack->MaleAttackAnimMontage->GetPlayLength();
 		PlayAnimMontage(Attack->MaleAttackAnimMontage);
 	}
 	FTimerHandle AnimTimer;

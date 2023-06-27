@@ -22,11 +22,7 @@ struct FAttackStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FText Description;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TSubclassOf<class UGameplayAbility_Montage> FemaleAttack;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UAnimMontage* FemaleAttackAnimMontage;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TSubclassOf<class UGameplayAbility_Montage> MaleAttack;
 	UPROPERTY(EditANywhere, BlueprintReadOnly)
 		UAnimMontage* MaleAttackAnimMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

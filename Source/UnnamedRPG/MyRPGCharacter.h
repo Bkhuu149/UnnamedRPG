@@ -31,7 +31,7 @@
 class InteractableInterface;
 
 UCLASS()
-class UNNAMEDRPG_API AMyRPGCharacter : public ARPGBaseClass , public IAbilitySystemInterface
+class UNNAMEDRPG_API AMyRPGCharacter : public ARPGBaseClass //, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -43,8 +43,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-		UAbilitySystemComponent* AbilityComp;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+		//UAbilitySystemComponent* AbilityComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interacts")
 		UMyInteractComponent* InteractComp;
@@ -289,7 +289,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void SaveInventory();
 
-	UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
+	//UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
 	UMyInteractComponent* GetInteractComponent() const { return InteractComp; }
 	UInventoryComponent* GetInventoryComponent() const { return InventoryComp; }
 	UAttackSkillComponent* GetAttackSkillComponent() const { return AttackSkillComp; }
