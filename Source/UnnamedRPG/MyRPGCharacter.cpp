@@ -466,7 +466,9 @@ bool AMyRPGCharacter::DamageChar(float val) {
 		BarrierHit = true;
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), GetHealth()));
-
+	if (CurrentWeapon) {
+		GetWorld()->DestroyActor(CurrentWeapon);
+	}
 	return bHit;
 }
 

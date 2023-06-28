@@ -51,7 +51,7 @@ bool ARPGBaseClass::DamageChar(float val) {
 void ARPGBaseClass::KillCharacter() {
 	Health = 0;
 	IsDead = true;
-	UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, DeathAnims.Num() - 1)];
+	UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, DeathAnims.Num())];
 	PlayAnimMontage(DeathMontage);
 	GetWorld()->GetTimerManager().SetTimer(DisableColTimer, [&]() { SetActorEnableCollision(false); 	PrimaryActorTick.bCanEverTick = false;}, DeathMontage->GetPlayLength(), false);
 }
