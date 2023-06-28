@@ -177,10 +177,11 @@ private:
 	//Handle Combat Timer
 	FTimerHandle CombatTimer;
 	float CombatTimerLength = 10;
+	UFUNCTION(BlueprintCallable)
 	void StartCombatTimer(); // Starts or Resets combat timer
+	UFUNCTION(BlueprintCallable)
 	void CombatTimerEnd(); // Runs at the end of combat timer
 	bool InCombat = false;
-	//Activate Timer in Enemy blueprint on OnSeePawn (PawnSensingComp)
 
 	float PerformAttack(FAttackStruct* Attack);
 

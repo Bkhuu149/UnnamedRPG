@@ -111,7 +111,7 @@ public:
 	void SetHotbar(TArray<FName> SavedHotbar) { Hotbar = SavedHotbar; }
 
 	UFUNCTION(BlueprintCallable)
-	void SetFinisher(FName AttackId);
+	void SetFinisher(FName SavedFinisher) { Finisher = SavedFinisher; }
 
 private:
 	int FindComboInInventory(FName AttackId, bool& ItemFound);

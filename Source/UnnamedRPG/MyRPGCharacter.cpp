@@ -253,7 +253,6 @@ void AMyRPGCharacter::OnTargetPressed() {
 void AMyRPGCharacter::OnAttackPressed() {
 	if ((GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting)&&!IsAttacking) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
-	StartCombatTimer();
 	FAttackStruct* AttackRow = AttackSkillComp->GetComboAttack(AttackCount);	
 	if (!AttackRow) { return; }
 	if (AttackRow->StaminaDrain * StaminaDrainMultiplier > CurrentStamina){ return; }
@@ -275,7 +274,6 @@ void AMyRPGCharacter::PerformSavedAttack() {
 		return;
 	case AttackQueuedType::COMBO:
 		SavedAttack = AttackQueuedType::NONE;
-		StartCombatTimer();
 		if (AttackCount >= CurrentMaxAttackCount) {
 			break;
 		}
@@ -286,7 +284,6 @@ void AMyRPGCharacter::PerformSavedAttack() {
 		UpdateAttackBar();
 		return;
 	}
-	StartCombatTimer();
 	SavedAttack = AttackQueuedType::NONE;
 	FinisherAttack = AttackSkillComp->GetFinisherAttack();
 	if (!(FinisherAttack && FinisherAttack->IsFinisher)) { return; }
@@ -553,6 +550,10 @@ void AMyRPGCharacter::StartCombatTimer() {
 }
 
 void AMyRPGCharacter::CombatTimerEnd() {
+	if (GetIsTargeted()) {
+		StartCombatTimer();
+		return;
+	}
 	if (GetWorld()->GetTimerManager().IsTimerActive(CombatTimer)) {
 		GetWorld()->GetTimerManager().ClearTimer(CombatTimer);
 	}
