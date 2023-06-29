@@ -124,7 +124,11 @@ void UInventoryComponent::AddToInventory(FName ItemId) {
 	//Stack has space, add to stack
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Added item successfully"));
 	AddToStack(Index);
-
+	bool HotbarFound;
+	int HotbarIndex = FindItemInHotbar(ItemId, HotbarFound);
+	if (!HotbarFound) { return; }
+	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(GetOwner());
+	if (Player) { Player->UpdateSlot1(HotbarIndex); }
 }
 
 bool UInventoryComponent::RemoveFromInventory(FName ItemId) {

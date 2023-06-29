@@ -120,6 +120,7 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateAttackBar();
 
+
 private:
 	//TO BE REMOVED LATER, LEFT IN FOR TESTING DAMAGE
 	void KILL();
@@ -198,6 +199,9 @@ private:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateSlot1(int HotbarIndex);
 
 	//Handle Health
 	virtual bool DamageChar(float val) override;
