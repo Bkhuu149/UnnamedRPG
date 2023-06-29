@@ -115,6 +115,9 @@ void AEnemyClass::StatePathWalking() {
 		}
 		FVector Location = WalkPath[CurrentPathNode].GetLocation();
 		FollowResult = MyController->MoveToLocation(Location, 100.f);
+		if (DelayTimer.IsValid()) {
+			DelayTimer.Invalidate();
+		}
 		GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {DelayTimer.Invalidate();}, 10.f, false);
 
 	}
@@ -127,6 +130,9 @@ void AEnemyClass::StateChaseClose() {
 		MyController->StopMovement();
 		ResetTarget();
 		CurrentEnemyState = EEnemyState::IDLE;
+		if (DelayTimer.IsValid()) {
+			DelayTimer.Invalidate();
+		}
 		GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {DelayTimer.Invalidate();}, 10.f, false);
 
 	}
@@ -233,12 +239,20 @@ void AEnemyClass::Attack()
 	int AttackIndex = FMath::RandRange(0, AttackAnimClose.Num()-1);
 	PlayAnimMontage(AttackAnimClose[AttackIndex]);
 	IsCoolingDown = true;
+	if (AttackTimer.IsValid()) {
+		AttackTimer.Invalidate();
+	}
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false);
 }
 
 bool AEnemyClass::DamageChar(float val) {
 	bool bHit = Super::DamageChar(val);
 	//Reset attack timer to allow player to finish their combo
-	if (bHit) { GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false); }
+	if (bHit) { 
+		if (AttackTimer.IsValid()) {
+			AttackTimer.Invalidate();
+		}
+		GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false); 
+	}
 	return bHit;
 }
