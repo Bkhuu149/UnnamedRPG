@@ -244,7 +244,7 @@ void AEnemyClass::Attack()
 	if (AttackTimer.IsValid()) {
 		AttackTimer.Invalidate();
 	}
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false);
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, FMath::RandRange(CooldownTime -3.f, CooldownTime + 3.f), false);
 }
 
 bool AEnemyClass::DamageChar(float val) {
