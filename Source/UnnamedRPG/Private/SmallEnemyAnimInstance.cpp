@@ -20,7 +20,6 @@ void USmallEnemyAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	bIsTargeted = Character->GetIsTargeted();
 	Velocity = MoveComp->Velocity;
 	GroundSpeed = ((FVector2D)Velocity).Length();
-	Acceleration = MoveComp->GetCurrentAcceleration();
 	ShouldMove = (Velocity != FVector(0, 0, 0)) && (GroundSpeed > 3);
 	IsFalling = MoveComp->IsFalling();
 
