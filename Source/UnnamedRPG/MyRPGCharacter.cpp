@@ -151,8 +151,14 @@ void AMyRPGCharacter::MoveRightLeft(float value)
 }
 
 void AMyRPGCharacter::OnBlockPressed() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting || IsRegeningMana) { return; }
-	Mana -= 25;
+	if (!(!IsDead && 
+		!IsAttacking && 
+		!IsInteracting && 
+		!IsRegeningMana && 
+		!IsDodging &&
+		!GetMesh()->GetAnimInstance()->Montage_IsPlaying(ParryAnim)
+		)) { return; }
+	Mana -= 50;
 	Mana = FMath::Clamp(Mana, 0, ManaMax);
 	if (Mana <= 0) {
 		IncrementMana();
