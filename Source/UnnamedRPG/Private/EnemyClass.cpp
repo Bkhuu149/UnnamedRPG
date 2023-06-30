@@ -214,6 +214,8 @@ void AEnemyClass::EndDash() {
 void AEnemyClass::ResetTarget() {
 	//Call to reset target values
 	Targeted = false;
+	//Remove self from player's NumCombatants
+	Cast<AMyRPGCharacter>(Target)->RemoveCombatant();
 	MyController->StopMovement();
 	Target = nullptr;
 }

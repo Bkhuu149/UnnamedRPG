@@ -552,12 +552,22 @@ void AMyRPGCharacter::StartCombatTimer() {
 }
 
 void AMyRPGCharacter::CombatTimerEnd() {
-	if (GetIsTargeted()) {
-		StartCombatTimer();
-		return;
-	}
 	if (GetWorld()->GetTimerManager().IsTimerActive(CombatTimer)) {
 		GetWorld()->GetTimerManager().ClearTimer(CombatTimer);
 	}
 	InCombat = false;
+}
+
+void AMyRPGCharacter::AddCombatant() {
+	NumCombatants++;
+	InCombat = true;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("NumCombatants: ++"), NumCombatants));
+}
+
+void AMyRPGCharacter::RemoveCombatant() {
+	NumCombatants--;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("NumCombatants: --"), NumCombatants));
+	if (NumCombatants <= 0) {
+		StartCombatTimer();
+	}
 }

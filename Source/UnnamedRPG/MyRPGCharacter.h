@@ -183,6 +183,7 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void CombatTimerEnd(); // Runs at the end of combat timer
 	bool InCombat = false;
+	int NumCombatants = 0;
 
 	float PerformAttack(FAttackStruct* Attack);
 
@@ -293,6 +294,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void SaveInventory();
+
+	UFUNCTION(BlueprintCallable)
+	void AddCombatant();
+
+	UFUNCTION(BlueprintCallable)
+	void RemoveCombatant();
 
 	//UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
 	UMyInteractComponent* GetInteractComponent() const { return InteractComp; }
