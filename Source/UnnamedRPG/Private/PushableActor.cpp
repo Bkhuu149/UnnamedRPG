@@ -193,7 +193,7 @@ void APushableActor::StopPush() {
 		GetWorld(),
 		GetActorLocation(),
 		GetActorLocation() - FVector(0, 0, 20),
-		FVector(50, 50, 50),
+		FVector(30, 30, 30) * GetActorScale(),
 		FRotator::ZeroRotator,
 		TraceTypeQuery2,
 		false,
