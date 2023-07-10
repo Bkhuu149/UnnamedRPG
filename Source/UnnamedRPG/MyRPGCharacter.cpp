@@ -31,7 +31,35 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 	if (Targeted) {
 		FocusTarget(DeltaTime);
 	}
-
+	
+	FRotator CameraRotation;
+	FRotator RinterpVal;
+	ForwardBackInputValue = GetInputAxisValue("ForwardBack");
+	RightLeftInputValue = GetInputAxisValue("RightLeft");
+	switch (MyCurrentState) {
+	case EPlayerState::INTERACTING:
+		CameraRotation = GetController()->GetControlRotation();
+		RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, GetActorForwardVector().ToOrientationRotator(), DeltaTime, 10.f);
+		GetController()->SetControlRotation(RinterpVal);
+		break;
+	case EPlayerState::SPRINTING:
+		if (ForwardBackInputValue != 0 || RightLeftInputValue != 0) {
+			CurrentStamina -= .1 * StaminaDrainMultiplier;
+		}
+		if (CurrentStamina <= 0) {
+			OnSprintReleased();
+		}
+		break;
+	case EPlayerState::IDLE:
+		if (CurrentStamina < StaminaMax) {
+			CurrentStamina += .5;
+			FMath::Clamp(CurrentStamina, 0, StaminaMax);
+		}
+		break;
+	default:
+		break;
+	}
+	/*
 	if (IsInteracting) {
 		FRotator CameraRotation = GetController()->GetControlRotation();
 		FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, GetActorForwardVector().ToOrientationRotator(), DeltaTime, 10.f);
@@ -51,7 +79,8 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 	if (CurrentStamina == 0) {
 		IsSprinting = false;
 		OnSprintReleased();
-	}
+	}*/
+
 }
 
 // Called to bind functionality to input
@@ -120,9 +149,9 @@ void AMyRPGCharacter::KILL() {
 
 void AMyRPGCharacter::MoveForwardBack(float value) 
 {
-	if (IsInteracting) { return; }
+	if (MyCurrentState == EPlayerState::INTERACTING) { return; }
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
-	if (value != 0 && IsAttacking) {
+	if (value != 0 && (MyCurrentState == EPlayerState::ATTACKING)) {
 		ResetAttack();
 	}
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
@@ -137,9 +166,9 @@ void AMyRPGCharacter::MoveForwardBack(float value)
 
 void AMyRPGCharacter::MoveRightLeft(float value)
 {
-	if (IsInteracting) { return; }
+	if (MyCurrentState == EPlayerState::INTERACTING) { return; }
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
-	if (value != 0 && IsAttacking) {
+	if (value != 0 && (MyCurrentState == EPlayerState::ATTACKING)) {
 		ResetAttack();
 	}
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
@@ -151,26 +180,24 @@ void AMyRPGCharacter::MoveRightLeft(float value)
 }
 
 void AMyRPGCharacter::OnBlockPressed() {
-	if (!(!IsDead && 
-		!IsAttacking && 
-		!IsInteracting && 
-		!IsRegeningMana && 
-		!IsDodging &&
-		!GetMesh()->GetAnimInstance()->Montage_IsPlaying(ParryAnim)
-		)) { return; }
+	if (MyCurrentState != EPlayerState::IDLE || IsDead || IsRegeningMana) {
+		return;
+	}
 	Mana -= 50;
 	Mana = FMath::Clamp(Mana, 0, ManaMax);
 	if (Mana <= 0) {
 		IncrementMana();
 		IsRegeningMana = true;
 	}
+	MyCurrentState = EPlayerState::BLOCKING;
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Blocked Pressed"));
 	PlayAnimMontage(ParryAnim);
 
 }
 
 void AMyRPGCharacter::OnHealPressed() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting || IsRegeningMana) { return; }
+	//if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting || IsRegeningMana) { return; }
+	if (MyCurrentState != EPlayerState::IDLE || IsRegeningMana) { return; }
 	PlayAnimMontage(HealAnim);
 	Mana = 0.0;
 	HealChar(GetHealthMax());
@@ -181,11 +208,12 @@ void AMyRPGCharacter::OnHealPressed() {
 void AMyRPGCharacter::OnDodgePressed() {
 	if (GetCharacterMovement()->IsFalling() || 
 		GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || 
-		IsInteracting || 
+		(MyCurrentState == EPlayerState::INTERACTING) ||
 		30 * StaminaDrainMultiplier > CurrentStamina
 		) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
 	IsDodging = true;
+	MyCurrentState = EPlayerState::DODGING;
 	CurrentStamina -= 30 * StaminaDrainMultiplier;
 	FMath::Clamp(CurrentStamina, 0, StaminaMax);
 	float duration = PlayAnimMontage(DodgeAnim);
@@ -193,7 +221,7 @@ void AMyRPGCharacter::OnDodgePressed() {
 	if (ForwardBackInputValue < 0) {
 		IsBackDodging = true;
 	}
-	if (Targeted && !IsSprinting)
+	if (Targeted && (MyCurrentState != EPlayerState::SPRINTING))
 	{
 		SetActorRotation(GetActorRotation() + FVector(ForwardBackInputValue, RightLeftInputValue, 0).Rotation());
 	}
@@ -202,6 +230,7 @@ void AMyRPGCharacter::OnDodgePressed() {
 void AMyRPGCharacter::DodgeFinished() {
 	IsDodging = false;
 	IsBackDodging = false;
+	MyCurrentState = EPlayerState::IDLE;
 	if (DodgeTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(DodgeTimer);
 		DodgeTimer.Invalidate();
@@ -210,11 +239,13 @@ void AMyRPGCharacter::DodgeFinished() {
 
 void AMyRPGCharacter::OnJumpedPressed() {
 	bool falling = GetCharacterMovement()->IsFalling();
-	if (falling || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) {
+	if (falling || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || MyCurrentState == EPlayerState::INTERACTING) {
 		return;
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Jump"));
 	Jump();
+	CurrentStamina -= 20;
+	FMath::Clamp(CurrentStamina, 0, StaminaMax);
 	IsJumping = true;
 	GetWorld()->GetTimerManager().SetTimer(JumpTimer, this, &AMyRPGCharacter::ReleaseJump, 1.f, false);
 }
@@ -229,7 +260,7 @@ void AMyRPGCharacter::ReleaseJump() {
 }
 
 void AMyRPGCharacter::OnTargetPressed() {
-	if (IsDodging) { return; }
+	if (MyCurrentState == EPlayerState::DODGING) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Targeting"));
 	if (Targeted) {
 		ResetTarget();
@@ -257,12 +288,12 @@ void AMyRPGCharacter::OnTargetPressed() {
 }
 
 void AMyRPGCharacter::OnAttackPressed() {
-	if ((GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting)&&!IsAttacking) { return; }
+	if ((GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || (MyCurrentState == EPlayerState::INTERACTING))&&(MyCurrentState != EPlayerState::ATTACKING)) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
 	FAttackStruct* AttackRow = AttackSkillComp->GetComboAttack(AttackCount);	
 	if (!AttackRow) { return; }
 	if (AttackRow->StaminaDrain * StaminaDrainMultiplier > CurrentStamina){ return; }
-	if (IsAttacking) {
+	if (MyCurrentState == EPlayerState::ATTACKING) {
 		SavedAttack = AttackQueuedType::COMBO;
 		return;
 	}
@@ -304,6 +335,7 @@ void AMyRPGCharacter::ResetAttack() {
 	if (GetWorld()->GetTimerManager().IsTimerActive(AttackTimer)) {
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
 	}
+	MyCurrentState = EPlayerState::IDLE;
 	AttackCount = 0;
 	IsAttacking = false;
 	SavedAttack = AttackQueuedType::NONE;
@@ -311,7 +343,7 @@ void AMyRPGCharacter::ResetAttack() {
 }
 
 void AMyRPGCharacter::DoFinisher() {
-	if ((GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) && !IsAttacking) { return; }
+	if ((GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || (MyCurrentState == EPlayerState::INTERACTING)) && (MyCurrentState != EPlayerState::ATTACKING)) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Finisher Pressed"));
 	FAttackStruct* FinisherAttack = AttackSkillComp->GetFinisherAttack();
 	if (!(FinisherAttack && FinisherAttack->IsFinisher)) { return; }
@@ -355,6 +387,7 @@ float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 	CurrentWeapon->SetOwner(this);
 	CurrentWeapon->SetDamage((AttackCount)*Attack->Damage * AttackDamageMultiplier);
 	IsAttacking = true;
+	MyCurrentState = EPlayerState::ATTACKING;
 	//AbilityComp->GiveAbilityAndActivateOnce(AttackAbility);
 	return AttackLength;
 }
@@ -393,6 +426,7 @@ void AMyRPGCharacter::OnInteractPressed() {
 				GetCharacterMovement()->Velocity = FVector::ZeroVector;
 			}
 			InteractableObject->HandleInteraction(this);
+			MyCurrentState = EPlayerState::INTERACTING;
 			break;
 		}
 	}
@@ -406,9 +440,10 @@ void AMyRPGCharacter::OnMenuPressed() {
 
 
 void AMyRPGCharacter::OnSprintPressed() {
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsInteracting) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || MyCurrentState == EPlayerState::INTERACTING) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Sprinting"));
 	SprintMultiplier = 1.f;
+	MyCurrentState = EPlayerState::SPRINTING;
 	IsSprinting = true;
 	//bUseControllerRotationYaw = false;
 	//GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -418,6 +453,7 @@ void AMyRPGCharacter::OnSprintPressed() {
 void AMyRPGCharacter::OnSprintReleased() {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Stop Sprinting"));
 	SprintMultiplier = .5f;
+	MyCurrentState = EPlayerState::IDLE;
 	IsSprinting = false;
 	//if (Target) {
 		//bUseControllerRotationYaw = true;
@@ -447,12 +483,12 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 	TargetLocation.Z = 0;
 	FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 
-	bool IsSprintandMove = IsSprinting && !GetVelocity().IsZero();
+	bool IsSprintandMove = (MyCurrentState == EPlayerState::SPRINTING) && !GetVelocity().IsZero();
 
 	GetCharacterMovement()->bOrientRotationToMovement = (IsSprintandMove) ? true : false;
 
-	if ((!(IsSprintandMove || IsBackDodging || IsAttacking))) {
-		float LerpTime = (IsDodging) ? 1.f : 10.f;
+	if ((!(IsSprintandMove || IsBackDodging || MyCurrentState == EPlayerState::ATTACKING))) {
+		float LerpTime = (MyCurrentState == EPlayerState::DODGING) ? 1.f : 10.f;
 		FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, LerpTime);
 		SetActorRotation(CharacterRotationInterpVal);
 		
@@ -547,6 +583,7 @@ void AMyRPGCharacter::EndBarrier() {
 
 	}
 	GetWorld()->DestroyActor(Barrier);
+	MyCurrentState = EPlayerState::IDLE;
 }
 
 void AMyRPGCharacter::StartCombatTimer() {

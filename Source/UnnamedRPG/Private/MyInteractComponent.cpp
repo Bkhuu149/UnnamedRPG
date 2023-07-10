@@ -126,9 +126,6 @@ void UMyInteractComponent::EndInteract() {
 
 			OwningCharacter->SetActorLocation(ClimbExitLocation);
 		}
-		else {
-
-		}
 		CurrentLadder = nullptr;
 		break;
 	case EInteractType::Pushing:
@@ -148,6 +145,7 @@ void UMyInteractComponent::EndInteract() {
 	SetComponentTickEnabled(false);
 
 	Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(false);
+	Cast<AMyRPGCharacter>(OwningCharacter)->SetPlayerState(EPlayerState::IDLE);
 	CurrentType = EInteractType::None;
 }
 float UMyInteractComponent::GetPushableHeight() {

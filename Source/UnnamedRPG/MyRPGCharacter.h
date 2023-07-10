@@ -30,6 +30,17 @@
 
 class InteractableInterface;
 
+UENUM(BlueprintType)
+enum class EPlayerState : uint8 {
+	IDLE			UMETA(DisplayName = "Idle"), //Default, not doing anything
+	DODGING			UMETA(DisplayName = "Dodging"),
+	SPRINTING		UMETA(DisplayName = "Sprinting"),
+	INTERACTING		UMETA(DisplayName = "Interacting"),
+	ATTACKING		UMETA(DisplayName = "Attacking"),
+	BLOCKING		UMETA(DisplayName = "Blocking")
+
+};
+
 UCLASS()
 class UNNAMEDRPG_API AMyRPGCharacter : public ARPGBaseClass //, public IAbilitySystemInterface
 {
@@ -46,6 +57,7 @@ protected:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 		//UAbilitySystemComponent* AbilityComp;
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interacts")
 		UMyInteractComponent* InteractComp;
 
@@ -58,6 +70,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool IsFemale = false;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		EPlayerState MyCurrentState = EPlayerState::IDLE;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool Targeted;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
@@ -224,6 +239,10 @@ public:
 	bool GetIsSprinting() { return IsSprinting; }
 
 	int GetAttackCount() { return AttackCount; }
+
+	void SetPlayerState(EPlayerState NewState) { MyCurrentState = NewState; }
+
+	EPlayerState GetPlayerState() { return MyCurrentState; }
 
 	void SetIsInteracting(bool value) { IsInteracting = value; }
 	bool GetIsInteracting() { return IsInteracting; }
