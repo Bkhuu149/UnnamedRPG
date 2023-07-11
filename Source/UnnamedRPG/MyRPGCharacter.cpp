@@ -212,7 +212,7 @@ void AMyRPGCharacter::OnDodgePressed() {
 		30 * StaminaDrainMultiplier > CurrentStamina
 		) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Dodge"));
-	IsDodging = true;
+//	IsDodging = true;
 	MyCurrentState = EPlayerState::DODGING;
 	CurrentStamina -= 30 * StaminaDrainMultiplier;
 	FMath::Clamp(CurrentStamina, 0, StaminaMax);
@@ -228,7 +228,7 @@ void AMyRPGCharacter::OnDodgePressed() {
 }
 
 void AMyRPGCharacter::DodgeFinished() {
-	IsDodging = false;
+//	IsDodging = false;
 	IsBackDodging = false;
 	MyCurrentState = EPlayerState::IDLE;
 	if (DodgeTimer.IsValid()) {
@@ -337,7 +337,7 @@ void AMyRPGCharacter::ResetAttack() {
 	}
 	MyCurrentState = EPlayerState::IDLE;
 	AttackCount = 0;
-	IsAttacking = false;
+//	IsAttacking = false;
 	SavedAttack = AttackQueuedType::NONE;
 	UpdateAttackBar();
 }
@@ -348,7 +348,7 @@ void AMyRPGCharacter::DoFinisher() {
 	FAttackStruct* FinisherAttack = AttackSkillComp->GetFinisherAttack();
 	if (!(FinisherAttack && FinisherAttack->IsFinisher)) { return; }
 	if (FinisherAttack->StaminaDrain * StaminaDrainMultiplier > CurrentStamina) { return; }
-	if (IsAttacking) {
+	if (MyCurrentState == EPlayerState::ATTACKING) {
 		SavedAttack = AttackQueuedType::FINISHER;
 		return;
 	}
@@ -386,7 +386,7 @@ float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
 	CurrentWeapon->SetDamage((AttackCount)*Attack->Damage * AttackDamageMultiplier);
-	IsAttacking = true;
+	//IsAttacking = true;
 	MyCurrentState = EPlayerState::ATTACKING;
 	//AbilityComp->GiveAbilityAndActivateOnce(AttackAbility);
 	return AttackLength;
@@ -444,7 +444,7 @@ void AMyRPGCharacter::OnSprintPressed() {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Sprinting"));
 	SprintMultiplier = 1.f;
 	MyCurrentState = EPlayerState::SPRINTING;
-	IsSprinting = true;
+//	IsSprinting = true;
 	//bUseControllerRotationYaw = false;
 	//GetCharacterMovement()->bOrientRotationToMovement = true;
 	
@@ -454,7 +454,7 @@ void AMyRPGCharacter::OnSprintReleased() {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Stop Sprinting"));
 	SprintMultiplier = .5f;
 	MyCurrentState = EPlayerState::IDLE;
-	IsSprinting = false;
+//	IsSprinting = false;
 	//if (Target) {
 		//bUseControllerRotationYaw = true;
 		//GetCharacterMovement()->bOrientRotationToMovement = false;

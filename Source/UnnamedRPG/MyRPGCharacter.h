@@ -79,10 +79,10 @@ protected:
 		ARPGBaseClass* Target;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool IsJumping = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
-		bool IsDodging = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
-		bool IsSprinting = false;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		//bool IsDodging = false;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		//bool IsSprinting = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		int AttackCount = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
@@ -186,7 +186,7 @@ private:
 	void ResetAttack();
 	FTimerHandle AttackTimer; 
 	int CurrentMaxAttackCount = 3;
-	bool IsAttacking = false;
+	//bool IsAttacking = false;
 	enum AttackQueuedType { NONE, COMBO, FINISHER };
 	AttackQueuedType SavedAttack = AttackQueuedType::NONE;
 
@@ -234,9 +234,9 @@ public:
 
 	void MoveRightLeft(float value);
 	
-	bool GetIsDodging() { return IsDodging; }
+//	bool GetIsDodging() { return IsDodging; }
 
-	bool GetIsSprinting() { return IsSprinting; }
+//	bool GetIsSprinting() { return IsSprinting; }
 
 	int GetAttackCount() { return AttackCount; }
 

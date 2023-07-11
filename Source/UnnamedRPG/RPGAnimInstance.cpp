@@ -26,7 +26,8 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 	Acceleration = MoveComp->GetCurrentAcceleration();
 	ShouldMove = (Velocity != FVector(0, 0, 0)) && (GroundSpeed > 3);
 	IsFalling = MoveComp->IsFalling();
-	IsSprinting = Character->GetIsSprinting();
+//	IsSprinting = Character->GetIsSprinting();
+	IsSprinting = Character->GetPlayerState() == EPlayerState::SPRINTING;
 
 	if (InteractComp) {
 		IsPushing = InteractComp->IsPushingObject();
