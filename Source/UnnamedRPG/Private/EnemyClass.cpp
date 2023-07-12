@@ -189,6 +189,7 @@ void AEnemyClass::StartDash() {
 	//Start dash hitbox timer
 	GetWorld()->GetTimerManager().SetTimer(DashTimer, this, &AEnemyClass::DashTrace, 0.2, true);
 }
+
 void AEnemyClass::DashTrace() {
 	//Performs a sphere trace every couple of seconds for dash
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = { EObjectTypeQuery::ObjectTypeQuery3 };
@@ -203,6 +204,7 @@ void AEnemyClass::DashTrace() {
 		}
 	}
 }
+
 void AEnemyClass::EndDash() {
 	//Stop dash hitbox timer
 	if (DashTimer.IsValid()) {
@@ -215,7 +217,7 @@ void AEnemyClass::ResetTarget() {
 	//Call to reset target values
 	Targeted = false;
 	//Remove self from player's NumCombatants
-	Cast<AMyRPGCharacter>(Target)->RemoveCombatant();
+	Cast<AMyRPGCharacter>(Target)->RemoveCombatant(this);
 	MyController->StopMovement();
 	Target = nullptr;
 }
@@ -257,4 +259,9 @@ bool AEnemyClass::DamageChar(float val) {
 		GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false); 
 	}
 	return bHit;
+}
+
+void AEnemyClass::KillCharacter() {
+	Super::KillCharacter();
+	Cast<AMyRPGCharacter>(Target)->RemoveCombatant(this);
 }

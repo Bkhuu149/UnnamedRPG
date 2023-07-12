@@ -601,16 +601,16 @@ void AMyRPGCharacter::CombatTimerEnd() {
 	InCombat = false;
 }
 
-void AMyRPGCharacter::AddCombatant() {
-	NumCombatants++;
+void AMyRPGCharacter::AddCombatant(AActor* Combatant) {
+	CombatantArray.Emplace(Combatant);
 	InCombat = true;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("NumCombatants: ++"), NumCombatants));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("NumCombatants: ++"));
 }
 
-void AMyRPGCharacter::RemoveCombatant() {
-	NumCombatants--;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, FString::Printf(TEXT("NumCombatants: --"), NumCombatants));
-	if (NumCombatants <= 0) {
+void AMyRPGCharacter::RemoveCombatant(AActor* Combatant) {
+	CombatantArray.Remove(Combatant);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("NumCombatants: --"));
+	if (CombatantArray.Num() == 0) {
 		StartCombatTimer();
 	}
 }

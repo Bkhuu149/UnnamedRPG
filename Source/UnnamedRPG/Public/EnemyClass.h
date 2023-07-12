@@ -67,6 +67,7 @@ protected:
 
 	virtual bool DamageChar(float val) override;
 
+	virtual void KillCharacter() override;
 	
 	UFUNCTION(BlueprintCallable)
 	void SetState(EEnemyState NewState) { CurrentEnemyState = NewState; };
