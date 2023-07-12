@@ -46,6 +46,10 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 		if (ForwardBackInputValue != 0 || RightLeftInputValue != 0) {
 			CurrentStamina -= .1 * StaminaDrainMultiplier;
 		}
+		else if (CurrentStamina < StaminaMax) {
+			CurrentStamina += .5;
+			FMath::Clamp(CurrentStamina, 0, StaminaMax);
+		}
 		if (CurrentStamina <= 0) {
 			OnSprintReleased();
 		}
