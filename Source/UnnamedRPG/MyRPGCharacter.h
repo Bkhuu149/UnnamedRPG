@@ -219,6 +219,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateSlot1(int HotbarIndex);
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateCombatStatus(bool IsInCombat);
+
+
 	//Handle Health
 	virtual bool DamageChar(float val) override;
 	virtual void HealChar(float val) override;

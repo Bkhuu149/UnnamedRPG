@@ -603,11 +603,13 @@ void AMyRPGCharacter::CombatTimerEnd() {
 		GetWorld()->GetTimerManager().ClearTimer(CombatTimer);
 	}
 	InCombat = false;
+	UpdateCombatStatus(InCombat);
 }
 
 void AMyRPGCharacter::AddCombatant(AActor* Combatant) {
 	CombatantArray.Emplace(Combatant);
 	InCombat = true;
+	UpdateCombatStatus(InCombat);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("NumCombatants: ++"));
 }
 
