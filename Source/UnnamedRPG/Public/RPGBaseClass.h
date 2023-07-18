@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Animation/AnimMontage.h"
 #include "WeaponActor.h"
+#include "MyEnumUtils.h"
 #include "RPGBaseClass.generated.h"
 
 UCLASS()
@@ -59,8 +60,7 @@ public:
 	virtual void CheckSpeed(float FallDamage = 0.f);
 
 	//Handle Health
-	UFUNCTION(BlueprintCallable, Category = "Character")
-	virtual bool DamageChar(float val);
+	virtual bool DamageChar(float val, EDamageType Type);
 
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void KillCharacter();

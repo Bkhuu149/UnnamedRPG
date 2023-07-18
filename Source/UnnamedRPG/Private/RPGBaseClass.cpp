@@ -32,7 +32,7 @@ void ARPGBaseClass::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-bool ARPGBaseClass::DamageChar(float val) {
+bool ARPGBaseClass::DamageChar(float val, EDamageType Type) {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Damage"));
 
 	if (IsDead || IsInvincible) { return false; }

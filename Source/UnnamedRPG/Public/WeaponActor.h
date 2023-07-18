@@ -6,6 +6,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/Actor.h"
+#include "MyEnumUtils.h"
 #include "Kismet/GameplayStatics.h"
 #include "WeaponActor.generated.h"
 
@@ -31,6 +32,9 @@ private:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	EDamageType Type = EDamageType::NONE;
+	void SetDamageType(EDamageType NewType) { Type = NewType; }
 
 	float Damage = 10.f;
 	void SetDamage(float NewDamage) { Damage = NewDamage; }

@@ -20,6 +20,7 @@
 #include "Public/MyInteractComponent.h"
 #include "Public/InventoryComponent.h"
 #include "Public/AttackSkillComponent.h"
+#include "Public/MyEnumUtils.h"
 
 #include "Engine/GameEngine.h"
 #include "Engine/DataTable.h"
@@ -30,16 +31,6 @@
 
 class InteractableInterface;
 
-UENUM(BlueprintType)
-enum class EPlayerState : uint8 {
-	IDLE			UMETA(DisplayName = "Idle"), //Default, not doing anything
-	DODGING			UMETA(DisplayName = "Dodging"),
-	SPRINTING		UMETA(DisplayName = "Sprinting"),
-	INTERACTING		UMETA(DisplayName = "Interacting"),
-	ATTACKING		UMETA(DisplayName = "Attacking"),
-	BLOCKING		UMETA(DisplayName = "Blocking")
-
-};
 
 UCLASS()
 class UNNAMEDRPG_API AMyRPGCharacter : public ARPGBaseClass //, public IAbilitySystemInterface
@@ -192,6 +183,7 @@ private:
 
 	//Handle Combat Timer
 	FTimerHandle CombatTimer;
+	UPROPERTY(EditAnywhere)
 	float CombatTimerLength = 10;
 	UFUNCTION(BlueprintCallable)
 	void StartCombatTimer(); // Starts or Resets combat timer
@@ -224,7 +216,8 @@ public:
 
 
 	//Handle Health
-	virtual bool DamageChar(float val) override;
+	UFUNCTION(BlueprintCallable)
+	virtual bool DamageChar(float val, EDamageType Type) override;
 	virtual void HealChar(float val) override;
 
 	virtual void KillCharacter() override;

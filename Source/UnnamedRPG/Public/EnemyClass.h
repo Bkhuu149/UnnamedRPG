@@ -10,17 +10,10 @@
 #include "NavigationSystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "MyEnumUtils.h"
 #include "EnemyClass.generated.h"
 
 
-UENUM(BlueprintType)
-enum class EEnemyState : uint8 {
-	IDLE			UMETA(DisplayName = "Idle"), //Default, not doing anything
-	PATH_WALKING	UMETA(DisplayName = "Path Walking"), //Currently following a set path
-	CHASE_CLOSE		UMETA(DisplayName = "Chase Close"), //Following target closely
-	CHASE_FAR		UMETA(DisplayName = "Chase Far"), //Has a target but staying a distance away
-	ATTACK			UMETA(DisplayName = "Attack") //Performing an attack
-};
 
 UCLASS()
 class UNNAMEDRPG_API AEnemyClass : public ARPGBaseClass
@@ -65,7 +58,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	EEnemyState CurrentEnemyState = EEnemyState::IDLE;
 
-	virtual bool DamageChar(float val) override;
+	UFUNCTION(BlueprintCallable)
+	virtual bool DamageChar(float val, EDamageType Type) override;
 
 	virtual void KillCharacter() override;
 	

@@ -506,8 +506,8 @@ void AMyRPGCharacter::ResetTarget() {
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
-bool AMyRPGCharacter::DamageChar(float val) {
-	bool bHit = Super::DamageChar(EnemyDamageMultiplier * val);
+bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {
+	bool bHit = Super::DamageChar(EnemyDamageMultiplier * val, Type);
 	if (Barrier && !bHit) {
 		BarrierHit = true;
 	}

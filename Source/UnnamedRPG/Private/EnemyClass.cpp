@@ -249,8 +249,8 @@ void AEnemyClass::Attack()
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, FMath::RandRange(CooldownTime -3.f, CooldownTime + 3.f), false);
 }
 
-bool AEnemyClass::DamageChar(float val) {
-	bool bHit = Super::DamageChar(val);
+bool AEnemyClass::DamageChar(float val, EDamageType Type) {
+	bool bHit = Super::DamageChar(val, Type);
 	//Reset attack timer to allow player to finish their combo
 	if (bHit) { 
 		if (AttackTimer.IsValid()) {
