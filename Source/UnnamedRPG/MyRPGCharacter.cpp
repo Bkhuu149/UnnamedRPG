@@ -302,6 +302,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 		return;
 	}
 	float AttackLength = PerformAttack(AttackRow);
+	CurrentWeapon->SetDamageType(AttackSkillComp->GetAttackAugment(AttackCount-1));
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
 	UpdateAttackBar();
 }
@@ -321,6 +322,7 @@ void AMyRPGCharacter::PerformSavedAttack() {
 		AttackRow = AttackSkillComp->GetComboAttack(AttackCount);
 		if (!AttackRow) { return; }
 		AttackLength = PerformAttack(AttackRow);
+		CurrentWeapon->SetDamageType(AttackSkillComp->GetAttackAugment(AttackCount-1));
 		GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
 		UpdateAttackBar();
 		return;
@@ -329,6 +331,7 @@ void AMyRPGCharacter::PerformSavedAttack() {
 	FinisherAttack = AttackSkillComp->GetFinisherAttack();
 	if (!(FinisherAttack && FinisherAttack->IsFinisher)) { return; }
 	AttackLength = PerformAttack(FinisherAttack);
+	CurrentWeapon->SetDamageType(AttackSkillComp->GetFinisherAugment());
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
 	return;
 	
@@ -358,6 +361,7 @@ void AMyRPGCharacter::DoFinisher() {
 	}
 
 	float AttackLength = PerformAttack(FinisherAttack);
+	CurrentWeapon->SetDamageType(AttackSkillComp->GetFinisherAugment());
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false); 
 }
 

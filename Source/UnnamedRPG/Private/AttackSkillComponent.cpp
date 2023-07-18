@@ -8,7 +8,7 @@ UAttackSkillComponent::UAttackSkillComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	FAttackSlotStruct Temp = FAttackSlotStruct();
 	Temp.AttackId = FName("SwordAttack3");
@@ -36,6 +36,12 @@ UAttackSkillComponent::UAttackSkillComponent()
 	Hotbar.Add(FName("SwordAttack5"));
 
 	Finisher = FName("SwordAttack2");
+
+	AttackAugments.Add(EDamageType::NONE);
+	AttackAugments.Add(EDamageType::FIRE);
+	AttackAugments.Add(EDamageType::ICE);
+	
+	FinisherDamageType = EDamageType::LIGHTNING;
 	// ...
 }
 
@@ -177,4 +183,9 @@ FAttackStruct* UAttackSkillComponent::GetComboAttack(int HotbarIndex) {
 
 FAttackStruct* UAttackSkillComponent::GetFinisherAttack() {
 	return GetAttackInformation(Finisher);
+}
+
+EDamageType UAttackSkillComponent::GetAttackAugment(int HotbarIndex) {
+	if (HotbarIndex >= Hotbar.Num()) { return GetFinisherAugment(); }
+	return AttackAugments[HotbarIndex];
 }

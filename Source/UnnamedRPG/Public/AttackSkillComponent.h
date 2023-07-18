@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility_Montage.h"
 #include "Components/ActorComponent.h"
+#include "MyEnumUtils.h"
 #include "Engine/DataTable.h"
 #include "Engine/Texture2D.h"
 
@@ -76,7 +77,13 @@ protected:
 		TArray<FName> Hotbar;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TArray<EDamageType> AttackAugments;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		FName Finisher;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		EDamageType FinisherDamageType;
 
 	int ComboMaxSize = 3;
 
@@ -98,6 +105,10 @@ public:
 	int FindAttackInCombo(FName AttackId, bool& Found);
 
 	FAttackStruct* GetComboAttack(int HotbarIndex);
+
+	EDamageType GetAttackAugment(int HotbarIndex);
+
+	EDamageType GetFinisherAugment() { return FinisherDamageType; }
 
 	FAttackStruct* GetFinisherAttack();
 

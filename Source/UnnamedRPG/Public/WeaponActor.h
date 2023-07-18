@@ -4,11 +4,33 @@
 
 #include "CoreMinimal.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Engine/DataTable.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/Actor.h"
 #include "MyEnumUtils.h"
+#include "MyDamageType.h"
 #include "Kismet/GameplayStatics.h"
 #include "WeaponActor.generated.h"
+
+
+USTRUCT(BlueprintType)
+struct FDamageTypeStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText DamageTypeDescription;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UMyDamageType> Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UNiagaraSystem* TypeWeaponTrail;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UNiagaraSystem* TypeWeaponEffect;
+
+};
 
 UCLASS()
 class UNNAMEDRPG_API AWeaponActor : public AActor
@@ -33,8 +55,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	EDamageType Type = EDamageType::NONE;
-	void SetDamageType(EDamageType NewType) { Type = NewType; }
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage Type Table")
+	UDataTable* DamageTypeTab;
+
+	TSubclassOf<UMyDamageType> MyType;
+	void SetDamageType(EDamageType NewType);
 
 	float Damage = 10.f;
 	void SetDamage(float NewDamage) { Damage = NewDamage; }

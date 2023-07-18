@@ -46,7 +46,7 @@ void AWeaponActor::WeaponLineTrace() {
 	IgnoreList.Append(tableinit);
 	bool bHIt = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), StartSocket, EndSocket, FVector(5, 5, 5), FRotator::ZeroRotator, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::None, OutHit, true);
 	//bool bHit = UKismetSystemLibrary::LineTraceSingle(GetWorld(), StartSocket, EndSocket, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::None, OutHit, true);
-	UGameplayStatics::ApplyDamage(OutHit.GetActor(), Damage, NULL, Owner, NULL); // Apply 5 damage to the actor being hit
+	UGameplayStatics::ApplyDamage(OutHit.GetActor(), Damage, NULL, Owner, MyType); // Apply 5 damage to the actor being hit
 
 }
 
@@ -61,4 +61,46 @@ void AWeaponActor::EndLineTrace() {
 		GetWorld()->GetTimerManager().ClearTimer(ColTimer);
 		ColTimer.Invalidate();
 	}
+}
+
+void AWeaponActor::SetDamageType(EDamageType NewType) {
+	//Do data table lookup to set correct values
+	FName DamageTypeTableKey = FName("Elementless");
+	switch (NewType) {
+	case EDamageType::NONE:
+		DamageTypeTableKey = FName("Elementless");
+		break;
+	case EDamageType::FIRE:
+		DamageTypeTableKey = FName("Fire");
+		break;
+	case EDamageType::WATER:
+		DamageTypeTableKey = FName("Water");
+		break;
+	case EDamageType::EARTH:
+		DamageTypeTableKey = FName("Earth");
+		break;
+	case EDamageType::WIND:
+		DamageTypeTableKey = FName("Wind");
+		break;
+	case EDamageType::ICE:
+		DamageTypeTableKey = FName("Ice");
+		break;
+	case EDamageType::LIGHTNING:
+		DamageTypeTableKey = FName("Lightning");
+		break;
+	case EDamageType::SAND:
+		DamageTypeTableKey = FName("Sand");
+		break;
+	case EDamageType::SMOKE:
+		DamageTypeTableKey = FName("Smoke");
+		break;
+	}
+
+	FDamageTypeStruct* DamageTypeData = DamageTypeTab->FindRow<FDamageTypeStruct>(DamageTypeTableKey, "");
+
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MyEnum is %s"), *UEnum::GetValueAsString(NewType)));
+
+	MyType = DamageTypeData->Type;
+	//Still need to set weapon vfx and trail to reflect what element an attack is
+
 }
