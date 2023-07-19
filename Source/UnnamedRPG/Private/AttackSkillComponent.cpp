@@ -181,11 +181,21 @@ FAttackStruct* UAttackSkillComponent::GetComboAttack(int HotbarIndex) {
 	return GetAttackInformation(Hotbar[HotbarIndex]);
 }
 
-FAttackStruct* UAttackSkillComponent::GetFinisherAttack() {
-	return GetAttackInformation(Finisher);
+EDamageType UAttackSkillComponent::GetAttackAugment(int AttackIndex) {
+	if (AttackIndex >= Hotbar.Num()) { return GetFinisherAugment(); }
+	return AttackAugments[AttackIndex];
 }
 
-EDamageType UAttackSkillComponent::GetAttackAugment(int HotbarIndex) {
-	if (HotbarIndex >= Hotbar.Num()) { return GetFinisherAugment(); }
-	return AttackAugments[HotbarIndex];
+void UAttackSkillComponent::SetAttackAugment(EDamageType NewType, int AttackIndex) {
+	if (AttackIndex >= AttackAugments.Num()) { return; }
+	AttackAugments[AttackIndex] = NewType;
+}
+
+void UAttackSkillComponent::AddDamageType(EDamageType NewType) {}
+
+int UAttackSkillComponent::FindDamageTypeInInventory(EDamageType Type, bool& TypeFound) {
+
+	int Index = -1;
+	TypeFound = AttackAugments.Find(Type, Index);
+	return Index;
 }

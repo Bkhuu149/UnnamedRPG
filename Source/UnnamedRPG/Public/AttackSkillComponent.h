@@ -54,6 +54,19 @@ struct FAttackSlotStruct
 
 };
 
+USTRUCT(BlueprintType)
+struct FAugmentSlotStruct
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	EDamageType Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int Order = 0;
+
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNNAMEDRPG_API UAttackSkillComponent : public UActorComponent
 {
@@ -77,6 +90,9 @@ protected:
 		TArray<FName> Hotbar;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TArray<EDamageType> UnlockedAugments;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TArray<EDamageType> AttackAugments;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -91,13 +107,22 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage Type Table")
+		UDataTable* DamageTypeTab;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Database")
 		UDataTable* AttackTab;
+
+	void AddDamageType(EDamageType NewType);
 
 	void AddAttack(FName AttackID);
 
 	UFUNCTION(BlueprintCallable)
 	void SetComboInHotbar(FName AttackId, int HotbarIndex);
+	
+	void SetAttackAugment(EDamageType NewType, int AttackIndex);
+
+	void SetFinisherAugment(EDamageType NewType) { FinisherDamageType = NewType; }
 
 	void IncreaseCombo() {}; //To be built later
 
@@ -106,11 +131,11 @@ public:
 
 	FAttackStruct* GetComboAttack(int HotbarIndex);
 
-	EDamageType GetAttackAugment(int HotbarIndex);
+	EDamageType GetAttackAugment(int AttackIndex);
 
 	EDamageType GetFinisherAugment() { return FinisherDamageType; }
 
-	FAttackStruct* GetFinisherAttack();
+	FAttackStruct* GetFinisherAttack() { return GetAttackInformation(Finisher); }
 
 	UFUNCTION(BlueprintCallable)
 	void SetComboInventory(TArray<FAttackSlotStruct> SavedCombo) { ComboInventory = SavedCombo; }
@@ -124,9 +149,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetFinisher(FName SavedFinisher) { Finisher = SavedFinisher; }
 
+
 private:
 	int FindComboInInventory(FName AttackId, bool& ItemFound);
 	int FindFinisherInInventory(FName AttackId, bool& ItemFound);
+	int FindDamageTypeInInventory(EDamageType Type, bool& TypeFound);
 
 	FAttackStruct* GetAttackInformation(FName AttackId);
 
