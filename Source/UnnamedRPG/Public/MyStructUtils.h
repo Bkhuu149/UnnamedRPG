@@ -3,13 +3,31 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
+#include "MyEnumUtils.h"
+#include "MyStructUtils.generated.h"
 /**
  * 
  */
-class UNNAMEDRPG_API MyStructUtils
+USTRUCT(BlueprintType)
+struct FAugmentSlotStruct
 {
-public:
-	MyStructUtils();
-	~MyStructUtils();
+
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	EDamageType Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool IsUnlocked = false;
+
+	FAugmentSlotStruct() {
+		Type = EDamageType::NONE;
+		IsUnlocked = false;
+	}
+
+	FAugmentSlotStruct(EDamageType InitialType, bool Acquired) {
+		Type = InitialType;
+		IsUnlocked = Acquired;
+	}
+
 };

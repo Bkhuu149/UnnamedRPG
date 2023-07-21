@@ -6,9 +6,9 @@
 #include "Abilities/GameplayAbility_Montage.h"
 #include "Components/ActorComponent.h"
 #include "MyEnumUtils.h"
+#include "MyStructUtils.h"
 #include "Engine/DataTable.h"
 #include "Engine/Texture2D.h"
-
 
 #include "AttackSkillComponent.generated.h"
 
@@ -52,20 +52,17 @@ struct FAttackSlotStruct
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		int WeaponGroup = 0;
 
+	FAttackSlotStruct() {
+		AttackId = FName("");
+		WeaponGroup = 0;
+	}
+
+	FAttackSlotStruct(FName Id, int Group) {
+		AttackId = Id;
+		WeaponGroup = Group;
+	}
 };
 
-USTRUCT(BlueprintType)
-struct FAugmentSlotStruct
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	EDamageType Type;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int Order = 0;
-
-};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNNAMEDRPG_API UAttackSkillComponent : public UActorComponent
@@ -90,7 +87,7 @@ protected:
 		TArray<FName> Hotbar;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TArray<EDamageType> UnlockedAugments;
+		TArray<FAugmentSlotStruct> UnlockedAugments;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		TArray<EDamageType> AttackAugments;
@@ -113,7 +110,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Database")
 		UDataTable* AttackTab;
 
-	void AddDamageType(EDamageType NewType);
+	void UnlockDamageType(EDamageType NewType);
 
 	void AddAttack(FName AttackID);
 
@@ -153,12 +150,10 @@ public:
 private:
 	int FindComboInInventory(FName AttackId, bool& ItemFound);
 	int FindFinisherInInventory(FName AttackId, bool& ItemFound);
-	int FindDamageTypeInInventory(EDamageType Type, bool& TypeFound);
 
 	FAttackStruct* GetAttackInformation(FName AttackId);
 
 	void AddAttackToFinishers(FAttackSlotStruct Attack);
 	void AddAttackToCombos(FAttackSlotStruct Attack);
-
 
 };

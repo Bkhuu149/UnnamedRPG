@@ -9,6 +9,7 @@
 #include "GameFramework/Actor.h"
 #include "MyEnumUtils.h"
 #include "MyDamageType.h"
+#include "Engine/Texture2D.h"
 #include "Kismet/GameplayStatics.h"
 #include "WeaponActor.generated.h"
 
@@ -29,6 +30,9 @@ struct FDamageTypeStruct : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UNiagaraSystem* TypeWeaponEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UTexture2D* Thumbnail;
 
 };
 

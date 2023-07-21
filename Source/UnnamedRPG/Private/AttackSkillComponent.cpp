@@ -10,21 +10,10 @@ UAttackSkillComponent::UAttackSkillComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-	FAttackSlotStruct Temp = FAttackSlotStruct();
-	Temp.AttackId = FName("SwordAttack3");
-	Temp.WeaponGroup = 1002;
-
-	FAttackSlotStruct Temp2 = FAttackSlotStruct();
-	Temp2.AttackId = FName("SwordAttack4");
-	Temp2.WeaponGroup = 1003;
-
-	FAttackSlotStruct Temp3 = FAttackSlotStruct();
-	Temp3.AttackId = FName("SwordAttack5");
-	Temp3.WeaponGroup = 1004;
-
-	FAttackSlotStruct Temp4 = FAttackSlotStruct();
-	Temp4.AttackId = FName("SwordAttack2");
-	Temp4.WeaponGroup = 1001;
+	FAttackSlotStruct Temp = FAttackSlotStruct("SwordAttack3", 1002);
+	FAttackSlotStruct Temp2 = FAttackSlotStruct("SwordAttack4", 1003);
+	FAttackSlotStruct Temp3 = FAttackSlotStruct("SwordAttack5", 1004);
+	FAttackSlotStruct Temp4 = FAttackSlotStruct("SwordAttack2", 1001);
 
 	ComboInventory.Add(Temp);
 	ComboInventory.Add(Temp2);
@@ -37,11 +26,31 @@ UAttackSkillComponent::UAttackSkillComponent()
 
 	Finisher = FName("SwordAttack2");
 
+	FAugmentSlotStruct AugmentNone = FAugmentSlotStruct(EDamageType::NONE, true);
+	FAugmentSlotStruct AugmentFire = FAugmentSlotStruct(EDamageType::FIRE, true);
+	FAugmentSlotStruct AugmentWater = FAugmentSlotStruct(EDamageType::WATER, true);
+	FAugmentSlotStruct AugmentEarth = FAugmentSlotStruct(EDamageType::EARTH, true);
+	FAugmentSlotStruct AugmentWind = FAugmentSlotStruct(EDamageType::WIND, true);
+	FAugmentSlotStruct AugmentIce = FAugmentSlotStruct(EDamageType::ICE, true);
+	FAugmentSlotStruct AugmentLightning = FAugmentSlotStruct(EDamageType::LIGHTNING, true);
+	FAugmentSlotStruct AugmentSand = FAugmentSlotStruct(EDamageType::SAND, true);
+	FAugmentSlotStruct AugmentSmoke = FAugmentSlotStruct(EDamageType::SMOKE, true);
+
+	UnlockedAugments.Add(AugmentNone);
+	UnlockedAugments.Add(AugmentFire);
+	UnlockedAugments.Add(AugmentWater);
+	UnlockedAugments.Add(AugmentEarth);
+	UnlockedAugments.Add(AugmentWind);
+	UnlockedAugments.Add(AugmentIce);
+	UnlockedAugments.Add(AugmentLightning);
+	UnlockedAugments.Add(AugmentSand);
+	UnlockedAugments.Add(AugmentSmoke);
+
 	AttackAugments.Add(EDamageType::NONE);
-	AttackAugments.Add(EDamageType::FIRE);
-	AttackAugments.Add(EDamageType::ICE);
+	AttackAugments.Add(EDamageType::NONE);
+	AttackAugments.Add(EDamageType::NONE);
 	
-	FinisherDamageType = EDamageType::LIGHTNING;
+	FinisherDamageType = EDamageType::NONE;
 	// ...
 }
 
@@ -135,9 +144,7 @@ void UAttackSkillComponent::AddAttack(FName AttackId) {
 	bool Found = false;
 	int Index = -1;
 
-	FAttackSlotStruct Attack = FAttackSlotStruct();
-	Attack.AttackId = AttackId;
-	Attack.WeaponGroup = AttackToBeAdded->WeaponGroup;
+	FAttackSlotStruct Attack = FAttackSlotStruct(AttackId, AttackToBeAdded->WeaponGroup);
 	switch (AttackToBeAdded->IsFinisher)
 	{
 	case (true):
@@ -187,15 +194,44 @@ EDamageType UAttackSkillComponent::GetAttackAugment(int AttackIndex) {
 }
 
 void UAttackSkillComponent::SetAttackAugment(EDamageType NewType, int AttackIndex) {
+	//Set the attack at Attack Index to be type given
 	if (AttackIndex >= AttackAugments.Num()) { return; }
 	AttackAugments[AttackIndex] = NewType;
 }
 
-void UAttackSkillComponent::AddDamageType(EDamageType NewType) {}
-
-int UAttackSkillComponent::FindDamageTypeInInventory(EDamageType Type, bool& TypeFound) {
-
+void UAttackSkillComponent::UnlockDamageType(EDamageType NewType) {
+	//Sets value of IsUnlocked for the element to be true
 	int Index = -1;
-	TypeFound = AttackAugments.Find(Type, Index);
-	return Index;
+	switch (NewType){
+	case EDamageType::NONE:
+		Index = 0;
+		break;
+	case EDamageType::FIRE:
+		Index = 1;
+		break;
+	case EDamageType::WATER:
+		Index = 2;
+		break;
+	case EDamageType::EARTH:
+		Index = 3;
+		break;
+	case EDamageType::WIND:
+		Index = 4;
+		break;
+	case EDamageType::ICE:
+		Index = 5;
+		break;
+	case EDamageType::LIGHTNING:
+		Index = 6;
+		break;
+	case EDamageType::SAND:
+		Index = 7;
+		break;
+	case EDamageType::SMOKE:
+		Index = 8;
+		break;
+	}
+	if (Index == -1) { return; }
+	UnlockedAugments[Index].IsUnlocked = true;
 }
+
