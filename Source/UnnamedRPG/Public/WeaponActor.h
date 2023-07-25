@@ -68,8 +68,11 @@ public:
 	float Damage = 10.f;
 	void SetDamage(float NewDamage) { Damage = NewDamage; }
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Element")
 	UNiagaraSystem* Trail;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Element")
+	UNiagaraSystem* ElementParticles;
 
 	UNiagaraComponent* TrailComp;
 

@@ -117,8 +117,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetComboInHotbar(FName AttackId, int HotbarIndex);
 	
+	UFUNCTION(BlueprintCallable)
 	void SetAttackAugment(EDamageType NewType, int AttackIndex);
 
+	UFUNCTION(BlueprintCallable)
 	void SetFinisherAugment(EDamageType NewType) { FinisherDamageType = NewType; }
 
 	void IncreaseCombo() {}; //To be built later
