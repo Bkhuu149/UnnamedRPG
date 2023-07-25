@@ -8,14 +8,13 @@ AWeaponActor::AWeaponActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
 void AWeaponActor::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
+	SetDamageType(EDamageType::NONE);
 }
 
 // Called every frame
@@ -53,6 +52,7 @@ void AWeaponActor::WeaponLineTrace() {
 void AWeaponActor::StartLineTrace() {
 	//Start timer for weapon hit detection
 	GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AWeaponActor::WeaponLineTrace, 0.01, true);
+	
 }
 
 void AWeaponActor::EndLineTrace() {
@@ -101,6 +101,12 @@ void AWeaponActor::SetDamageType(EDamageType NewType) {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MyEnum is %s"), *UEnum::GetValueAsString(NewType)));
 
 	MyType = DamageTypeData->Type;
+	if (DamageTypeData->TypeWeaponEffect){
+		ElementParticles = DamageTypeData->TypeWeaponEffect;
+	}
 	//Still need to set weapon vfx and trail to reflect what element an attack is
-
+	if (ElementParticles) {
+		UNiagaraComponent* WeaponEffect = UNiagaraFunctionLibrary::SpawnSystemAttached(ElementParticles, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT(""), FVector(0, 0, 0), FRotator::ZeroRotator, EAttachLocation::SnapToTargetIncludingScale, true);
+		WeaponEffect->SetRelativeScale3D(FVector(0.2, 0.2, 0.2));
+	}
 }

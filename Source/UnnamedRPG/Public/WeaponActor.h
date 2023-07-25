@@ -62,6 +62,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Damage Type Table")
 	UDataTable* DamageTypeTab;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UMyDamageType> MyType;
 	void SetDamageType(EDamageType NewType);
 

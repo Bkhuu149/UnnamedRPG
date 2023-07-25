@@ -10,6 +10,7 @@ AEnemyClass::AEnemyClass()
 	PrimaryActorTick.bCanEverTick = true;
 
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("Pawn Sensing Component"));
+	StatusComp = CreateDefaultSubobject<UStatusComponent>(TEXT("Status Component"));
 
 }
 

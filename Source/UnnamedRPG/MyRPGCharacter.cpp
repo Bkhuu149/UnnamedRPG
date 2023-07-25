@@ -13,6 +13,7 @@ AMyRPGCharacter::AMyRPGCharacter()
 	InteractComp = CreateDefaultSubobject<UMyInteractComponent>(TEXT("Interact Component"));
 	InventoryComp = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory Component"));
 	AttackSkillComp = CreateDefaultSubobject<UAttackSkillComponent>(TEXT("Attack Skill Component"));
+	StatusComp = CreateDefaultSubobject<UStatusComponent>(TEXT("Status Component"));
 }
 
 // Called when the game starts or when spawned
@@ -584,7 +585,7 @@ void AMyRPGCharacter::EndBarrier() {
 		for (AActor* Enemy: OutHits) {
 			ARPGBaseClass* Temp = Cast<ARPGBaseClass>(Enemy);
 			if (Temp) { Temp->SetInterruptable(true); }
-			UGameplayStatics::ApplyDamage(Enemy, 10, NULL, this, NULL);
+			UGameplayStatics::ApplyDamage(Enemy, 10, NULL, this, BarrierDamageType);
 		}
 		FTransform ParticleSpawnTransform = FTransform(GetActorRotation(), GetActorLocation(), FVector(.5, .5, .5));
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BarrierParticle, ParticleSpawnTransform);
@@ -599,6 +600,7 @@ void AMyRPGCharacter::StartCombatTimer() {
 		GetWorld()->GetTimerManager().ClearTimer(CombatTimer);
 	}
 	InCombat = true;
+	UpdateCombatStatus(InCombat);
 	GetWorld()->GetTimerManager().SetTimer(CombatTimer, this, &AMyRPGCharacter::CombatTimerEnd, CombatTimerLength, false);
 }
 

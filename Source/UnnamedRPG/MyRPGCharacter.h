@@ -20,6 +20,7 @@
 #include "Public/MyInteractComponent.h"
 #include "Public/InventoryComponent.h"
 #include "Public/AttackSkillComponent.h"
+#include "StatusComponent.h"
 #include "Public/MyEnumUtils.h"
 
 #include "Engine/GameEngine.h"
@@ -57,6 +58,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Skills")
 		UAttackSkillComponent* AttackSkillComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Status")
+		UStatusComponent* StatusComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool IsFemale = false;
@@ -100,6 +104,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UClass* BarrierClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<UMyDamageType> BarrierDamageType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* DodgeAnim;
@@ -321,5 +328,6 @@ public:
 	UMyInteractComponent* GetInteractComponent() const { return InteractComp; }
 	UInventoryComponent* GetInventoryComponent() const { return InventoryComp; }
 	UAttackSkillComponent* GetAttackSkillComponent() const { return AttackSkillComp; }
+	UStatusComponent* GetStatusComponent() const { return StatusComp; }
 };
 
