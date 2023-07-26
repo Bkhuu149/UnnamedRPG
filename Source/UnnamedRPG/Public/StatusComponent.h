@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "MyEnumUtils.h"
 #include "StatusComponent.generated.h"
 
 
@@ -20,9 +21,22 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+private:
+	TMap<FName, int> StatusEffects;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	void DecrimentEffects();
+
+	void RemoveFinishedEffects();
+
+	void RemoveEffect(FName Effect);
+
+	void AddItemEffect(FName ItemEffect, int Time);
+
+	void AddDebuff(EDamageType Type, float Damage);
+
+	int CalculateEffectBuildupFromDamage(float Damage);
 };
