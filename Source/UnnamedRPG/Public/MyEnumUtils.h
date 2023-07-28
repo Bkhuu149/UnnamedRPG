@@ -5,6 +5,22 @@
 #include "CoreMinimal.h"
 #include "MyEnumUtils.generated.h"
 
+UENUM(BlueprintType) 
+enum class EStatus : uint8 {
+	BURN			UMETA(DisplayName = "Burn"),
+	WET		 		UMETA(DisplayName = "Wet"),
+	DIRT			UMETA(DisplayName = "Dirt"),
+	UNSTEADY		UMETA(DisplayName = "Unsteady"),
+	SLOWED			UMETA(DisplayName = "Slowed"),
+	DUST			UMETA(DisplayName = "Dust"),
+	PARALIZED		UMETA(DisplayName = "Paralized"),
+	SMOKE			UMETA(DisplayName = "Smoke"),
+	REGEN			UMETA(DisplayName = "Regen"),
+	DAMAGEBUFF		UMETA(DisplayName = "Damage Buff"),
+	STAMINABUFF		UMETA(DisplayName = "Stamina Buff"),
+	DEFENSEBUFF		UMETA(DisplayName = "Defense Buff")
+};
+
 UENUM(BlueprintType)
 enum class EDamageType : uint8 {
 	NONE		UMETA(DisplayName = "None"), //Default, not doing anything

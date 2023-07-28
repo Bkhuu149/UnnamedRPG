@@ -124,6 +124,7 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 }
 
 void AMyRPGCharacter::KILL() {
+	/*
 	AttackSkillComp->AddAttack(FName("SwordAttack1"));
 	AttackSkillComp->AddAttack(FName("SwordAttack2"));
 	AttackSkillComp->AddAttack(FName("SwordAttack3"));
@@ -147,6 +148,8 @@ void AMyRPGCharacter::KILL() {
 	InventoryComp->AddToInventory(FName("AttackFood"));
 	InventoryComp->AddToInventory(FName("StaminaFood"));
 	InventoryComp->AddToInventory(FName("DefenseFood"));
+	*/
+
 
 
 }

@@ -22,21 +22,25 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	TMap<FName, int> StatusEffects;
+	TMap<EStatus, int> StatusEffects;
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void DecrimentEffects();
+	virtual void DecrimentEffects();
 
-	void RemoveFinishedEffects();
+	virtual void RemoveFinishedEffects();
 
-	void RemoveEffect(FName Effect);
+	virtual void RemoveEffect(EStatus Effect);
 
-	void AddItemEffect(FName ItemEffect, int Time);
+	virtual void AddItemEffect(EStatus ItemEffect, int Time);
 
-	void AddDebuff(EDamageType Type, float Damage);
+	virtual void AddDebuff(EDamageType Type, float Damage);
 
-	int CalculateEffectBuildupFromDamage(float Damage);
+	virtual int CalculateEffectBuildupFromDamage(float Damage);
+
+	virtual void ActivateEffect(EStatus Effect);
+
+	virtual void DeactivateEffect(EStatus Effect);
 };

@@ -38,9 +38,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pawn Sense")
 	UPawnSensingComponent* PawnSensingComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Status")
-		UStatusComponent* StatusComp;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	bool IsMoving;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
@@ -123,8 +120,6 @@ public:
 	void DashTrace();
 	UFUNCTION(BlueprintCallable)
 	void EndDash();
-
-	UStatusComponent* GetStatusComponent() const { return StatusComp; }
 
 
 
