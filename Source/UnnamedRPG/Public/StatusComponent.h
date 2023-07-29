@@ -8,6 +8,7 @@
 #include "StatusComponent.generated.h"
 
 
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNNAMEDRPG_API UStatusComponent : public UActorComponent
 {
@@ -22,15 +23,17 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	TMap<EStatus, int> StatusEffects;
+	TMap<EStatus, int> StatusEffectBuildups;
+
+	TMap<EStatus, int> ActiveStatusEffects;
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	virtual void DecrimentEffects();
+	virtual void DecrimentEffects(TMap<EStatus, int>& StatusMap);
 
-	virtual void RemoveFinishedEffects();
+	virtual void RemoveFinishedEffects(TMap<EStatus, int>& StatusMap);
 
 	virtual void RemoveEffect(EStatus Effect);
 
@@ -43,4 +46,7 @@ public:
 	virtual void ActivateEffect(EStatus Effect);
 
 	virtual void DeactivateEffect(EStatus Effect);
+
+	float FireTickDamage = 2;
+
 };

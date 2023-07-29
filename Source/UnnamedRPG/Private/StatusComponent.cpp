@@ -2,6 +2,8 @@
 
 
 #include "StatusComponent.h"
+#include "../MyRPGCharacter.h"
+
 
 // Sets default values for this component's properties
 UStatusComponent::UStatusComponent()
@@ -19,7 +21,7 @@ void UStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	SetComponentTickInterval(1.f);
-	StatusEffects.Add(EStatus::BURN, 10);
+	StatusEffectBuildups.Add(EStatus::BURN, 10);
 }
 
 
@@ -27,35 +29,43 @@ void UStatusComponent::BeginPlay()
 void UStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	DecrimentEffects();
+	DecrimentEffects(StatusEffectBuildups);
+	//Perform Active Status Effects;
+	if (ActiveStatusEffects.Contains(EStatus::BURN)) {
+		//Do FireTickDamage
+	}
+	DecrimentEffects(ActiveStatusEffects);
 	// ...
 }
 
-void UStatusComponent::DecrimentEffects() {
-	for (TPair<EStatus, int>& Effect : StatusEffects) {
+void UStatusComponent::DecrimentEffects(TMap<EStatus, int>& StatusMap) {
+	for (TPair<EStatus, int>& Effect : StatusMap) {
 		Effect.Value--;
 	}
-	RemoveFinishedEffects();
+	RemoveFinishedEffects(StatusMap);
 }
 
-void UStatusComponent::RemoveFinishedEffects() {
+void UStatusComponent::RemoveFinishedEffects(TMap<EStatus, int>& StatusMap) {
 	TArray<EStatus> Keys;
-	StatusEffects.GetKeys(Keys);
+	StatusMap.GetKeys(Keys);
 	for (EStatus Key : Keys) {
-		if (StatusEffects[Key] <= 0) {
-			StatusEffects.Remove(Key);
+		if (StatusMap[Key] <= 0) {
+			StatusMap.Remove(Key);
+			DeactivateEffect(Key);
 		}
 	}
 }
 
 void UStatusComponent::RemoveEffect(EStatus Effect) {
-	//For use outside of class
-	StatusEffects.Remove(Effect);
+	//Removes all data of the effect given
+	StatusEffectBuildups.Remove(Effect);
+	ActiveStatusEffects.Remove(Effect);
+
 }
 
 void UStatusComponent::AddItemEffect(EStatus ItemEffect, int Time) {
 	//For use outside of class
-	StatusEffects.Add(ItemEffect, Time);
+	ActiveStatusEffects.Add(ItemEffect, Time);
 }
 
 void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
@@ -89,15 +99,22 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 		DesiredDebuff = EStatus::SMOKE;
 		break;
 	}
-	if (StatusEffects.Contains(DesiredDebuff)) {
-		//Player already had some buildup in debuff, add more
-		StatusEffects[DesiredDebuff] += DebuffTime;
+	if (ActiveStatusEffects.Contains(DesiredDebuff)) {
+		//Debuff already active, increase time for debuff but keep it below threshold
+		ActiveStatusEffects[DesiredDebuff] = FMath::Clamp(ActiveStatusEffects[DesiredDebuff] + DebuffTime, 0, 100);
+		return;
+	}
+	if (StatusEffectBuildups.Contains(DesiredDebuff)) {
+		//Debuff is not active but player has some buildup for it
+		StatusEffectBuildups[DesiredDebuff] = FMath::Clamp(StatusEffectBuildups[DesiredDebuff] + DebuffTime, 0, 100);
 		//If Buildup reaches thresshold, activate effect
-
+		if (StatusEffectBuildups[DesiredDebuff] >= 100) {
+			ActivateEffect(DesiredDebuff);
+		}
 		return;
 	}
 	//Player doesn't have any buildup for this debuff, create buildup
-	StatusEffects.Add(DesiredDebuff, DebuffTime);
+	StatusEffectBuildups.Add(DesiredDebuff, DebuffTime);
 }
 
 int UStatusComponent::CalculateEffectBuildupFromDamage(float Damage) {
@@ -106,6 +123,14 @@ int UStatusComponent::CalculateEffectBuildupFromDamage(float Damage) {
 }
 
 void UStatusComponent::ActivateEffect(EStatus Effect) {
+	//Move Effect from Buildup map to Active Effects map
+	TPair<EStatus, int> ActivatedEffect = TPair<EStatus, int>(Effect, StatusEffectBuildups[Effect]);
+	StatusEffectBuildups.Remove(Effect);
+	ActiveStatusEffects.Add(ActivatedEffect);
+
+	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(GetOwner());
+
+
 	switch (Effect)
 	{
 	case EStatus::BURN:
@@ -132,23 +157,14 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 	case EStatus::SMOKE:
 		//Temprory vision impairment for player
 		break;
-	case EStatus::REGEN:
-		break;
-	case EStatus::DAMAGEBUFF:
-		//Deals more damage
-		break;
-	case EStatus::STAMINABUFF:
-		//Actions use less stamina
-		break;
-	case EStatus::DEFENSEBUFF:
-		//Take less damage
-		break;
 	default:
 		break;
 	}
 }
 
 void UStatusComponent::DeactivateEffect(EStatus Effect) {
+	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(GetOwner());
+
 	switch (Effect)
 	{
 	case EStatus::BURN:
@@ -170,10 +186,13 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 	case EStatus::REGEN:
 		break;
 	case EStatus::DAMAGEBUFF:
+		Player->ResetAttackDamageMultiplier();
 		break;
 	case EStatus::STAMINABUFF:
+		Player->ResetStaminaDrainMultiplier();
 		break;
 	case EStatus::DEFENSEBUFF:
+		Player->ResetEnemyDamageMultiplier();
 		break;
 	default:
 		break;

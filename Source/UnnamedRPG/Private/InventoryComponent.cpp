@@ -168,14 +168,17 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 		switch (Item->StatAffected) {
 		case EStatAffected::Stamina:
 			Player->SetStaminaDrainMultiplier(.5);
+			Player->GetStatusComponent()->AddItemEffect(EStatus::STAMINABUFF, 300);
 			return true;
 
 		case EStatAffected::Attack:
 			Player->SetAttackDamageMultiplier(1.4);
+			Player->GetStatusComponent()->AddItemEffect(EStatus::DAMAGEBUFF, 300);
 			return true;
 
 		case EStatAffected::Defense:
 			Player->SetEnemyDamageMultiplier(.7);
+			Player->GetStatusComponent()->AddItemEffect(EStatus::DEFENSEBUFF, 300);
 			return true;
 		}
 	}
