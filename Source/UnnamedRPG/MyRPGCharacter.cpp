@@ -523,6 +523,9 @@ bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {
 	if (CurrentWeapon) {
 		GetWorld()->DestroyActor(CurrentWeapon);
 	}
+	if (!BarrierHit && bHit) {
+		StatusComp->AddDebuff(Type, val);
+	}
 	return bHit;
 }
 
