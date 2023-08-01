@@ -11,7 +11,6 @@ UStatusComponent::UStatusComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	
 	// ...
 }
 
@@ -21,7 +20,9 @@ void UStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	SetComponentTickInterval(1.f);
-	StatusEffectBuildups.Add(EStatus::BURN, 10);
+	Player = Cast<AMyRPGCharacter>(GetOwner());
+
+	//ActiveStatusEffects.Add(EStatus::BURN, 100);
 }
 
 
@@ -33,6 +34,7 @@ void UStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	//Perform Active Status Effects;
 	if (ActiveStatusEffects.Contains(EStatus::BURN)) {
 		//Do FireTickDamage
+		Player->DoFireTickDamage();
 	}
 	DecrimentEffects(ActiveStatusEffects);
 	// ...
@@ -128,8 +130,6 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 	StatusEffectBuildups.Remove(Effect);
 	ActiveStatusEffects.Add(ActivatedEffect);
 
-	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(GetOwner());
-
 
 	switch (Effect)
 	{
@@ -137,7 +137,7 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 		//Damage over time
 		break;
 	case EStatus::WET:
-		//Takes more damage
+		//Player has slippery floor
 		break;
 	case EStatus::DIRT:
 		//Mana recovers slower
@@ -163,7 +163,6 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 }
 
 void UStatusComponent::DeactivateEffect(EStatus Effect) {
-	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(GetOwner());
 
 	switch (Effect)
 	{

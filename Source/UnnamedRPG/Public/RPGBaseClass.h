@@ -82,6 +82,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character Information")
 	float GetHealthMax() { return HealthMax; }
 
+	UFUNCTION(BlueprintCallable)
+		void SetHealth(float Val) {
+		Health = FMath::Clamp(Val, 0, HealthMax);
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Animations")
 	TArray<UAnimMontage*> DeathAnims;
 

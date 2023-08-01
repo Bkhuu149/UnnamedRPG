@@ -221,6 +221,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateCombatStatus(bool IsInCombat);
 
+	void DoFireTickDamage();
 
 	//Handle Health
 	UFUNCTION(BlueprintCallable)

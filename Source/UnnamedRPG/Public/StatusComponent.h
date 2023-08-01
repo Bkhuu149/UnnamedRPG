@@ -8,6 +8,7 @@
 #include "StatusComponent.generated.h"
 
 
+class AMyRPGCharacter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNNAMEDRPG_API UStatusComponent : public UActorComponent
@@ -26,6 +27,8 @@ private:
 	TMap<EStatus, int> StatusEffectBuildups;
 
 	TMap<EStatus, int> ActiveStatusEffects;
+
+	
 
 public:	
 	// Called every frame
@@ -49,4 +52,5 @@ public:
 
 	float FireTickDamage = 2;
 
+	AMyRPGCharacter* Player;
 };

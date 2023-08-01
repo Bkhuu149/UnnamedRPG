@@ -529,6 +529,15 @@ bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {
 	return bHit;
 }
 
+void AMyRPGCharacter::DoFireTickDamage() {
+	SetHealth(GetHealth()-5);
+	if (GetHealth() <= 0) {
+		KillCharacter();
+		StatusComp->RemoveEffect(EStatus::BURN);
+	}
+}
+
+
 void AMyRPGCharacter::HealChar(float val) {
 	Super::HealChar(val);
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Healed: %f"), Health));
