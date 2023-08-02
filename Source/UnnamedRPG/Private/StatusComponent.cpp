@@ -101,16 +101,19 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 		DesiredDebuff = EStatus::SMOKE;
 		break;
 	}
+
 	if (ActiveStatusEffects.Contains(DesiredDebuff)) {
 		//Debuff already active, increase time for debuff but keep it below threshold
 		ActiveStatusEffects[DesiredDebuff] = FMath::Clamp(ActiveStatusEffects[DesiredDebuff] + DebuffTime, 0, 100);
 		return;
 	}
-	if (StatusEffectBuildups.Contains(DesiredDebuff)) {
+	else if (StatusEffectBuildups.Contains(DesiredDebuff)) {
 		//Debuff is not active but player has some buildup for it
-		StatusEffectBuildups[DesiredDebuff] = FMath::Clamp(StatusEffectBuildups[DesiredDebuff] + DebuffTime, 0, 100);
+		int NewDebuffTime = FMath::Clamp(StatusEffectBuildups[DesiredDebuff] + DebuffTime, 0, 100);
+		StatusEffectBuildups.Add(DesiredDebuff, NewDebuffTime);
+		//StatusEffectBuildups[DesiredDebuff] = FMath::Clamp(NewDebuffTime, 0, 100);
 		//If Buildup reaches thresshold, activate effect
-		if (StatusEffectBuildups[DesiredDebuff] >= 100) {
+		if (NewDebuffTime >= 99) {
 			ActivateEffect(DesiredDebuff);
 		}
 		return;
@@ -122,10 +125,12 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 int UStatusComponent::CalculateEffectBuildupFromDamage(float Damage) {
 	//Returns a temporary value, function to be made to calculate damage later
 	//return FMath::CeilToInt(Damage/2);
-	return Damage;
+	return 25;
 }
 
 void UStatusComponent::ActivateEffect(EStatus Effect) {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Activate Effect %s"), *UEnum::GetValueAsString(Effect)));
+
 	//Move Effect from Buildup map to Active Effects map
 	TPair<EStatus, int> ActivatedEffect = TPair<EStatus, int>(Effect, StatusEffectBuildups[Effect]);
 	StatusEffectBuildups.Remove(Effect);
@@ -139,7 +144,7 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::WET:
 		//Player has slippery floor
-		Player->GetCharacterMovement();
+		Player->GetCharacterMovement()->GroundFriction = 0;
 		break;
 	case EStatus::DIRT:
 		//Mana recovers slower
@@ -171,6 +176,7 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 	case EStatus::BURN:
 		break;
 	case EStatus::WET:
+		Player->GetCharacterMovement()->GroundFriction = 100;
 		break;
 	case EStatus::DIRT:
 		break;

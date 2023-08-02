@@ -36,7 +36,7 @@ bool ARPGBaseClass::DamageChar(float val, EDamageType Type) {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Damage"));
 
 	if (IsDead || IsInvincible) { return false; }
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MyEnum is %s"), *UEnum::GetValueAsString(Type)));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MyEnum is %s"), *UEnum::GetValueAsString(Type)));
 	if (Health - val <= 0) {
 		KillCharacter();
 		return true;

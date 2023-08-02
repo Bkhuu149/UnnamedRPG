@@ -523,7 +523,11 @@ bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {
 	if (CurrentWeapon) {
 		GetWorld()->DestroyActor(CurrentWeapon);
 	}
+	
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MyEnum is %s"), *UEnum::GetValueAsString(Type)));
 	if (!BarrierHit && bHit) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Adding Debuff: %s"), *UEnum::GetValueAsString(Type)));
+
 		StatusComp->AddDebuff(Type, val);
 	}
 	return bHit;
@@ -589,8 +593,8 @@ void AMyRPGCharacter::StartBarrier() {
 }
 
 void AMyRPGCharacter::EndBarrier() {
+	BarrierHit = false;
 	if (BarrierHit){
-		BarrierHit = false;
 
 		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = { EObjectTypeQuery::ObjectTypeQuery3 };
 		TArray<AActor*> IgnoreList = { this };
