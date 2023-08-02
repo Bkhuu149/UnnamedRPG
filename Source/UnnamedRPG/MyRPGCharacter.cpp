@@ -21,7 +21,6 @@ void AMyRPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	//AbilityComp->InitAbilityActorInfo(this, this);
-
 }
 
 // Called every frame
@@ -188,7 +187,7 @@ void AMyRPGCharacter::MoveRightLeft(float value)
 }
 
 void AMyRPGCharacter::OnBlockPressed() {
-	if (MyCurrentState != EPlayerState::IDLE || IsDead || IsRegeningMana) {
+	if (MyCurrentState != EPlayerState::IDLE || IsDead || IsRegeningMana || GetMesh()->GetAnimInstance()->Montage_IsPlaying(LevelStartAnim)) {
 		return;
 	}
 	Mana -= 50;
@@ -524,9 +523,9 @@ bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {
 		GetWorld()->DestroyActor(CurrentWeapon);
 	}
 	
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MyEnum is %s"), *UEnum::GetValueAsString(Type)));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MyEnum is %s"), *UEnum::GetValueAsString(Type)));
 	if (!BarrierHit && bHit) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Adding Debuff: %s"), *UEnum::GetValueAsString(Type)));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Adding Debuff: %s"), *UEnum::GetValueAsString(Type)));
 
 		StatusComp->AddDebuff(Type, val);
 	}
@@ -593,8 +592,8 @@ void AMyRPGCharacter::StartBarrier() {
 }
 
 void AMyRPGCharacter::EndBarrier() {
-	BarrierHit = false;
 	if (BarrierHit){
+		BarrierHit = false;
 
 		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes = { EObjectTypeQuery::ObjectTypeQuery3 };
 		TArray<AActor*> IgnoreList = { this };

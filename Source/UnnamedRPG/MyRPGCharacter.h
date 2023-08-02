@@ -16,6 +16,7 @@
 #include "Abilities/GameplayAbility_Montage.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayAbilitySpec.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "AbilitySystemComponent.h"
 #include "Public/MyInteractComponent.h"
 #include "Public/InventoryComponent.h"
@@ -116,6 +117,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* HealAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* LevelStartAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UParticleSystem* BarrierParticle;
