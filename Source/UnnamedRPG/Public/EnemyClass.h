@@ -52,6 +52,11 @@ protected:
 	float CooldownTime = 5.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float Damage = 10.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UMyDamageType> MyType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		EDamageType WeaponType = EDamageType::NONE;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTimerHandle DelayTimer;

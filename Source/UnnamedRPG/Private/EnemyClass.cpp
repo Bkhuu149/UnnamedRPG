@@ -24,6 +24,7 @@ void AEnemyClass::BeginPlay()
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
 	CurrentWeapon->SetDamage(Damage);
+	CurrentWeapon->SetDamageType(WeaponType);
 	if (WalkPath.Num() == 0) {
 		WalkPath.Add(GetActorTransform());
 	}
@@ -199,7 +200,7 @@ void AEnemyClass::DashTrace() {
 	for (AActor* Enemy : OutHits) {
 		AMyRPGCharacter* Temp = Cast<AMyRPGCharacter>(Enemy);
 		if (Temp) {
-			UGameplayStatics::ApplyDamage(Enemy, 10, NULL, this, NULL);
+			UGameplayStatics::ApplyDamage(Enemy, 10, NULL, this, MyType);
 		}
 	}
 }
