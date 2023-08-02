@@ -14,7 +14,6 @@ AWeaponActor::AWeaponActor()
 void AWeaponActor::BeginPlay()
 {
 	Super::BeginPlay();	
-	SetDamageType(EDamageType::NONE);
 }
 
 // Called every frame

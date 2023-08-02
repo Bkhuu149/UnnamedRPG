@@ -23,12 +23,11 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-private:
+	UPROPERTY(EditAnywhere)
 	TMap<EStatus, int> StatusEffectBuildups;
 
+	UPROPERTY(EditAnywhere)
 	TMap<EStatus, int> ActiveStatusEffects;
-
-	
 
 public:	
 	// Called every frame

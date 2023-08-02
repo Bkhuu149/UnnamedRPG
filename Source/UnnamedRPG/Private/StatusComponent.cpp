@@ -80,7 +80,7 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 		DesiredDebuff = EStatus::BURN;
 		break;
 	case EDamageType::WATER:
-		DesiredDebuff = EStatus::WET;
+		DesiredDebuff = EStatus::SLOWED;
 		break;
 	case EDamageType::EARTH:
 		DesiredDebuff = EStatus::DIRT;
@@ -89,7 +89,7 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 		DesiredDebuff = EStatus::UNSTEADY;
 		break;
 	case EDamageType::ICE:
-		DesiredDebuff = EStatus::SLOWED;
+		DesiredDebuff = EStatus::WET;
 		break;
 	case EDamageType::LIGHTNING:
 		DesiredDebuff = EStatus::PARALIZED;
@@ -121,7 +121,8 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 
 int UStatusComponent::CalculateEffectBuildupFromDamage(float Damage) {
 	//Returns a temporary value, function to be made to calculate damage later
-	return FMath::CeilToInt(Damage/2);
+	//return FMath::CeilToInt(Damage/2);
+	return Damage;
 }
 
 void UStatusComponent::ActivateEffect(EStatus Effect) {
@@ -138,6 +139,7 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::WET:
 		//Player has slippery floor
+		Player->GetCharacterMovement();
 		break;
 	case EStatus::DIRT:
 		//Mana recovers slower

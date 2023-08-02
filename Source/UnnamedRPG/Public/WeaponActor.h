@@ -66,6 +66,7 @@ public:
 	TSubclassOf<UMyDamageType> MyType;
 	void SetDamageType(EDamageType NewType);
 
+	UPROPERTY(EditAnywhere)
 	float Damage = 10.f;
 	void SetDamage(float NewDamage) { Damage = NewDamage; }
 
