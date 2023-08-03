@@ -554,7 +554,7 @@ void AMyRPGCharacter::KillCharacter() {
 
 void AMyRPGCharacter::RestoreMana() {
 	if (Mana < ManaMax) {
-		Mana += .025;
+		Mana += .025 * ManaRecoveryMultiplier;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Mana: %f"), Mana));
 	}
 	if (Mana >= ManaMax) {
@@ -576,7 +576,7 @@ void AMyRPGCharacter::IncrementMana() {
 }
 
 void AMyRPGCharacter::AddManaAttacking() {
-	Mana += 4 * (AttackCount+1);
+	Mana += ManaRecoveryMultiplier * (4 * (AttackCount+1));
 	Mana = FMath::Clamp(Mana, 0, ManaMax);
 }
 

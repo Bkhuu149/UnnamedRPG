@@ -125,7 +125,7 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 int UStatusComponent::CalculateEffectBuildupFromDamage(float Damage) {
 	//Returns a temporary value, function to be made to calculate damage later
 	//return FMath::CeilToInt(Damage/2);
-	return 25;
+	return 70;
 }
 
 void UStatusComponent::ActivateEffect(EStatus Effect) {
@@ -148,12 +148,14 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::DIRT:
 		//Mana recovers slower
+		Player->SetManaRestoreMultiplier(.5);
 		break;
 	case EStatus::UNSTEADY:
 		//Stamina recovers slower
 		break;
 	case EStatus::SLOWED:
 		//movement slowed
+		Player->GetCharacterMovement()->MaxWalkSpeed = 500;
 		break;
 	case EStatus::DUST:
 		//Deals less damage
@@ -179,10 +181,12 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 		Player->GetCharacterMovement()->GroundFriction = 100;
 		break;
 	case EStatus::DIRT:
+		Player->ResetManaRestoreMultiplier();
 		break;
 	case EStatus::UNSTEADY:
 		break;
 	case EStatus::SLOWED:
+		Player->GetCharacterMovement()->MaxWalkSpeed = 1000;
 		break;
 	case EStatus::DUST:
 		break;
