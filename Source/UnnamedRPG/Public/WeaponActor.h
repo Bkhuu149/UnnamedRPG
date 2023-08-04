@@ -78,9 +78,6 @@ public:
 
 	UNiagaraComponent* TrailComp;
 
-	void PlayTrail();
-	void EndTrail();
-
 	void StartLineTrace();
 	void EndLineTrace();
 

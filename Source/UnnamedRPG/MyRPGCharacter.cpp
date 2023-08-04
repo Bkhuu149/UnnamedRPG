@@ -136,6 +136,10 @@ void AMyRPGCharacter::KILL() {
 	AttackSkillComp->AddAttack(FName("KatanaAttack1"));
 	AttackSkillComp->AddAttack(FName("KatanaAttack2"));
 	AttackSkillComp->AddAttack(FName("KatanaAttack3"));
+	AttackSkillComp->AddAttack(FName("KatanaAttack4"));
+	AttackSkillComp->AddAttack(FName("KatanaAttack5"));
+	AttackSkillComp->AddAttack(FName("KatanaAttack6"));
+	AttackSkillComp->AddAttack(FName("KatanaAttack7"));
 
 	AttackSkillComp->AddAttack(FName("GreatSwordAttack1"));
 	AttackSkillComp->AddAttack(FName("GreatSwordAttack2"));
@@ -144,6 +148,11 @@ void AMyRPGCharacter::KILL() {
 
 	AttackSkillComp->AddAttack(FName("SpearAttack1"));
 	AttackSkillComp->AddAttack(FName("SpearAttack2"));
+	AttackSkillComp->AddAttack(FName("SpearAttack3"));
+	AttackSkillComp->AddAttack(FName("SpearAttack4"));
+	AttackSkillComp->AddAttack(FName("SpearAttack5"));
+	AttackSkillComp->AddAttack(FName("SpearAttack6"));
+	AttackSkillComp->AddAttack(FName("SpearAttack7"));
 
 	InventoryComp->AddToInventory(FName("HealthPotion"));
 	InventoryComp->AddToInventory(FName("ManaPotion"));

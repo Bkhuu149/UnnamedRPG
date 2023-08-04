@@ -24,15 +24,6 @@ void AWeaponActor::Tick(float DeltaTime)
 
 }
 
-void AWeaponActor::PlayTrail() {
-	TrailComp = UNiagaraFunctionLibrary::SpawnSystemAttached(Trail, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT("Middle"), FVector(0, 0, 0), FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true);
-
-}
-
-void AWeaponActor::EndTrail() {
-	TrailComp->Deactivate();
-}
-
 void AWeaponActor::WeaponLineTrace() {
 	//Draw a trace from weapon hilt to tip of weapon defined by sockets in mesh
 	UActorComponent* WeaponComponent = GetComponentByClass(UStaticMeshComponent::StaticClass());
@@ -51,6 +42,9 @@ void AWeaponActor::WeaponLineTrace() {
 
 void AWeaponActor::StartLineTrace() {
 	//Start timer for weapon hit detection
+	if (Trail) {
+		TrailComp = UNiagaraFunctionLibrary::SpawnSystemAttached(Trail, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT("Middle"), FVector(0, 0, 0), FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true);
+	}
 	GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AWeaponActor::WeaponLineTrace, 0.01, true);
 	
 }
@@ -60,6 +54,9 @@ void AWeaponActor::EndLineTrace() {
 	if (ColTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(ColTimer);
 		ColTimer.Invalidate();
+	}
+	if (TrailComp) {
+		TrailComp->Deactivate();
 	}
 }
 
