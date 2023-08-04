@@ -155,6 +155,7 @@ private:
 	//Handle Target Pressed
 	void OnTargetPressed();
 	void FocusTarget(float DeltaTime);
+	void TransitionCamera(float DeltaTime, FVector3d CamPosition);
 	void ResetTarget();
 
 	//Handle Block Inputs
@@ -205,6 +206,10 @@ private:
 	void CombatTimerEnd(); // Runs at the end of combat timer
 	bool InCombat = false;
 	TSet<AActor*> CombatantArray;
+
+	//Player Camera Positions
+	FVector3d NormalCamPosition = FVector3d(0, 0, 50);
+	FVector3d TargetCamPosition = FVector3d(0, 100, 50);
 
 	float PerformAttack(FAttackStruct* Attack);
 

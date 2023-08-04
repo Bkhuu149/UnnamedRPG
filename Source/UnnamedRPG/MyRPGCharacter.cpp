@@ -30,6 +30,9 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 
 	if (Targeted) {
 		FocusTarget(DeltaTime);
+		TransitionCamera(DeltaTime, TargetCamPosition);
+	} else {
+		TransitionCamera(DeltaTime, NormalCamPosition);
 	}
 	
 	FRotator CameraRotation;
@@ -485,7 +488,7 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 		ResetTarget();
 		return;
 	}
-
+	
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 	FRotator CameraRotation = GetController()->GetControlRotation();
 	FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, LookAtRotation, DeltaTime, 10.0);
@@ -506,10 +509,17 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 	}
 }
 
+void AMyRPGCharacter::TransitionCamera(float DeltaTime, FVector3d CamPosition) {
+	USpringArmComponent* CameraBoom = FindComponentByClass<USpringArmComponent>();
+	FVector VinterpVal = UKismetMathLibrary::VInterpTo(CameraBoom->GetRelativeLocation(), CamPosition, DeltaTime, 10.0);
+	CameraBoom->SetRelativeLocation(VinterpVal);
+}
+
 void AMyRPGCharacter::ResetTarget() {
 	Target = nullptr;
 	Targeted = false;
 	bUseControllerRotationYaw = false;
+
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
