@@ -132,6 +132,8 @@ void AMyRPGCharacter::KILL() {
 	AttackSkillComp->AddAttack(FName("SwordAttack3"));
 	AttackSkillComp->AddAttack(FName("SwordAttack4"));
 	AttackSkillComp->AddAttack(FName("SwordAttack5"));
+	AttackSkillComp->AddAttack(FName("SwordAttack6"));
+	AttackSkillComp->AddAttack(FName("SwordAttack7"));
 
 	AttackSkillComp->AddAttack(FName("KatanaAttack1"));
 	AttackSkillComp->AddAttack(FName("KatanaAttack2"));
@@ -538,7 +540,7 @@ bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {
 		BarrierHit = true;
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), GetHealth()));
-	if (CurrentWeapon) {
+	if (bHit && CurrentWeapon) {
 		GetWorld()->DestroyActor(CurrentWeapon);
 	}
 	

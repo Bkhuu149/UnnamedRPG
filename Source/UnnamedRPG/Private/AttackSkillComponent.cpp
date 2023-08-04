@@ -10,21 +10,21 @@ UAttackSkillComponent::UAttackSkillComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-	FAttackSlotStruct Temp = FAttackSlotStruct("SwordAttack3", 1002);
-	FAttackSlotStruct Temp2 = FAttackSlotStruct("SwordAttack4", 1003);
-	FAttackSlotStruct Temp3 = FAttackSlotStruct("SwordAttack5", 1004);
-	FAttackSlotStruct Temp4 = FAttackSlotStruct("SwordAttack2", 1001);
+	FAttackSlotStruct Temp = FAttackSlotStruct("SwordAttack1", 1002);
+	FAttackSlotStruct Temp2 = FAttackSlotStruct("SwordAttack2", 1003);
+	FAttackSlotStruct Temp3 = FAttackSlotStruct("SwordAttack3", 1004);
+	FAttackSlotStruct Temp4 = FAttackSlotStruct("SwordAttack5", 1001);
 
 	ComboInventory.Add(Temp);
 	ComboInventory.Add(Temp2);
 	ComboInventory.Add(Temp3);
 	FinishersInventory.Add(Temp4);
 
+	Hotbar.Add(FName("SwordAttack1"));
+	Hotbar.Add(FName("SwordAttack2"));
 	Hotbar.Add(FName("SwordAttack3"));
-	Hotbar.Add(FName("SwordAttack4"));
-	Hotbar.Add(FName("SwordAttack5"));
 
-	Finisher = FName("SwordAttack2");
+	Finisher = FName("SwordAttack5");
 
 	FAugmentSlotStruct AugmentNone = FAugmentSlotStruct(EDamageType::NONE, true);
 	FAugmentSlotStruct AugmentFire = FAugmentSlotStruct(EDamageType::FIRE, true);
