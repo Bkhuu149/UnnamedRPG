@@ -36,6 +36,9 @@ void UStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		//Do FireTickDamage
 		Player->DoFireTickDamage();
 	}
+	if (ActiveStatusEffects.Contains(EStatus::PARALIZED)) {
+		//Randomized interval for when paralize effect ticks, maybe 1 in 10 chance to play stun animation
+	}
 	DecrimentEffects(ActiveStatusEffects);
 	// ...
 }
