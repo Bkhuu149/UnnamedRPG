@@ -10,10 +10,10 @@ UAttackSkillComponent::UAttackSkillComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-	FAttackSlotStruct Temp = FAttackSlotStruct("SwordAttack1", 1002);
-	FAttackSlotStruct Temp2 = FAttackSlotStruct("SwordAttack2", 1003);
-	FAttackSlotStruct Temp3 = FAttackSlotStruct("SwordAttack3", 1004);
-	FAttackSlotStruct Temp4 = FAttackSlotStruct("SwordAttack5", 1001);
+	FAttackSlotStruct Temp = FAttackSlotStruct("SwordAttack1", 1000);
+	FAttackSlotStruct Temp2 = FAttackSlotStruct("SwordAttack2", 1001);
+	FAttackSlotStruct Temp3 = FAttackSlotStruct("SwordAttack3", 1002);
+	FAttackSlotStruct Temp4 = FAttackSlotStruct("SwordAttack5", 1004);
 
 	ComboInventory.Add(Temp);
 	ComboInventory.Add(Temp2);
