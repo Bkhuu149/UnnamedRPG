@@ -87,6 +87,9 @@ public:
 		Health = FMath::Clamp(Val, 0, HealthMax);
 	}
 
+	UFUNCTION(BlueprintCallable)
+		bool GetIsInterrupatbe() { return Interruptable; }
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Animations")
 	TArray<UAnimMontage*> DeathAnims;
 

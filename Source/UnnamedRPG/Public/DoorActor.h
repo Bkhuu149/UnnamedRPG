@@ -4,6 +4,7 @@
 
 #include "InteractableInterface.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "MyEnumUtils.h"
 #include "Kismet/GameplayStatics.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"

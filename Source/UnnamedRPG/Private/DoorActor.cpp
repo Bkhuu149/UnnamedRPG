@@ -105,6 +105,7 @@ void ADoorActor::HandleInteraction(ACharacter* Character)
 			break;
 
 	}
+	Cast<AMyRPGCharacter>(Character)->SetPlayerState(EPlayerState::IDLE);
 	SaveDoor();
 
 }

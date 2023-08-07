@@ -327,7 +327,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 void AMyRPGCharacter::PerformSavedAttack() {
 	float AttackLength = 0.f;
 	FAttackStruct* AttackRow;
-	FAttackStruct* FinisherAttack;
+	//FAttackStruct* FinisherAttack;
 	switch (SavedAttack) {
 	case AttackQueuedType::NONE:
 		return;
@@ -345,9 +345,9 @@ void AMyRPGCharacter::PerformSavedAttack() {
 		return;
 	}
 	SavedAttack = AttackQueuedType::NONE;
-	FinisherAttack = AttackSkillComp->GetFinisherAttack();
-	if (!(FinisherAttack && FinisherAttack->IsFinisher)) { return; }
-	AttackLength = PerformAttack(FinisherAttack);
+	AttackRow = AttackSkillComp->GetFinisherAttack();
+	if (!(AttackRow && AttackRow->IsFinisher)) { return; }
+	AttackLength = PerformAttack(AttackRow);
 	CurrentWeapon->SetDamageType(AttackSkillComp->GetFinisherAugment());
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
 	return;
@@ -385,6 +385,11 @@ void AMyRPGCharacter::DoFinisher() {
 float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 	if ((Attack->StaminaDrain * StaminaDrainMultiplier > CurrentStamina)) { return 0; }
 	CurrentStamina -= Attack->StaminaDrain * StaminaDrainMultiplier;
+	if (Targeted) {
+		//Rotate Player towards targeted enemy if there is one
+		FRotator RotationToTarget = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
+		SetActorRotation(RotationToTarget);
+	}
 	//FGameplayAbilitySpec AttackAbility;
 	float AttackLength = 0.1;
 	if (IsFemale) {
@@ -450,8 +455,8 @@ void AMyRPGCharacter::OnInteractPressed() {
 				GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
 				GetCharacterMovement()->Velocity = FVector::ZeroVector;
 			}
-			InteractableObject->HandleInteraction(this);
 			MyCurrentState = EPlayerState::INTERACTING;
+			InteractableObject->HandleInteraction(this);
 			break;
 		}
 	}

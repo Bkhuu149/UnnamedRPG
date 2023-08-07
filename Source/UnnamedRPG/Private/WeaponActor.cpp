@@ -106,4 +106,8 @@ void AWeaponActor::SetDamageType(EDamageType NewType) {
 		UNiagaraComponent* WeaponEffect = UNiagaraFunctionLibrary::SpawnSystemAttached(ElementParticles, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT(""), FVector(0, 0, 0), FRotator::ZeroRotator, EAttachLocation::SnapToTargetIncludingScale, true);
 		WeaponEffect->SetRelativeScale3D(FVector(0.2, 0.2, 0.2));
 	}
+
+	if (DamageTypeData->TypeWeaponTrail) {
+
+	}
 }
