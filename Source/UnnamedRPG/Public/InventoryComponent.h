@@ -27,6 +27,7 @@ UENUM(BlueprintType)
 enum class EItemEffect : uint8 {
 	None		UMETA(DisplayName = "None"),
 	Restore		UMETA(DisplayName = "Restore"),
+	Remove		UMETA(DisplayName = "Remove"),
 	Buff		UMETA(DisplayName = "Buff")
 };
 

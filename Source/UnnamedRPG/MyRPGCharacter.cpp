@@ -161,9 +161,18 @@ void AMyRPGCharacter::KILL() {
 
 	InventoryComp->AddToInventory(FName("HealthPotion"));
 	InventoryComp->AddToInventory(FName("ManaPotion"));
+	InventoryComp->AddToInventory(FName("TeleportScroll"));
 	InventoryComp->AddToInventory(FName("AttackFood"));
 	InventoryComp->AddToInventory(FName("StaminaFood"));
 	InventoryComp->AddToInventory(FName("DefenseFood"));
+	InventoryComp->AddToInventory(FName("WaterScroll"));
+	InventoryComp->AddToInventory(FName("FireScroll"));
+	InventoryComp->AddToInventory(FName("WindScroll"));
+	InventoryComp->AddToInventory(FName("EarthScroll"));
+	InventoryComp->AddToInventory(FName("Blanket"));
+	InventoryComp->AddToInventory(FName("Duster"));
+	InventoryComp->AddToInventory(FName("StaticRemover"));
+	InventoryComp->AddToInventory(FName("EyeDrop"));
 	
 
 

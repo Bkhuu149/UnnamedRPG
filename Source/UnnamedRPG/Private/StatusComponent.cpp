@@ -65,6 +65,7 @@ void UStatusComponent::RemoveEffect(EStatus Effect) {
 	//Removes all data of the effect given
 	StatusEffectBuildups.Remove(Effect);
 	ActiveStatusEffects.Remove(Effect);
+	DeactivateEffect(Effect);
 
 }
 

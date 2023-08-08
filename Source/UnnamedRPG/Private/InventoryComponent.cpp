@@ -164,6 +164,19 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 			Player->AddMana(30);
 			return true;
 		}
+	case EItemEffect::Remove:
+		switch (Item->StatAffected) {
+		case EStatAffected::Health:
+			Player->GetStatusComponent()->RemoveEffect(EStatus::BURN);
+			return true;
+		case EStatAffected::Stamina:
+			Player->GetStatusComponent()->RemoveEffect(EStatus::SLOWED);
+			return true;
+		case EStatAffected::Movement:
+			Player->GetStatusComponent()->RemoveEffect(EStatus::WET);
+			return true;
+		}
+
 	case EItemEffect::Buff:
 		switch (Item->StatAffected) {
 		case EStatAffected::Stamina:
