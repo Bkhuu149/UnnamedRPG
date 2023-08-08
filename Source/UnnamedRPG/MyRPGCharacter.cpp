@@ -147,6 +147,9 @@ void AMyRPGCharacter::KILL() {
 	AttackSkillComp->AddAttack(FName("GreatSwordAttack2"));
 	AttackSkillComp->AddAttack(FName("GreatSwordAttack3"));
 	AttackSkillComp->AddAttack(FName("GreatSwordAttack4"));
+	AttackSkillComp->AddAttack(FName("GreatSwordAttack5"));
+	AttackSkillComp->AddAttack(FName("GreatSwordAttack6"));	
+	AttackSkillComp->AddAttack(FName("GreatSwordAttack7"));
 
 	AttackSkillComp->AddAttack(FName("SpearAttack1"));
 	AttackSkillComp->AddAttack(FName("SpearAttack2"));
