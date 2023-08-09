@@ -50,7 +50,7 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 			CurrentStamina -= .1 * StaminaDrainMultiplier;
 		}
 		else if (CurrentStamina < StaminaMax) {
-			CurrentStamina += .5;
+			CurrentStamina += .5 * StaminaRecoveryMultiplier;
 			FMath::Clamp(CurrentStamina, 0, StaminaMax);
 		}
 		if (CurrentStamina <= 0) {
@@ -59,7 +59,7 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 		break;
 	case EPlayerState::IDLE:
 		if (CurrentStamina < StaminaMax) {
-			CurrentStamina += .5;
+			CurrentStamina += .5 * StaminaRecoveryMultiplier;
 			FMath::Clamp(CurrentStamina, 0, StaminaMax);
 		}
 		break;
@@ -427,7 +427,7 @@ float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(Attack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
-	CurrentWeapon->SetDamage((AttackCount)*Attack->Damage * AttackDamageMultiplier);
+	CurrentWeapon->SetDamage((AttackCount)*Attack->Damage * AttackDamageMultiplier * (1 - AttackDebuffMultiplier));
 	//IsAttacking = true;
 	MyCurrentState = EPlayerState::ATTACKING;
 	//AbilityComp->GiveAbilityAndActivateOnce(AttackAbility);

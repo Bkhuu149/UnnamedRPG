@@ -97,10 +97,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Multipliers")
 		float AttackDamageMultiplier = 1.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Multipliers")
+		float AttackDebuffMultiplier = 0.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Multipliers")
 		float EnemyDamageMultiplier = 1.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Multipliers")
 		float ManaRecoveryMultiplier = 1.f;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Multipliers")
+		float StaminaRecoveryMultiplier = 1.f;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
@@ -329,6 +332,23 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 		void ResetManaRestoreMultiplier() { ManaRecoveryMultiplier = 1.f; };
 
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		float GetStaminaRestoreMultiplier() { return StaminaRecoveryMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void SetStaminaRestoreMultiplier(float NewMultiplier) { StaminaRecoveryMultiplier = NewMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void ResetStaminaRestoreMultiplier() { StaminaRecoveryMultiplier = 1.f; };
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		float GetAttackDebuffMultiplier() { return AttackDebuffMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void SetAttackDebuffMultiplier(float NewMultiplier) { AttackDebuffMultiplier = NewMultiplier; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void ResetAttackDebuffMultiplier() { AttackDebuffMultiplier = 0.f; };
 
 	float GetForwardBackValue() { return ForwardBackInputValue; }
 	

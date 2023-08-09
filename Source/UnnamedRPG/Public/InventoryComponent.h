@@ -15,7 +15,9 @@ UENUM(BlueprintType)
 enum class EStatAffected : uint8 {
 	None		UMETA(DisplayName = "None"),
 	Health		UMETA(DisplayName = "Health"),
+	Speed		UMETA(DisplayName = "Speed"),
 	Mana		UMETA(DisplayName = "Mana"),
+	Controls	UMETA(DisplayName = "Controls"),
 	Stamina		UMETA(DisplayName = "Stamina"),
 	Defense		UMETA(DisplayName = "Defense"),
 	Attack		UMETA(DisplayName = "Attack"),

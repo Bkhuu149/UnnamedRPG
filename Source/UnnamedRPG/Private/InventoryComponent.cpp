@@ -167,13 +167,28 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 	case EItemEffect::Remove:
 		switch (Item->StatAffected) {
 		case EStatAffected::Health:
+			//WaterScroll
 			Player->GetStatusComponent()->RemoveEffect(EStatus::BURN);
 			return true;
-		case EStatAffected::Stamina:
+		case EStatAffected::Speed:
+			//Firescroll
 			Player->GetStatusComponent()->RemoveEffect(EStatus::SLOWED);
 			return true;
+		case EStatAffected::Stamina:
+			//EarthScroll
+			Player->GetStatusComponent()->RemoveEffect(EStatus::UNSTEADY);
+			return true;
+		case EStatAffected::Mana:
+			//Windscroll
+			Player->GetStatusComponent()->RemoveEffect(EStatus::DIRT);
+			return true;
 		case EStatAffected::Movement:
-			Player->GetStatusComponent()->RemoveEffect(EStatus::WET);
+			//Blanket
+			Player->GetStatusComponent()->RemoveEffect(EStatus::SLIPPERY);
+			return true;
+		case EStatAffected::Attack:
+			//Blanket
+			Player->GetStatusComponent()->RemoveEffect(EStatus::DUST);
 			return true;
 		}
 

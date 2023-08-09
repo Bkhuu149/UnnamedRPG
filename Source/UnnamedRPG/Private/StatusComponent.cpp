@@ -93,7 +93,7 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 		DesiredDebuff = EStatus::UNSTEADY;
 		break;
 	case EDamageType::ICE:
-		DesiredDebuff = EStatus::WET;
+		DesiredDebuff = EStatus::SLIPPERY;
 		break;
 	case EDamageType::LIGHTNING:
 		DesiredDebuff = EStatus::PARALIZED;
@@ -104,6 +104,9 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 	case EDamageType::SMOKE:
 		DesiredDebuff = EStatus::SMOKE;
 		break;
+
+	default:
+		return;
 	}
 
 	if (ActiveStatusEffects.Contains(DesiredDebuff)) {
@@ -146,23 +149,28 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 	case EStatus::BURN:
 		//Damage over time
 		break;
-	case EStatus::WET:
+	case EStatus::SLIPPERY:
 		//Player has slippery floor
+		//Change to slowness to slow player down later
 		Player->GetCharacterMovement()->GroundFriction = 0;
 		break;
 	case EStatus::DIRT:
 		//Mana recovers slower
+		//Change to make player not be able to jump or TBD
 		Player->SetManaRestoreMultiplier(.5);
 		break;
 	case EStatus::UNSTEADY:
 		//Stamina recovers slower
+		Player->SetStaminaRestoreMultiplier(.5);
 		break;
 	case EStatus::SLOWED:
 		//movement slowed
+		//Change to make mana regen slower
 		Player->GetCharacterMovement()->MaxWalkSpeed = 500;
 		break;
 	case EStatus::DUST:
 		//Deals less damage
+		Player->SetAttackDebuffMultiplier(.7);
 		break;
 	case EStatus::PARALIZED:
 		//Occasional stun
@@ -181,18 +189,20 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 	{
 	case EStatus::BURN:
 		break;
-	case EStatus::WET:
+	case EStatus::SLIPPERY:
 		Player->GetCharacterMovement()->GroundFriction = 100;
 		break;
 	case EStatus::DIRT:
 		Player->ResetManaRestoreMultiplier();
 		break;
 	case EStatus::UNSTEADY:
+		Player->ResetStaminaRestoreMultiplier();
 		break;
 	case EStatus::SLOWED:
 		Player->GetCharacterMovement()->MaxWalkSpeed = 1000;
 		break;
 	case EStatus::DUST:
+		Player->ResetAttackDebuffMultiplier();
 		break;
 	case EStatus::PARALIZED:
 		break;
