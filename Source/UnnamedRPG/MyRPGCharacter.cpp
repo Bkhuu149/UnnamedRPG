@@ -272,7 +272,7 @@ void AMyRPGCharacter::DodgeFinished() {
 
 void AMyRPGCharacter::OnJumpedPressed() {
 	bool falling = GetCharacterMovement()->IsFalling();
-	if (falling || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || MyCurrentState == EPlayerState::INTERACTING) {
+	if (!CanPlayerJump || falling || GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || MyCurrentState == EPlayerState::INTERACTING) {
 		return;
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Jump"));

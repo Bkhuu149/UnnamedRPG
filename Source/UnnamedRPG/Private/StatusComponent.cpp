@@ -84,16 +84,16 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 		DesiredDebuff = EStatus::BURN;
 		break;
 	case EDamageType::WATER:
-		DesiredDebuff = EStatus::SLOWED;
+		DesiredDebuff = EStatus::WET;
 		break;
 	case EDamageType::EARTH:
-		DesiredDebuff = EStatus::DIRT;
+		DesiredDebuff = EStatus::HEAVY;
 		break;
 	case EDamageType::WIND:
 		DesiredDebuff = EStatus::UNSTEADY;
 		break;
 	case EDamageType::ICE:
-		DesiredDebuff = EStatus::SLIPPERY;
+		DesiredDebuff = EStatus::SLOWED;
 		break;
 	case EDamageType::LIGHTNING:
 		DesiredDebuff = EStatus::PARALIZED;
@@ -149,15 +149,15 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 	case EStatus::BURN:
 		//Damage over time
 		break;
-	case EStatus::SLIPPERY:
+	case EStatus::WET:
 		//Player has slippery floor
 		//Change to slowness to slow player down later
-		Player->GetCharacterMovement()->GroundFriction = 0;
+		Player->GetCharacterMovement()->MaxWalkSpeed = 500;
 		break;
-	case EStatus::DIRT:
+	case EStatus::HEAVY:
 		//Mana recovers slower
 		//Change to make player not be able to jump or TBD
-		Player->SetManaRestoreMultiplier(.5);
+		Player->SetCanJump(false);
 		break;
 	case EStatus::UNSTEADY:
 		//Stamina recovers slower
@@ -166,7 +166,7 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 	case EStatus::SLOWED:
 		//movement slowed
 		//Change to make mana regen slower
-		Player->GetCharacterMovement()->MaxWalkSpeed = 500;
+		Player->SetManaRestoreMultiplier(.5);
 		break;
 	case EStatus::DUST:
 		//Deals less damage
@@ -189,17 +189,17 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 	{
 	case EStatus::BURN:
 		break;
-	case EStatus::SLIPPERY:
-		Player->GetCharacterMovement()->GroundFriction = 100;
+	case EStatus::WET:
+		Player->GetCharacterMovement()->MaxWalkSpeed = 1000;
 		break;
-	case EStatus::DIRT:
-		Player->ResetManaRestoreMultiplier();
+	case EStatus::HEAVY:
+		Player->SetCanJump(false);
 		break;
 	case EStatus::UNSTEADY:
 		Player->ResetStaminaRestoreMultiplier();
 		break;
 	case EStatus::SLOWED:
-		Player->GetCharacterMovement()->MaxWalkSpeed = 1000;
+		Player->ResetManaRestoreMultiplier();
 		break;
 	case EStatus::DUST:
 		Player->ResetAttackDebuffMultiplier();

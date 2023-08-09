@@ -170,21 +170,21 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 			//WaterScroll
 			Player->GetStatusComponent()->RemoveEffect(EStatus::BURN);
 			return true;
-		case EStatAffected::Speed:
-			//Firescroll
-			Player->GetStatusComponent()->RemoveEffect(EStatus::SLOWED);
+		case EStatAffected::Mana:
+			//FireScroll
+			Player->GetStatusComponent()->RemoveEffect(EStatus::WET);
+			return true;
+		case EStatAffected::Movement:
+			//WindScroll
+			Player->GetStatusComponent()->RemoveEffect(EStatus::HEAVY);
 			return true;
 		case EStatAffected::Stamina:
 			//EarthScroll
 			Player->GetStatusComponent()->RemoveEffect(EStatus::UNSTEADY);
 			return true;
-		case EStatAffected::Mana:
-			//Windscroll
-			Player->GetStatusComponent()->RemoveEffect(EStatus::DIRT);
-			return true;
-		case EStatAffected::Movement:
-			//Blanket
-			Player->GetStatusComponent()->RemoveEffect(EStatus::SLIPPERY);
+		case EStatAffected::Speed:
+			//Firescroll
+			Player->GetStatusComponent()->RemoveEffect(EStatus::SLOWED);
 			return true;
 		case EStatAffected::Attack:
 			//Blanket

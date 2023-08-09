@@ -8,8 +8,8 @@
 UENUM(BlueprintType) 
 enum class EStatus : uint8 {
 	BURN			UMETA(DisplayName = "Burn"),
-	SLIPPERY 		UMETA(DisplayName = "Slippery"),
-	DIRT			UMETA(DisplayName = "Dirt"),
+	WET		 		UMETA(DisplayName = "Wet"),
+	HEAVY			UMETA(DisplayName = "Heavy"),
 	UNSTEADY		UMETA(DisplayName = "Unsteady"),
 	SLOWED			UMETA(DisplayName = "Slowed"),
 	DUST			UMETA(DisplayName = "Dust"),

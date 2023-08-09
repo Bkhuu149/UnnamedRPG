@@ -91,6 +91,8 @@ protected:
 		float ForwardBackInputValue;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		float RightLeftInputValue;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		bool CanPlayerJump = true;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Multipliers")
 		float StaminaDrainMultiplier = 1.f;
@@ -349,6 +351,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 		void ResetAttackDebuffMultiplier() { AttackDebuffMultiplier = 0.f; };
+
+	void SetCanJump(bool IsAllowedToJump) { CanPlayerJump = IsAllowedToJump; }
 
 	float GetForwardBackValue() { return ForwardBackInputValue; }
 	
