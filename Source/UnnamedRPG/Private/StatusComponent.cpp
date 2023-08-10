@@ -152,7 +152,7 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 	case EStatus::WET:
 		//Player has slippery floor
 		//Change to slowness to slow player down later
-		Player->GetCharacterMovement()->MaxWalkSpeed = 500;
+		Player->SetManaRestoreMultiplier(.5);
 		break;
 	case EStatus::HEAVY:
 		//Mana recovers slower
@@ -165,8 +165,7 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::SLOWED:
 		//movement slowed
-		//Change to make mana regen slower
-		Player->SetManaRestoreMultiplier(.5);
+		Player->GetCharacterMovement()->MaxWalkSpeed = 500;
 		break;
 	case EStatus::DUST:
 		//Deals less damage
@@ -190,7 +189,7 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 	case EStatus::BURN:
 		break;
 	case EStatus::WET:
-		Player->GetCharacterMovement()->MaxWalkSpeed = 1000;
+		Player->ResetManaRestoreMultiplier();
 		break;
 	case EStatus::HEAVY:
 		Player->SetCanJump(false);
@@ -199,7 +198,7 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 		Player->ResetStaminaRestoreMultiplier();
 		break;
 	case EStatus::SLOWED:
-		Player->ResetManaRestoreMultiplier();
+		Player->GetCharacterMovement()->MaxWalkSpeed = 1000;
 		break;
 	case EStatus::DUST:
 		Player->ResetAttackDebuffMultiplier();

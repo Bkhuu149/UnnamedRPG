@@ -467,7 +467,7 @@ void AMyRPGCharacter::OnInteractPressed() {
 				GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
 				GetCharacterMovement()->Velocity = FVector::ZeroVector;
 			}
-			MyCurrentState = EPlayerState::INTERACTING;
+			
 			InteractableObject->HandleInteraction(this);
 			break;
 		}

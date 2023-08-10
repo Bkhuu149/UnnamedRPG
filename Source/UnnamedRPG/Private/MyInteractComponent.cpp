@@ -92,7 +92,8 @@ void UMyInteractComponent::BeginPush(APushableActor* Pushable) {
 	SetComponentTickEnabled(true);
 	
 	//Set bool value
-	Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(true);
+	//Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(true);
+	Cast<AMyRPGCharacter>(OwningCharacter)->SetPlayerState(EPlayerState::INTERACTING);
 	OwningCharacter->GetCharacterMovement()->Velocity = FVector(0, 0, 0);
 }
 void UMyInteractComponent::EndInteract() {
@@ -202,5 +203,6 @@ void UMyInteractComponent::BeginClimb(ALadderActor* Ladder) {
 	SetComponentTickEnabled(true);
 
 	//Set bool value
-	Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(true);
+	//Cast<AMyRPGCharacter>(OwningCharacter)->SetIsInteracting(true);
+	Cast<AMyRPGCharacter>(OwningCharacter)->SetPlayerState(EPlayerState::INTERACTING);
 }
