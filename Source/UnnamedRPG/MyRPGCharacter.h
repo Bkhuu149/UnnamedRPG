@@ -66,6 +66,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool IsFemale = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool IsBlind = false;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		EPlayerState MyCurrentState = EPlayerState::IDLE;
@@ -161,7 +164,7 @@ private:
 	void OnTargetPressed();
 	void FocusTarget(float DeltaTime);
 	void TransitionCamera(float DeltaTime, FVector3d CamPosition);
-	void ResetTarget();
+
 
 	//Handle Block Inputs
 	void OnBlockPressed();
@@ -237,6 +240,12 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateCombatStatus(bool IsInCombat);
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void SetBlindness(bool VisionBlindness);
+	
+
+	void ResetTarget();
 
 	void DoFireTickDamage();
 

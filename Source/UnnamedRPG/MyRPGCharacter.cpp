@@ -293,7 +293,7 @@ void AMyRPGCharacter::ReleaseJump() {
 }
 
 void AMyRPGCharacter::OnTargetPressed() {
-	if (MyCurrentState == EPlayerState::DODGING) { return; }
+	if (MyCurrentState == EPlayerState::DODGING || IsBlind) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Targeting"));
 	if (Targeted) {
 		ResetTarget();

@@ -176,6 +176,8 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::SMOKE:
 		//Temprory vision impairment for player
+		Player->SetBlindness(true);
+		Player->ResetTarget();
 		break;
 	default:
 		break;
@@ -206,6 +208,7 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 	case EStatus::PARALIZED:
 		break;
 	case EStatus::SMOKE:
+		Player->SetBlindness(false);
 		break;
 	case EStatus::REGEN:
 		break;

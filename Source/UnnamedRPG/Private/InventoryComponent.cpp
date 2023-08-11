@@ -190,6 +190,9 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 			//Blanket
 			Player->GetStatusComponent()->RemoveEffect(EStatus::DUST);
 			return true;
+		case EStatAffected::Vision:
+			Player->GetStatusComponent()->RemoveEffect(EStatus::SMOKE);
+			return true;
 		}
 
 	case EItemEffect::Buff:
