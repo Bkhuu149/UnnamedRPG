@@ -30,7 +30,7 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 
 	if (Targeted) {
 		FocusTarget(DeltaTime);
-		TransitionCamera(DeltaTime, RightCamPosition);
+		TransitionCamera(DeltaTime, LeftCamPosition);
 	} else {
 		TransitionCamera(DeltaTime, NormalCamPosition);
 	}
