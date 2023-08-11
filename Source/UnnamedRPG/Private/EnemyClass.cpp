@@ -80,6 +80,7 @@ void AEnemyClass::StateIdle() {
 
 	if (Targeted) {
 		//Exit idle state and move into chasing the player
+		GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
 		DelayTimer.Invalidate();
 		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
 		return;
@@ -96,6 +97,7 @@ void AEnemyClass::StatePathWalking() {
 	if (!NavSys || WalkPath.Num() == 0) { return; }
 	if (Targeted) {
 		//If found target, then chase player
+		GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
 		DelayTimer.Invalidate();
 		MyController->StopMovement();
 		CurrentEnemyState = EEnemyState::CHASE_CLOSE;
@@ -116,6 +118,7 @@ void AEnemyClass::StatePathWalking() {
 		FVector Location = WalkPath[CurrentPathNode].GetLocation();
 		FollowResult = MyController->MoveToLocation(Location, 100.f);
 		if (DelayTimer.IsValid()) {
+			GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
 			DelayTimer.Invalidate();
 		}
 		GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {DelayTimer.Invalidate();}, 10.f, false);
@@ -131,9 +134,10 @@ void AEnemyClass::StateChaseClose() {
 		ResetTarget();
 		CurrentEnemyState = EEnemyState::IDLE;
 		if (DelayTimer.IsValid()) {
+			GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
 			DelayTimer.Invalidate();
 		}
-		GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {DelayTimer.Invalidate();}, 10.f, false);
+		//GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {DelayTimer.Invalidate();}, 10.f, false);
 
 	}
 	else if (Target && FVector::Distance(GetActorLocation(), Target->GetActorLocation()) < 125)
@@ -244,6 +248,7 @@ void AEnemyClass::Attack()
 	PlayAnimMontage(AttackAnimClose[AttackIndex]);
 	IsCoolingDown = true;
 	if (AttackTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
 		AttackTimer.Invalidate();
 	}
 	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, FMath::RandRange(CooldownTime -3.f, CooldownTime + 3.f), false);
@@ -254,6 +259,7 @@ bool AEnemyClass::DamageChar(float val, EDamageType Type) {
 	//Reset attack timer to allow player to finish their combo
 	if (bHit) { 
 		if (AttackTimer.IsValid()) {
+			GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
 			AttackTimer.Invalidate();
 		}
 		GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false); 
