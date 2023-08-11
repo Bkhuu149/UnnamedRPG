@@ -36,9 +36,6 @@ void UStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		//Do FireTickDamage
 		Player->DoFireTickDamage();
 	}
-	if (ActiveStatusEffects.Contains(EStatus::PARALIZED)) {
-		//Randomized interval for when paralize effect ticks, maybe 1 in 10 chance to play stun animation
-	}
 	DecrimentEffects(ActiveStatusEffects);
 	// ...
 }
@@ -173,6 +170,7 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::PARALIZED:
 		//Occasional stun
+		Player->StartParalysis();
 		break;
 	case EStatus::SMOKE:
 		//Temprory vision impairment for player
@@ -206,6 +204,7 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 		Player->ResetAttackDebuffMultiplier();
 		break;
 	case EStatus::PARALIZED:
+		Player->EndParalysis();
 		break;
 	case EStatus::SMOKE:
 		Player->SetBlindness(false);

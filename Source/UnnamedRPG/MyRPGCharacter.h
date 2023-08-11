@@ -129,6 +129,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
 	UAnimMontage* HealAnim;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
+	UAnimMontage* StunAnim;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAnimMontage* LevelStartAnim;
 
@@ -385,5 +388,10 @@ public:
 	UInventoryComponent* GetInventoryComponent() const { return InventoryComp; }
 	UAttackSkillComponent* GetAttackSkillComponent() const { return AttackSkillComp; }
 	UStatusComponent* GetStatusComponent() const { return StatusComp; }
+
+	void StartParalysis();
+	void TriggerStun();
+	void EndParalysis();
+	FTimerHandle ParalysisTimer;
 };
 

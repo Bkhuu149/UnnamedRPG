@@ -193,6 +193,8 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 		case EStatAffected::Vision:
 			Player->GetStatusComponent()->RemoveEffect(EStatus::SMOKE);
 			return true;
+		case EStatAffected::Controls:
+			Player->GetStatusComponent()->RemoveEffect(EStatus::PARALIZED);
 		}
 
 	case EItemEffect::Buff:

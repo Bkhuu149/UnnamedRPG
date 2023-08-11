@@ -682,3 +682,29 @@ void AMyRPGCharacter::RemoveCombatant(AActor* Combatant) {
 		StartCombatTimer();
 	}
 }
+
+void AMyRPGCharacter::StartParalysis() {
+	GetWorld()->GetTimerManager().SetTimer(ParalysisTimer, this, &AMyRPGCharacter::TriggerStun, FMath::RandRange(4,10), false);
+}
+
+void AMyRPGCharacter::EndParalysis() {
+	GetWorld()->GetTimerManager().ClearTimer(ParalysisTimer);
+	ParalysisTimer.Invalidate();
+}
+
+void AMyRPGCharacter::TriggerStun() {
+	if (Barrier) {
+		BarrierHit = false;
+		GetWorld()->DestroyActor(Barrier);
+	}
+	if (CurrentWeapon) {
+		GetWorld()->DestroyActor(CurrentWeapon);
+	}
+	ResetInvincibility();
+	if (IsDead) { return; }
+	GetMesh()->GetAnimInstance()->StopAllMontages(1.f);
+	PlayAnimMontage(StunAnim);
+	GetWorld()->GetTimerManager().SetTimer(ParalysisTimer, this, &AMyRPGCharacter::TriggerStun, FMath::RandRange(4, 10), false);
+
+
+}
