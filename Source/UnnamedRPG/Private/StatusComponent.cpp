@@ -128,8 +128,7 @@ void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
 
 int UStatusComponent::CalculateEffectBuildupFromDamage(float Damage) {
 	//Returns a temporary value, function to be made to calculate damage later
-	//return FMath::CeilToInt(Damage/2);
-	return 70;
+	return FMath::CeilToInt(Damage);
 }
 
 void UStatusComponent::ActivateEffect(EStatus Effect) {
@@ -192,7 +191,7 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 		Player->ResetManaRestoreMultiplier();
 		break;
 	case EStatus::HEAVY:
-		Player->SetCanJump(false);
+		Player->SetCanJump(true);
 		break;
 	case EStatus::UNSTEADY:
 		Player->ResetStaminaRestoreMultiplier();
