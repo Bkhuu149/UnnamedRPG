@@ -400,6 +400,7 @@ float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 	if (Targeted) {
 		//Rotate Player towards targeted enemy if there is one
 		FRotator RotationToTarget = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
+		RotationToTarget.Pitch = 0;
 		SetActorRotation(RotationToTarget);
 	}
 	//FGameplayAbilitySpec AttackAbility;
@@ -700,6 +701,7 @@ void AMyRPGCharacter::TriggerStun() {
 	if (CurrentWeapon) {
 		GetWorld()->DestroyActor(CurrentWeapon);
 	}
+	MyCurrentState = EPlayerState::IDLE;
 	ResetInvincibility();
 	if (IsDead) { return; }
 	GetMesh()->GetAnimInstance()->StopAllMontages(1.f);
