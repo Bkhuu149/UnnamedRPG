@@ -122,8 +122,8 @@ void AEnemyClass::StatePathWalking() {
 			DelayTimer.Invalidate();
 		}
 		GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {
-			GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
-			DelayTimer.Invalidate();}, 10.f, false);
+			//GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
+			/*DelayTimer.Invalidate(); */ }, 10.f, false);
 
 	}
 }
