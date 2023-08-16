@@ -30,7 +30,7 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 
 	if (Targeted) {
 		FocusTarget(DeltaTime);
-		TransitionCamera(DeltaTime, RightCamPosition);
+		TransitionCamera(DeltaTime, FollowCamPosition);
 	} else {
 		TransitionCamera(DeltaTime, NormalCamPosition);
 	}
@@ -540,6 +540,8 @@ void AMyRPGCharacter::FocusTarget(float DeltaTime) {
 
 void AMyRPGCharacter::TransitionCamera(float DeltaTime, FVector3d CamPosition) {
 	USpringArmComponent* CameraBoom = FindComponentByClass<USpringArmComponent>();
+	// Camera lag speed/max distance in BP_ThirdPersonCharacter
+	Targeted ? CameraBoom->bEnableCameraLag = true : CameraBoom->bEnableCameraLag = false;
 	FVector VinterpVal = UKismetMathLibrary::VInterpTo(CameraBoom->SocketOffset, CamPosition, DeltaTime, 10.0);
 	CameraBoom->SocketOffset = VinterpVal;
 }

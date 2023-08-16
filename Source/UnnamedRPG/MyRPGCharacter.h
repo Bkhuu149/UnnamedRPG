@@ -220,8 +220,7 @@ private:
 
 	//Player Camera Positions
 	FVector3d NormalCamPosition = FVector3d(0, 0, 0);
-	FVector3d LeftCamPosition = FVector3d(0, -100, 50);
-	FVector3d RightCamPosition = FVector3d(0, 100, 50);
+	FVector3d FollowCamPosition = FVector3d(0, 0, 50);
 
 	float PerformAttack(FAttackStruct* Attack);
 
