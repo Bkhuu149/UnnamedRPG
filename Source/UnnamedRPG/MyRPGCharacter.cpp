@@ -658,8 +658,6 @@ void AMyRPGCharacter::StartCombatTimer() {
 	if (GetWorld()->GetTimerManager().IsTimerActive(CombatTimer)) {
 		GetWorld()->GetTimerManager().ClearTimer(CombatTimer);
 	}
-	InCombat = true;
-	UpdateCombatStatus(InCombat);
 	GetWorld()->GetTimerManager().SetTimer(CombatTimer, this, &AMyRPGCharacter::CombatTimerEnd, CombatTimerLength, false);
 }
 
@@ -672,6 +670,9 @@ void AMyRPGCharacter::CombatTimerEnd() {
 }
 
 void AMyRPGCharacter::AddCombatant(AActor* Combatant) {
+	if (GetWorld()->GetTimerManager().IsTimerActive(CombatTimer)) {
+		GetWorld()->GetTimerManager().ClearTimer(CombatTimer);
+	}
 	CombatantArray.Emplace(Combatant);
 	InCombat = true;
 	UpdateCombatStatus(InCombat);
@@ -681,7 +682,7 @@ void AMyRPGCharacter::AddCombatant(AActor* Combatant) {
 void AMyRPGCharacter::RemoveCombatant(AActor* Combatant) {
 	CombatantArray.Remove(Combatant);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("NumCombatants: --"));
-	if (CombatantArray.Num() == 0) {
+	if (CombatantArray.IsEmpty()) {
 		StartCombatTimer();
 	}
 }
