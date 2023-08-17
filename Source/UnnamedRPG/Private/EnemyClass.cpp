@@ -227,6 +227,7 @@ void AEnemyClass::ResetTarget() {
 	Target = nullptr;
 	SetHealth(GetHealthMax());
 	UpdateHealthBar();
+	GetCharacterMovement()->MaxWalkSpeed = 250.f;
 }
 
 void AEnemyClass::Rotate(float DeltaTime)
