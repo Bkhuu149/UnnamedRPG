@@ -24,7 +24,8 @@ public:
 	// Sets default values for this character's properties
 	AEnemyClass();
 
-	
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateHealthBar();
 
 protected:
 	// Called when the game starts or when spawned

@@ -225,6 +225,8 @@ void AEnemyClass::ResetTarget() {
 	Cast<AMyRPGCharacter>(Target)->RemoveCombatant(this);
 	MyController->StopMovement();
 	Target = nullptr;
+	SetHealth(GetHealthMax());
+	UpdateHealthBar();
 }
 
 void AEnemyClass::Rotate(float DeltaTime)
