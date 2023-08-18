@@ -123,6 +123,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetFinisherAugment(EDamageType NewType) { FinisherDamageType = NewType; }
 
+	UFUNCTION(BlueprintCallable)
+	void SetUnlockedAugment(TArray<FAugmentSlotStruct> NewType) { UnlockedAugments = NewType; }
+
 	void IncreaseCombo() {}; //To be built later
 
 	UFUNCTION(BlueprintCallable)
