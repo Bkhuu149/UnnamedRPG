@@ -27,14 +27,14 @@ UAttackSkillComponent::UAttackSkillComponent()
 	Finisher = FName("SwordAttack5");
 
 	FAugmentSlotStruct AugmentNone = FAugmentSlotStruct(EDamageType::NONE, true);
-	FAugmentSlotStruct AugmentFire = FAugmentSlotStruct(EDamageType::FIRE, true);
-	FAugmentSlotStruct AugmentWater = FAugmentSlotStruct(EDamageType::WATER, true);
-	FAugmentSlotStruct AugmentEarth = FAugmentSlotStruct(EDamageType::EARTH, true);
-	FAugmentSlotStruct AugmentWind = FAugmentSlotStruct(EDamageType::WIND, true);
-	FAugmentSlotStruct AugmentIce = FAugmentSlotStruct(EDamageType::ICE, true);
-	FAugmentSlotStruct AugmentLightning = FAugmentSlotStruct(EDamageType::LIGHTNING, true);
-	FAugmentSlotStruct AugmentSand = FAugmentSlotStruct(EDamageType::SAND, true);
-	FAugmentSlotStruct AugmentSmoke = FAugmentSlotStruct(EDamageType::SMOKE, true);
+	FAugmentSlotStruct AugmentFire = FAugmentSlotStruct(EDamageType::FIRE, false);
+	FAugmentSlotStruct AugmentWater = FAugmentSlotStruct(EDamageType::WATER, false);
+	FAugmentSlotStruct AugmentEarth = FAugmentSlotStruct(EDamageType::EARTH, false);
+	FAugmentSlotStruct AugmentWind = FAugmentSlotStruct(EDamageType::WIND, false);
+	FAugmentSlotStruct AugmentIce = FAugmentSlotStruct(EDamageType::ICE, false);
+	FAugmentSlotStruct AugmentLightning = FAugmentSlotStruct(EDamageType::LIGHTNING, false);
+	FAugmentSlotStruct AugmentSand = FAugmentSlotStruct(EDamageType::SAND, false);
+	FAugmentSlotStruct AugmentSmoke = FAugmentSlotStruct(EDamageType::SMOKE, false);
 
 	UnlockedAugments.Add(AugmentNone);
 	UnlockedAugments.Add(AugmentFire);
