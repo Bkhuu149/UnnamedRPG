@@ -246,6 +246,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void SetBlindness(bool VisionBlindness);
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void RemovePlayerMenu();
 	
 
 	void ResetTarget();

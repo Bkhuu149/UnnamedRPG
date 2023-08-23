@@ -675,6 +675,10 @@ void AMyRPGCharacter::AddCombatant(AActor* Combatant) {
 	}
 	CombatantArray.Emplace(Combatant);
 	InCombat = true;
+	RemovePlayerMenu();
+	if (InteractComp->GetInteractType() != EInteractType::None) {
+		InteractComp->EndInteract();
+	}
 	UpdateCombatStatus(InCombat);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("NumCombatants: ++"));
 }
