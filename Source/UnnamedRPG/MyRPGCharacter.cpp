@@ -121,7 +121,7 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	PlayerInputComponent->BindAction(TEXT("TEMPKILL"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::KILL);
 	
-
+	PlayerInputComponent->BindAction(TEXT("SwitchTarget"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnSwitchTargetPressed);
 
 }
 
@@ -308,8 +308,6 @@ void AMyRPGCharacter::OnTargetPressed() {
 	FVector TraceStart = GetActorLocation();
 	FVector TraceDistance = 1000.f * (UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetControlRotation().Vector());
 	FVector TraceEnd = TraceStart + TraceDistance;
-	
-	FHitResult OutHit;
 
 	bool HitResult;
 
@@ -318,12 +316,20 @@ void AMyRPGCharacter::OnTargetPressed() {
 
 	FCollisionShape MyColSphere = FCollisionShape::MakeSphere(500.0f);
 
-	HitResult = GetWorld()->SweepSingleByChannel(OutHit, TraceStart, TraceEnd, FVector(0, 0, 0).ToOrientationQuat(), 
+	HitResult = GetWorld()->SweepMultiByChannel(OutHit, TraceStart, TraceEnd, FVector(0, 0, 0).ToOrientationQuat(), 
 		ECC_GameTraceChannel1, MyColSphere, Params);
 
-	Target = Cast<ARPGBaseClass>(OutHit.GetActor());
+	if (OutHit.IsEmpty()) { return; }
+
+	Target = Cast<ARPGBaseClass>(OutHit[0].GetActor());
 
 	Targeted = HitResult;
+}
+
+void AMyRPGCharacter::OnSwitchTargetPressed() {
+	if (OutHit.IsEmpty()) { return; }
+
+
 }
 
 void AMyRPGCharacter::OnAttackPressed() {

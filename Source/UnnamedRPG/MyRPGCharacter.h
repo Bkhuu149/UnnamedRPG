@@ -168,6 +168,10 @@ private:
 	void FocusTarget(float DeltaTime);
 	void TransitionCamera(float DeltaTime, FVector3d CamPosition);
 
+	//Handle SwitchTarget Pressed
+	void OnSwitchTargetPressed();
+	TArray<FHitResult> OutHit;
+	TArray<ARPGBaseClass> RecentTargets;
 
 	//Handle Block Inputs
 	void OnBlockPressed();
@@ -232,7 +236,6 @@ private:
 
 	//Handle Menu Pressed
 	void OnMenuPressed();
-	
 
 public:	
 	// Called every frame
