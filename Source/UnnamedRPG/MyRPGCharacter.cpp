@@ -174,8 +174,14 @@ void AMyRPGCharacter::KILL() {
 	InventoryComp->AddToInventory(FName("StaticRemover"));
 	InventoryComp->AddToInventory(FName("EyeDrop"));
 	
-
-
+	AttackSkillComp->UnlockDamageType(EDamageType::FIRE);
+	AttackSkillComp->UnlockDamageType(EDamageType::WATER);
+	AttackSkillComp->UnlockDamageType(EDamageType::EARTH);
+	AttackSkillComp->UnlockDamageType(EDamageType::WIND);
+	AttackSkillComp->UnlockDamageType(EDamageType::ICE);
+	AttackSkillComp->UnlockDamageType(EDamageType::LIGHTNING);
+	AttackSkillComp->UnlockDamageType(EDamageType::SAND);
+	AttackSkillComp->UnlockDamageType(EDamageType::SMOKE);
 
 }
 
