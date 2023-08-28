@@ -136,7 +136,13 @@ protected:
 	UAnimMontage* LevelStartAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UAnimMontage* AerialAttackAnim;
+		UAnimMontage* AerialAttackAnim_Katana;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UAnimMontage* AerialAttackAnim_Greatsword;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UAnimMontage* AerialAttackAnim_Broadsword;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UAnimMontage* AerialAttackAnim_Spear;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UParticleSystem* BarrierParticle;

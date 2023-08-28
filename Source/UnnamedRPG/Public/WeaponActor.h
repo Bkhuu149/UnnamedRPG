@@ -79,6 +79,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		EWeaponType Weapon = EWeaponType::OTHER;
 
+	EWeaponType GetWeaponType() { return Weapon; }
+
 	UNiagaraComponent* TrailComp;
 
 	void StartLineTrace();

@@ -333,14 +333,30 @@ void AMyRPGCharacter::OnSwitchTargetPressed() {
 }
 
 void AMyRPGCharacter::PerformAerialAttack() {
-	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AerialAttackAnim)) { return; }
+	if (MyCurrentState == EPlayerState::ATTACKING) { return; }
 	FAttackStruct* FinisherAttack = AttackSkillComp->GetFinisherAttack();
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(FinisherAttack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
 	CurrentWeapon->SetDamage(20 * AttackDamageMultiplier * (1 - AttackDebuffMultiplier));
-	PlayAnimMontage(AerialAttackAnim);
+
+	switch (CurrentWeapon->GetWeaponType()) {
+
+	case EWeaponType::BROADSWORD:
+		PlayAnimMontage(AerialAttackAnim_Broadsword);
+		break;
+	case EWeaponType::GREATSWORD:
+		PlayAnimMontage(AerialAttackAnim_Greatsword, 0.75);
+		break;
+	case EWeaponType::SPEAR:
+		PlayAnimMontage(AerialAttackAnim_Spear);
+		break;
+	case EWeaponType::KATANA:
+		PlayAnimMontage(AerialAttackAnim_Katana);
+		break;
+	}
+	//Change damage to be based on speed later
 	CurrentWeapon->SetDamageType(AttackSkillComp->GetFinisherAugment());
 	MyCurrentState = EPlayerState::ATTACKING;
 }
@@ -754,9 +770,25 @@ void AMyRPGCharacter::TriggerStun() {
 
 void AMyRPGCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) {
 	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
-	if (PrevMovementMode == EMovementMode::MOVE_Falling && GetMesh()->GetAnimInstance()->Montage_IsPlaying(AerialAttackAnim)) {
+	if (PrevMovementMode == EMovementMode::MOVE_Falling) {
 		//Attacking while falling and hit the ground, play get up animation
-		PlayAnimMontage(AerialAttackAnim, .5, FName("Loop End"));
+		if (!CurrentWeapon) { return; }
+		switch (CurrentWeapon->GetWeaponType()) {
+
+		case EWeaponType::BROADSWORD:
+			PlayAnimMontage(AerialAttackAnim_Broadsword, .75, FName("Loop End"));
+			break;
+		case EWeaponType::GREATSWORD:
+			PlayAnimMontage(AerialAttackAnim_Greatsword, .5, FName("Loop End"));
+			break;
+		case EWeaponType::SPEAR:
+			PlayAnimMontage(AerialAttackAnim_Spear, .75, FName("Loop End"));
+			break;
+		case EWeaponType::KATANA:
+			PlayAnimMontage(AerialAttackAnim_Katana, .75, FName("Loop End"));
+			break;
+		}
+
 		MyCurrentState = EPlayerState::IDLE;
 	}
 }
