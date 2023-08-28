@@ -7,6 +7,7 @@
 #include "Engine/DataTable.h"
 #include "Engine/Texture2D.h"
 #include "MyEnumUtils.h"
+#include "SavePoint.h"
 #include "StatusComponent.h"
 
 #include "InventoryComponent.generated.h"

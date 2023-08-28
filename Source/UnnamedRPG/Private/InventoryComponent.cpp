@@ -151,6 +151,7 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 
 	FItemStruct* Item = GetItemInformation(ItemId);
 	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(GetOwner());
+	TArray<AActor*> FoundActors;
 
 	switch (Item->ItemEffect) {
 
@@ -163,6 +164,10 @@ bool UInventoryComponent::RemoveFromInventory(FName ItemId) {
 		case EStatAffected::Mana:
 			Player->AddMana(30);
 			return true;
+		case EStatAffected::Controls:
+			Player->SaveInventory();
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASavePoint::StaticClass(), FoundActors);
+			Cast<ASavePoint>(FoundActors[0])->ResetLevel();
 		}
 	case EItemEffect::Remove:
 		switch (Item->StatAffected) {
