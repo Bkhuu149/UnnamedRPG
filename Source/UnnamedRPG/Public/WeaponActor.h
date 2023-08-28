@@ -76,6 +76,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Element")
 	UNiagaraSystem* ElementParticles;
 
+	UPROPERTY(EditAnywhere)
+		EWeaponType Weapon = EWeaponType::OTHER;
+
 	UNiagaraComponent* TrailComp;
 
 	void StartLineTrace();

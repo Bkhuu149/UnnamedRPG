@@ -96,6 +96,10 @@ void AWeaponActor::SetDamageType(EDamageType NewType) {
 	FDamageTypeStruct* DamageTypeData = DamageTypeTab->FindRow<FDamageTypeStruct>(DamageTypeTableKey, "");
 
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MyEnum is %s"), *UEnum::GetValueAsString(NewType)));
+	
+	if (NewType != EDamageType::NONE) {
+		Damage = Damage * .75;
+	}
 
 	MyType = DamageTypeData->Type;
 	if (DamageTypeData->TypeWeaponEffect){
@@ -104,10 +108,12 @@ void AWeaponActor::SetDamageType(EDamageType NewType) {
 	//Still need to set weapon vfx and trail to reflect what element an attack is
 	if (ElementParticles) {
 		UNiagaraComponent* WeaponEffect = UNiagaraFunctionLibrary::SpawnSystemAttached(ElementParticles, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT(""), FVector(0, 0, 0), FRotator::ZeroRotator, EAttachLocation::SnapToTargetIncludingScale, true);
+		//Need to scale partcles based on what weapon it is, below is for broadsword
 		WeaponEffect->SetRelativeScale3D(FVector(0.2, 0.2, 0.2));
+		
 	}
 
 	if (DamageTypeData->TypeWeaponTrail) {
-
+		//Need to make more weapon trails for each element
 	}
 }

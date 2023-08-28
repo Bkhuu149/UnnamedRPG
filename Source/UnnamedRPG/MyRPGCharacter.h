@@ -136,11 +136,15 @@ protected:
 	UAnimMontage* LevelStartAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UAnimMontage* AerialAttackAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UParticleSystem* BarrierParticle;
 	
 	UFUNCTION(BlueprintCallable)
 		void PerformSavedAttack();
 
+	void PerformAerialAttack();
 
 	UFUNCTION(BlueprintCallable)
 		void StartBarrier();
@@ -240,6 +244,8 @@ private:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateSlot1(int HotbarIndex);

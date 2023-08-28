@@ -22,6 +22,15 @@ enum class EStatus : uint8 {
 };
 
 UENUM(BlueprintType)
+enum class EWeaponType : uint8 {
+	BROADSWORD		UMETA(DisplayName = "Broadsword"),
+	GREATSWORD		UMETA(DisplayName = "Greatsword"),
+	SPEAR			UMETA(DisplayName = "Spear"),
+	KATANA			UMETA(DisplayName = "Katana"),
+	OTHER			UMETA(DisplayName = "Other")
+};
+
+UENUM(BlueprintType)
 enum class EDamageType : uint8 {
 	NONE		UMETA(DisplayName = "None"), //Default, not doing anything
 	FIRE		UMETA(DisplayName = "Fire"),

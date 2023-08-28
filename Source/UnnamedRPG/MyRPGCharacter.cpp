@@ -283,7 +283,7 @@ void AMyRPGCharacter::OnJumpedPressed() {
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Jump"));
 	Jump();
-	CurrentStamina -= 20;
+	CurrentStamina -= 40;
 	FMath::Clamp(CurrentStamina, 0, StaminaMax);
 	IsJumping = true;
 	GetWorld()->GetTimerManager().SetTimer(JumpTimer, this, &AMyRPGCharacter::ReleaseJump, 1.f, false);
@@ -332,9 +332,26 @@ void AMyRPGCharacter::OnSwitchTargetPressed() {
 
 }
 
+void AMyRPGCharacter::PerformAerialAttack() {
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AerialAttackAnim)) { return; }
+	FAttackStruct* FinisherAttack = AttackSkillComp->GetFinisherAttack();
+	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
+	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(FinisherAttack->Weapon, WeaponTransform));
+	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
+	CurrentWeapon->SetOwner(this);
+	CurrentWeapon->SetDamage(20 * AttackDamageMultiplier * (1 - AttackDebuffMultiplier));
+	PlayAnimMontage(AerialAttackAnim);
+	CurrentWeapon->SetDamageType(AttackSkillComp->GetFinisherAugment());
+	MyCurrentState = EPlayerState::ATTACKING;
+}
+
 void AMyRPGCharacter::OnAttackPressed() {
 	if ((GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || (MyCurrentState == EPlayerState::INTERACTING))&&(MyCurrentState != EPlayerState::ATTACKING)) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack"));
+	if (GetCharacterMovement()->IsFalling()) {
+		PerformAerialAttack();
+		return;
+	}
 	FAttackStruct* AttackRow = AttackSkillComp->GetComboAttack(AttackCount);	
 	if (!AttackRow) { return; }
 	if (AttackRow->StaminaDrain * StaminaDrainMultiplier > CurrentStamina){ return; }
@@ -393,6 +410,10 @@ void AMyRPGCharacter::ResetAttack() {
 void AMyRPGCharacter::DoFinisher() {
 	if ((GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || (MyCurrentState == EPlayerState::INTERACTING)) && (MyCurrentState != EPlayerState::ATTACKING)) { return; }
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Finisher Pressed"));
+	if (GetCharacterMovement()->IsFalling()) {
+		PerformAerialAttack();
+		return;
+	}
 	FAttackStruct* FinisherAttack = AttackSkillComp->GetFinisherAttack();
 	if (!(FinisherAttack && FinisherAttack->IsFinisher)) { return; }
 	if (FinisherAttack->StaminaDrain * StaminaDrainMultiplier > CurrentStamina) { return; }
@@ -729,4 +750,13 @@ void AMyRPGCharacter::TriggerStun() {
 	GetWorld()->GetTimerManager().SetTimer(ParalysisTimer, this, &AMyRPGCharacter::TriggerStun, FMath::RandRange(4, 10), false);
 
 
+}
+
+void AMyRPGCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) {
+	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+	if (PrevMovementMode == EMovementMode::MOVE_Falling && GetMesh()->GetAnimInstance()->Montage_IsPlaying(AerialAttackAnim)) {
+		//Attacking while falling and hit the ground, play get up animation
+		PlayAnimMontage(AerialAttackAnim, .5, FName("Loop End"));
+		MyCurrentState = EPlayerState::IDLE;
+	}
 }
