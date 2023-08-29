@@ -14,6 +14,7 @@ AMyRPGCharacter::AMyRPGCharacter()
 	InventoryComp = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory Component"));
 	AttackSkillComp = CreateDefaultSubobject<UAttackSkillComponent>(TEXT("Attack Skill Component"));
 	StatusComp = CreateDefaultSubobject<UStatusComponent>(TEXT("Status Component"));
+	ExperienceComp = CreateDefaultSubobject<UExperienceComponent>(TEXT("Experience Component"));
 }
 
 // Called when the game starts or when spawned
@@ -339,7 +340,7 @@ void AMyRPGCharacter::PerformAerialAttack() {
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(FinisherAttack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
-	CurrentWeapon->SetDamage(20 * AttackDamageMultiplier * (1 - AttackDebuffMultiplier));
+	CurrentWeapon->SetDamage(15 * AttackDamageMultiplier * (1 - AttackDebuffMultiplier));
 
 	switch (CurrentWeapon->GetWeaponType()) {
 

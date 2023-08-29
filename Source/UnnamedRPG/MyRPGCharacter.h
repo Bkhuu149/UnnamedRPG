@@ -7,21 +7,22 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "CollisionQueryParams.h"
 #include "Animation/AnimMontage.h"
 #include "Public/RPGBaseClass.h"
 #include "Public/InteractableInterface.h"
-
-#include "Abilities/GameplayAbility_Montage.h"
-#include "AbilitySystemInterface.h"
 #include "GameplayAbilitySpec.h"
+#include "AbilitySystemInterface.h"
+#include "Abilities/GameplayAbility_Montage.h"
+
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "AbilitySystemComponent.h"
 #include "Public/MyInteractComponent.h"
 #include "Public/InventoryComponent.h"
 #include "Public/AttackSkillComponent.h"
-#include "StatusComponent.h"
+#include "Public/StatusComponent.h"
+#include "Public/ExperienceComponent.h"
 #include "Public/MyEnumUtils.h"
 
 #include "Engine/GameEngine.h"
@@ -62,6 +63,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Status")
 		UStatusComponent* StatusComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Experience")
+		UExperienceComponent* ExperienceComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 		bool IsFemale = false;
@@ -109,7 +113,6 @@ protected:
 		float ManaRecoveryMultiplier = 1.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Multipliers")
 		float StaminaRecoveryMultiplier = 1.f;
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	UClass* WeaponClass;
@@ -405,10 +408,12 @@ public:
 	UInventoryComponent* GetInventoryComponent() const { return InventoryComp; }
 	UAttackSkillComponent* GetAttackSkillComponent() const { return AttackSkillComp; }
 	UStatusComponent* GetStatusComponent() const { return StatusComp; }
+	UExperienceComponent* GetExperienceComponent() const { return ExperienceComp; }
 
 	void StartParalysis();
 	void TriggerStun();
 	void EndParalysis();
 	FTimerHandle ParalysisTimer;
+
 };
 

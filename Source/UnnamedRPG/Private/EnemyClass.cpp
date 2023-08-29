@@ -273,5 +273,7 @@ bool AEnemyClass::DamageChar(float val, EDamageType Type) {
 
 void AEnemyClass::KillCharacter() {
 	Super::KillCharacter();
-	Cast<AMyRPGCharacter>(Target)->RemoveCombatant(this);
+	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(Target);
+	Player->GetExperienceComponent()->GiveXP(EXPDropped);
+	Player->RemoveCombatant(this);
 }
