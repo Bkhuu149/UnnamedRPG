@@ -31,7 +31,7 @@ public:
 		void GiveXP(int Xp);
 
 	UFUNCTION(BlueprintCallable)
-		void RemoveXp(int Xp);
+		void RemoveXP(int Xp);
 
 	void UpgradeMaxHealth();
 	void UpgradeMaxMana();
