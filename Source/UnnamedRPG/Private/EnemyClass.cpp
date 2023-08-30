@@ -266,6 +266,10 @@ bool AEnemyClass::DamageChar(float val, EDamageType Type) {
 			GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
 			AttackTimer.Invalidate();
 		}
+		if (DelayTimer.IsValid()) {
+			GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
+			DelayTimer.Invalidate();
+		}
 		GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false); 
 	}
 	return bHit;
