@@ -306,6 +306,15 @@ void AMyRPGCharacter::OnTargetPressed() {
 		ResetTarget();
 		return;
 	}
+	Targeted = GetTargetsInRange();
+
+	if (OutHit.IsEmpty()) { return; }
+
+	Target = Cast<ARPGBaseClass>(OutHit[0].GetActor());
+	RecentTargets.Add(Target);
+}
+
+bool AMyRPGCharacter::GetTargetsInRange() {
 	FVector TraceStart = GetActorLocation();
 	FVector TraceDistance = 1000.f * (UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetControlRotation().Vector());
 	FVector TraceEnd = TraceStart + TraceDistance;
@@ -317,20 +326,33 @@ void AMyRPGCharacter::OnTargetPressed() {
 
 	FCollisionShape MyColSphere = FCollisionShape::MakeSphere(500.0f);
 
-	HitResult = GetWorld()->SweepMultiByChannel(OutHit, TraceStart, TraceEnd, FVector(0, 0, 0).ToOrientationQuat(), 
+	TArray<FHitResult> TargetsInRange;
+	TArray<FHitResult> FreshTargetsInRange;
+
+	HitResult = GetWorld()->SweepMultiByChannel(TargetsInRange, TraceStart, TraceEnd, FVector(0, 0, 0).ToOrientationQuat(),
 		ECC_GameTraceChannel1, MyColSphere, Params);
+	
+	for (FHitResult CurrTarget : TargetsInRange) {
+		if (!RecentTargets.Contains(Cast<ARPGBaseClass>(CurrTarget.GetActor()))) {
+			FreshTargetsInRange.Add(CurrTarget);
+		}
+	}
 
-	if (OutHit.IsEmpty()) { return; }
+	if (FreshTargetsInRange.IsEmpty()) { 
+		OutHit = TargetsInRange;
+	} else {
+		OutHit = FreshTargetsInRange;
+	}
 
-	Target = Cast<ARPGBaseClass>(OutHit[0].GetActor());
-
-	Targeted = HitResult;
+	return HitResult;
 }
 
 void AMyRPGCharacter::OnSwitchTargetPressed() {
-	if (OutHit.IsEmpty()) { return; }
-
-
+	TargetIndex++;
+	if (TargetIndex > OutHit.Num()-1) { TargetIndex = 0; }
+	GetTargetsInRange();
+	Target = Cast<ARPGBaseClass>(OutHit[TargetIndex].GetActor());
+	RecentTargets.Add(Target);
 }
 
 void AMyRPGCharacter::PerformAerialAttack() {

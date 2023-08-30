@@ -180,11 +180,13 @@ private:
 	void OnTargetPressed();
 	void FocusTarget(float DeltaTime);
 	void TransitionCamera(float DeltaTime, FVector3d CamPosition);
+	bool GetTargetsInRange();
 
 	//Handle SwitchTarget Pressed
 	void OnSwitchTargetPressed();
 	TArray<FHitResult> OutHit;
-	TArray<ARPGBaseClass> RecentTargets;
+	TArray<ARPGBaseClass*> RecentTargets;
+	int TargetIndex = 0;
 
 	//Handle Block Inputs
 	void OnBlockPressed();
