@@ -40,6 +40,10 @@ void UExperienceComponent::RemoveXP(int Xp) {
 
 }
 
+int UExperienceComponent::GetCostByLevel(int Level) {
+	return FMath::Floor(FMath::Pow(((Level+1)*50), 1.5f));
+}
+
 void UExperienceComponent::UpgradeMaxHealth() {
 
 }

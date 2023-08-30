@@ -219,7 +219,6 @@ private:
 
 	//Handle Attack Pressed
 	void OnAttackPressed();
-	void ResetAttack();
 	FTimerHandle AttackTimer; 
 	int CurrentMaxAttackCount = 3;
 	//bool IsAttacking = false;
@@ -269,6 +268,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void RemovePlayerMenu();
+
+	UFUNCTION(BlueprintCallable)
+		void ResetAttack();
 	
 
 	void ResetTarget();

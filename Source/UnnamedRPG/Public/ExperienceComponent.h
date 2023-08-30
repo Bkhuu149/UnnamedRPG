@@ -12,7 +12,7 @@ class UNNAMEDRPG_API UExperienceComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
 	UExperienceComponent();
 
@@ -20,10 +20,12 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	int GetCostByLevel(int Level);
+
 	UPROPERTY(EditAnywhere)
 		int StoredXP = 0;
 
-public:	
+public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 

@@ -400,7 +400,7 @@ void AMyRPGCharacter::OnAttackPressed() {
 	}
 	float AttackLength = PerformAttack(AttackRow);
 	CurrentWeapon->SetDamageType(AttackSkillComp->GetAttackAugment(AttackCount-1));
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
+	//GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
 	UpdateAttackBar();
 }
 
@@ -420,7 +420,7 @@ void AMyRPGCharacter::PerformSavedAttack() {
 		if (!AttackRow) { return; }
 		AttackLength = PerformAttack(AttackRow);
 		CurrentWeapon->SetDamageType(AttackSkillComp->GetAttackAugment(AttackCount-1));
-		GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
+		//GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
 		UpdateAttackBar();
 		return;
 	}
@@ -429,7 +429,7 @@ void AMyRPGCharacter::PerformSavedAttack() {
 	if (!(AttackRow && AttackRow->IsFinisher)) { return; }
 	AttackLength = PerformAttack(AttackRow);
 	CurrentWeapon->SetDamageType(AttackSkillComp->GetFinisherAugment());
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
+	//GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false);
 	return;
 	
 }
@@ -438,6 +438,10 @@ void AMyRPGCharacter::ResetAttack() {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack Reset"));
 	if (GetWorld()->GetTimerManager().IsTimerActive(AttackTimer)) {
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
+	}
+	if (CurrentWeapon != nullptr) {
+		GetWorld()->DestroyActor(CurrentWeapon);
+		CurrentWeapon = nullptr;
 	}
 	MyCurrentState = EPlayerState::IDLE;
 	AttackCount = 0;
@@ -463,7 +467,7 @@ void AMyRPGCharacter::DoFinisher() {
 
 	float AttackLength = PerformAttack(FinisherAttack);
 	CurrentWeapon->SetDamageType(AttackSkillComp->GetFinisherAugment());
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false); 
+	//GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false); 
 }
 
 float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
@@ -496,6 +500,10 @@ float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 		AnimTimer.Invalidate();
 		}, AttackLength * 0.9, false);*/
 	AttackCount++;
+	if (CurrentWeapon != nullptr) {
+		GetWorld()->DestroyActor(CurrentWeapon);
+		CurrentWeapon = nullptr;
+	}
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(Attack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
@@ -632,7 +640,7 @@ bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {
 		BarrierHit = true;
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damaged: %f"), GetHealth()));
-	if (bHit && CurrentWeapon) {
+	if (CurrentWeapon) {
 		GetWorld()->DestroyActor(CurrentWeapon);
 	}
 	
@@ -724,6 +732,7 @@ void AMyRPGCharacter::EndBarrier() {
 
 	}
 	GetWorld()->DestroyActor(Barrier);
+	Barrier = nullptr;
 	MyCurrentState = EPlayerState::IDLE;
 }
 
@@ -777,9 +786,12 @@ void AMyRPGCharacter::TriggerStun() {
 	if (Barrier) {
 		BarrierHit = false;
 		GetWorld()->DestroyActor(Barrier);
+		Barrier = nullptr;
 	}
 	if (CurrentWeapon) {
+		EndSwordEvent();
 		GetWorld()->DestroyActor(CurrentWeapon);
+		CurrentWeapon = nullptr;
 	}
 	MyCurrentState = EPlayerState::IDLE;
 	ResetInvincibility();

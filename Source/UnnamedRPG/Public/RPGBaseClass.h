@@ -27,6 +27,10 @@ protected:
 		void StartInvincibility() { IsInvincible = true; }
 	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
 		void ResetInvincibility() { IsInvincible = false; }
+	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
+	void BeginSwordEvent();
+	UFUNCTION(BlueprintCallable, category = "MyRPGCharacter")
+	void EndSwordEvent();
 
 private: 
 
@@ -40,10 +44,6 @@ private:
 
 	FTimerHandle CheckSpeedTimer;
 
-	UFUNCTION(BlueprintCallable, category = "MYRPGCharacter")
-	void BeginSwordEvent();
-	UFUNCTION(BlueprintCallable, category = "MyRPGCharacter")
-	void EndSwordEvent();
 
 public:	
 	// Called every frame

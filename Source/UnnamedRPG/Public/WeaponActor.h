@@ -83,7 +83,10 @@ public:
 
 	UNiagaraComponent* TrailComp;
 
+	UFUNCTION(Blueprintcallable)
 	void StartLineTrace();
+
+	UFUNCTION(BlueprintCallable)
 	void EndLineTrace();
 
 	void SetOwner(AActor* MyActor) { Owner = MyActor; }

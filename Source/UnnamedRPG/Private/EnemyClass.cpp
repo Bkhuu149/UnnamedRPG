@@ -270,7 +270,7 @@ bool AEnemyClass::DamageChar(float val, EDamageType Type) {
 			GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
 			DelayTimer.Invalidate();
 		}
-		GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime, false); 
+		GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime -3.f, false); 
 	}
 	return bHit;
 }
