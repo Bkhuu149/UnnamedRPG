@@ -127,7 +127,12 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 }
 
 void AMyRPGCharacter::KILL() {
-	
+
+	ExperienceComp->UpgradeMaxHealth();
+	ExperienceComp->UpgradeMaxMana();
+	ExperienceComp->UpgradeMaxStamina();
+
+
 	AttackSkillComp->AddAttack(FName("SwordAttack1"));
 	AttackSkillComp->AddAttack(FName("SwordAttack2"));
 	AttackSkillComp->AddAttack(FName("SwordAttack3"));

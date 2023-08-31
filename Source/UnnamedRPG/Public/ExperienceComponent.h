@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "ExperienceComponent.generated.h"
 
+class AMyRPGCharacter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNNAMEDRPG_API UExperienceComponent : public UActorComponent
@@ -16,6 +17,9 @@ public:
 	// Sets default values for this component's properties
 	UExperienceComponent();
 
+private:
+	AMyRPGCharacter* Player;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -24,6 +28,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 		int StoredXP = 0;
+	
+	UPROPERTY(EditAnywhere)
+	TMap<FName, int> PlayerStatMap;
 
 public:
 	// Called every frame

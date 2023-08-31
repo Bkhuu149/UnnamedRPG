@@ -269,6 +269,15 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void RemovePlayerMenu();
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateHealhBar();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateManaBar();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateStaminaBar();
+
 	UFUNCTION(BlueprintCallable)
 		void ResetAttack();
 	
@@ -324,6 +333,9 @@ public:
 	float GetManaMax() { return ManaMax; }
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void SetManaMax(float NewMax) { ManaMax = NewMax; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 	void AddManaAttacking();
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
@@ -334,6 +346,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 		float GetStaminaMax() { return StaminaMax; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void SetStaminaMax(float NewMax) { StaminaMax = NewMax; }
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 		float GetStaminaDrainMultiplier() { return StaminaDrainMultiplier; }

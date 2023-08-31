@@ -82,6 +82,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character Information")
 	float GetHealthMax() { return HealthMax; }
 
+	UFUNCTION(BlueprintCallable, Category = "Character Information")
+		void SetHealthMax(float NewMaxHealth) { HealthMax = NewMaxHealth; }
+
 	UFUNCTION(BlueprintCallable)
 		void SetHealth(float Val) {
 		Health = FMath::Clamp(Val, 0, HealthMax);

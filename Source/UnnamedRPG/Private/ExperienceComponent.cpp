@@ -20,6 +20,13 @@ void UExperienceComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Player = Cast<AMyRPGCharacter>(GetOwner());
+	PlayerStatMap.Add(FName("Health"), 0);
+	PlayerStatMap.Add(FName("Mana"), 0);
+	PlayerStatMap.Add(FName("Stamina"), 0);
+	PlayerStatMap.Add(FName("Defense"), 0);
+	PlayerStatMap.Add(FName("Damage"), 0);
+
 	// ...
 	
 }
@@ -38,23 +45,47 @@ void UExperienceComponent::GiveXP(int Xp) {
 }
 
 void UExperienceComponent::RemoveXP(int Xp) {
-
+	if (StoredXP - Xp <= 0) {
+		StoredXP = 0;
+		return;
+	}
+	StoredXP -= Xp;
 }
 
 int UExperienceComponent::GetCostByLevel(int Level) {
-	return FMath::Floor(FMath::Pow(((Level+1)*50), 1.5f));
+	return FMath::CeilToInt(FMath::Pow(((Level+1)*50), 1.5f));
 }
 
 void UExperienceComponent::UpgradeMaxHealth() {
-
+	//If stat level is already 20 which is max or player doesn't have enough xp to level stat
+	int StatLevel = PlayerStatMap[FName("Health")];
+	int StatCost = GetCostByLevel(PlayerStatMap[FName("Health")]);
+	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
+	RemoveXP(StatCost);
+	PlayerStatMap[FName("Health")]++;
+	Player->SetHealthMax(Player->GetHealthMax() + 5);
+	Player->UpdateHealhBar();
 }
 
 void UExperienceComponent::UpgradeMaxMana() {
+	//If stat level is already 20 which is max or player doesn't have enough xp to level stat
 
+	int StatLevel = PlayerStatMap[FName("Mana")];
+	int StatCost = GetCostByLevel(PlayerStatMap[FName("Mana")]);
+	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
+	PlayerStatMap[FName("Mana")]++;
+	Player->SetManaMax(Player->GetManaMax() + 5);
+	Player->UpdateManaBar();
 }
 
 void UExperienceComponent::UpgradeMaxStamina() {
-
+	//If stat level is already 20 which is max or player doesn't have enough xp to level stat
+	int StatLevel = PlayerStatMap[FName("Stamina")];
+	int StatCost = GetCostByLevel(PlayerStatMap[FName("Stamina")]);
+	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
+	PlayerStatMap[FName("Stamina")]++;
+	Player->SetStaminaMax(Player->GetStaminaMax() + 5.f);
+	Player->UpdateStaminaBar();
 }
 
 void UExperienceComponent::UpgradeBaseDefense() {
