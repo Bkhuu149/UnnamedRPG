@@ -42,9 +42,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RemoveXP(int Xp);
 
+	UFUNCTION(BlueprintCallable)
+		int GetStoredXP() { return StoredXP; }
+
 	void UpgradeMaxHealth();
 	void UpgradeMaxMana();
 	void UpgradeMaxStamina();
 	void UpgradeBaseDefense();
 	void UpgradeBaseDamage();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateExperienceAmmount();
 };

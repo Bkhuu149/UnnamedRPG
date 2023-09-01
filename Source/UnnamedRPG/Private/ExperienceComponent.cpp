@@ -42,14 +42,17 @@ void UExperienceComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UExperienceComponent::GiveXP(int Xp) {
 	StoredXP += Xp;
+	Player->UpdateExperienceAmmount();
 }
 
 void UExperienceComponent::RemoveXP(int Xp) {
 	if (StoredXP - Xp <= 0) {
 		StoredXP = 0;
+		UpdateExperienceAmmount();
 		return;
 	}
 	StoredXP -= Xp;
+	UpdateExperienceAmmount();
 }
 
 int UExperienceComponent::GetCostByLevel(int Level) {
