@@ -635,7 +635,6 @@ void AMyRPGCharacter::TransitionCamera(float DeltaTime, FVector3d CamPosition) {
 void AMyRPGCharacter::ResetTarget() {
 	Target = nullptr;
 	Targeted = false;
-	TargetIndex = 0;
 	bUseControllerRotationYaw = false;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
