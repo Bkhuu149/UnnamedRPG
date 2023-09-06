@@ -24,8 +24,6 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	int GetCostByLevel(int Level);
-
 	UPROPERTY(EditAnywhere)
 		int StoredXP = 0;
 	
@@ -47,6 +45,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		int GetStatLevel(FName StatName) { return PlayerStatMap[StatName]; }
+
+	UFUNCTION(BlueprintCallable)
+	int GetCostByLevel(int Level);
 
 	void UpgradeMaxHealth();
 	void UpgradeMaxMana();
