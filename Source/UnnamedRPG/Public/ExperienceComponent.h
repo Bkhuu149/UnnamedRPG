@@ -45,12 +45,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int GetStoredXP() { return StoredXP; }
 
+	UFUNCTION(BlueprintCallable)
+		int GetStatLevel(FName StatName) { return PlayerStatMap[StatName]; }
+
 	void UpgradeMaxHealth();
 	void UpgradeMaxMana();
 	void UpgradeMaxStamina();
 	void UpgradeBaseDefense();
 	void UpgradeBaseDamage();
-
+	
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateExperienceAmmount();
 };

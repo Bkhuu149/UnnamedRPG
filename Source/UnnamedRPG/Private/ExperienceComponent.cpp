@@ -26,7 +26,7 @@ void UExperienceComponent::BeginPlay()
 	PlayerStatMap.Add(FName("Stamina"), 0);
 	PlayerStatMap.Add(FName("Defense"), 0);
 	PlayerStatMap.Add(FName("Damage"), 0);
-
+	StoredXP = 100000;
 	// ...
 	
 }
