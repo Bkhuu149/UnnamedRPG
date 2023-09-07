@@ -165,7 +165,7 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::DUST:
 		//Deals less damage
-		Player->SetAttackDebuffMultiplier(.7);
+		Player->SetAttackDebuffMultiplier(.5);
 		break;
 	case EStatus::PARALIZED:
 		//Occasional stun

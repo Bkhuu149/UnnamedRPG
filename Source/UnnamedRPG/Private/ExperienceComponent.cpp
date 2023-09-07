@@ -22,10 +22,10 @@ void UExperienceComponent::BeginPlay()
 
 	Player = Cast<AMyRPGCharacter>(GetOwner());
 	PlayerStatMap.Add(FName("Health"), 0);
-	PlayerStatMap.Add(FName("Mana"), 0);
-	PlayerStatMap.Add(FName("Stamina"), 0);
-	PlayerStatMap.Add(FName("Defense"), 0);
-	PlayerStatMap.Add(FName("Damage"), 0);
+	PlayerStatMap.Add(FName("Mana"), 1);
+	PlayerStatMap.Add(FName("Stamina"), 2);
+	PlayerStatMap.Add(FName("Defense"), 3);
+	PlayerStatMap.Add(FName("Damage"), 4);
 	StoredXP = 100000;
 	// ...
 	
@@ -66,7 +66,7 @@ void UExperienceComponent::UpgradeMaxHealth() {
 	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
 	RemoveXP(StatCost);
 	PlayerStatMap[FName("Health")]++;
-	Player->SetHealthMax(Player->GetHealthMax() + 5);
+	Player->SetHealthMax(Player->GetHealthMax() + HealthUpgradeAmount);
 	Player->UpdateHealhBar();
 }
 
@@ -77,7 +77,7 @@ void UExperienceComponent::UpgradeMaxMana() {
 	int StatCost = GetCostByLevel(PlayerStatMap[FName("Mana")]);
 	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
 	PlayerStatMap[FName("Mana")]++;
-	Player->SetManaMax(Player->GetManaMax() + 5);
+	Player->SetManaMax(Player->GetManaMax() + ManaUpgradeAmount);
 	Player->UpdateManaBar();
 }
 
@@ -87,7 +87,7 @@ void UExperienceComponent::UpgradeMaxStamina() {
 	int StatCost = GetCostByLevel(PlayerStatMap[FName("Stamina")]);
 	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
 	PlayerStatMap[FName("Stamina")]++;
-	Player->SetStaminaMax(Player->GetStaminaMax() + 5.f);
+	Player->SetStaminaMax(Player->GetStaminaMax() + StaminaUpgradeAmount);
 	Player->UpdateStaminaBar();
 }
 

@@ -514,7 +514,7 @@ float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(Attack->Weapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
-	CurrentWeapon->SetDamage((AttackCount)*Attack->Damage * AttackDamageMultiplier * (1 - AttackDebuffMultiplier));
+	CurrentWeapon->SetDamage(AttackCount * Attack->Damage * AttackDamageMultiplier * (1 - AttackDebuffMultiplier) * StrengthStat);
 	//IsAttacking = true;
 	MyCurrentState = EPlayerState::ATTACKING;
 	//AbilityComp->GiveAbilityAndActivateOnce(AttackAbility);
@@ -642,7 +642,8 @@ void AMyRPGCharacter::ResetTarget() {
 }
 
 bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {
-	bool bHit = Super::DamageChar(EnemyDamageMultiplier * val, Type);
+	float damage = EnemyDamageMultiplier * val * (1-(DefenseStat/2));
+	bool bHit = Super::DamageChar(damage, Type);
 	if (Barrier && !bHit) {
 		BarrierHit = true;
 	}

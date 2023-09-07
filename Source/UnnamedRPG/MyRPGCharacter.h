@@ -220,6 +220,8 @@ private:
 	//Handle Attack Pressed
 	void OnAttackPressed();
 	FTimerHandle AttackTimer; 
+	float StrengthStat = 1.f;
+	float DefenseStat = 0.f;
 	int CurrentMaxAttackCount = 3;
 	//bool IsAttacking = false;
 	enum AttackQueuedType { NONE, COMBO, FINISHER };
@@ -406,6 +408,18 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Character Stats")
 		void ResetAttackDebuffMultiplier() { AttackDebuffMultiplier = 0.f; };
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		float GetStrengthStat() { return StrengthStat; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void SetStrengthStat(float NewStrengthStat) { StrengthStat = NewStrengthStat; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		float GetDefenseStat() { return DefenseStat; }
+
+	UFUNCTION(BlueprintCallable, Category = "Character Stats")
+		void SetDefenseStat(float NewDefenseStat) { DefenseStat = NewDefenseStat; }
 
 	void SetCanJump(bool IsAllowedToJump) { CanPlayerJump = IsAllowedToJump; }
 
