@@ -69,10 +69,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void GetStatUpgradeInformation(FName StatName, int& CurrentLevel, int& NewLevel, int& Cost, int& NewExperience);
 
+	UFUNCTION(BlueprintCallable)
 	void UpgradeMaxHealth();
+	UFUNCTION(BlueprintCallable)
 	void UpgradeMaxMana();
+	UFUNCTION(BlueprintCallable)
 	void UpgradeMaxStamina();
+	UFUNCTION(BlueprintCallable)
 	void UpgradeBaseDefense();
+	UFUNCTION(BlueprintCallable)
 	void UpgradeBaseDamage();
 	
 	UFUNCTION(BlueprintImplementableEvent)

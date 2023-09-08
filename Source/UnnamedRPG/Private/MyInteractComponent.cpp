@@ -12,6 +12,7 @@ UMyInteractComponent::UMyInteractComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+	OwningCharacter = Cast<ACharacter>(GetOwner());
 }
 
 
@@ -19,7 +20,6 @@ UMyInteractComponent::UMyInteractComponent()
 void UMyInteractComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	OwningCharacter = Cast<ACharacter>(GetOwner());
 	SetComponentTickEnabled(false);
 	
 }

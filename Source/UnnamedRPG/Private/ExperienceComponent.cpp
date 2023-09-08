@@ -14,11 +14,11 @@ UExperienceComponent::UExperienceComponent()
 	//default values
 	Player = Cast<AMyRPGCharacter>(GetOwner());
 	PlayerStatMap.Add(FName("Health"), 0);
-	PlayerStatMap.Add(FName("Mana"), 1);
-	PlayerStatMap.Add(FName("Stamina"), 2);
-	PlayerStatMap.Add(FName("Defense"), 3);
-	PlayerStatMap.Add(FName("Damage"), 4);
-	StoredXP = 100000;
+	PlayerStatMap.Add(FName("Mana"), 0);
+	PlayerStatMap.Add(FName("Stamina"), 0);
+	PlayerStatMap.Add(FName("Defense"), 0);
+	PlayerStatMap.Add(FName("Damage"), 0);
+	StoredXP = 1000000;
 }
 
 
@@ -62,11 +62,12 @@ int UExperienceComponent::GetCostByLevel(int Level) {
 void UExperienceComponent::UpgradeMaxHealth() {
 	//If stat level is already 20 which is max or player doesn't have enough xp to level stat
 	int StatLevel = PlayerStatMap[FName("Health")];
-	int StatCost = GetCostByLevel(PlayerStatMap[FName("Health")]);
+	int StatCost = GetCostByLevel(StatLevel);
 	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
 	RemoveXP(StatCost);
 	PlayerStatMap[FName("Health")]++;
 	Player->SetHealthMax(Player->GetHealthMax() + HealthUpgradeAmount);
+	Player->SetHealth(Player->GetHealthMax());
 	Player->UpdateHealhBar();
 }
 
@@ -74,29 +75,44 @@ void UExperienceComponent::UpgradeMaxMana() {
 	//If stat level is already 20 which is max or player doesn't have enough xp to level stat
 
 	int StatLevel = PlayerStatMap[FName("Mana")];
-	int StatCost = GetCostByLevel(PlayerStatMap[FName("Mana")]);
+	int StatCost = GetCostByLevel(StatLevel);
 	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
+	RemoveXP(StatCost);
 	PlayerStatMap[FName("Mana")]++;
 	Player->SetManaMax(Player->GetManaMax() + ManaUpgradeAmount);
+	Player->AddMana(Player->GetManaMax());
 	Player->UpdateManaBar();
 }
 
 void UExperienceComponent::UpgradeMaxStamina() {
 	//If stat level is already 20 which is max or player doesn't have enough xp to level stat
 	int StatLevel = PlayerStatMap[FName("Stamina")];
-	int StatCost = GetCostByLevel(PlayerStatMap[FName("Stamina")]);
+	int StatCost = GetCostByLevel(StatLevel);
 	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
+	RemoveXP(StatCost);
 	PlayerStatMap[FName("Stamina")]++;
 	Player->SetStaminaMax(Player->GetStaminaMax() + StaminaUpgradeAmount);
 	Player->UpdateStaminaBar();
 }
 
 void UExperienceComponent::UpgradeBaseDefense() {
-
+	//If stat level is already 20 which is max or player doesn't have enough xp to level stat
+	int StatLevel = PlayerStatMap[FName("Defense")];
+	int StatCost = GetCostByLevel(StatLevel);
+	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
+	RemoveXP(StatCost);
+	PlayerStatMap[FName("Defense")]++;
+	Player->SetDefenseStat(Player->GetDefenseStat() + DefenseUpgradeAmount);
 }
 
 void UExperienceComponent::UpgradeBaseDamage() {
-
+	//If stat level is already 20 which is max or player doesn't have enough xp to level stat
+	int StatLevel = PlayerStatMap[FName("Damage")];
+	int StatCost = GetCostByLevel(StatLevel);
+	if (StatLevel >= 20 || StoredXP < StatCost) { return; }
+	RemoveXP(StatCost);
+	PlayerStatMap[FName("Damage")]++;
+	Player->SetStrengthStat(Player->GetStrengthStat() + StrengthUpgradeAmount);
 }
 
 void UExperienceComponent::GetStatUpgradeInformation(FName StatName, int& CurrentLevel, int& NewLevel, int& Cost, int& NewExperience) {
