@@ -98,3 +98,10 @@ void UExperienceComponent::UpgradeBaseDefense() {
 void UExperienceComponent::UpgradeBaseDamage() {
 
 }
+
+void UExperienceComponent::GetStatUpgradeInformation(FName StatName, int& CurrentLevel, int& NewLevel, int& Cost, int& NewExperience) {
+	CurrentLevel = PlayerStatMap[StatName];
+	NewLevel = CurrentLevel + 1;
+	Cost = GetCostByLevel(CurrentLevel);
+	NewExperience = StoredXP - Cost;
+}

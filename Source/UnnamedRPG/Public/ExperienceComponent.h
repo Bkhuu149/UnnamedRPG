@@ -66,6 +66,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetCostByLevel(int Level);
 
+	UFUNCTION(BlueprintCallable)
+		void GetStatUpgradeInformation(FName StatName, int& CurrentLevel, int& NewLevel, int& Cost, int& NewExperience);
+
 	void UpgradeMaxHealth();
 	void UpgradeMaxMana();
 	void UpgradeMaxStamina();
