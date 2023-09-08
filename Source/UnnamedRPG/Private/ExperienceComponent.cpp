@@ -11,7 +11,14 @@ UExperienceComponent::UExperienceComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	//default values
+	Player = Cast<AMyRPGCharacter>(GetOwner());
+	PlayerStatMap.Add(FName("Health"), 0);
+	PlayerStatMap.Add(FName("Mana"), 1);
+	PlayerStatMap.Add(FName("Stamina"), 2);
+	PlayerStatMap.Add(FName("Defense"), 3);
+	PlayerStatMap.Add(FName("Damage"), 4);
+	StoredXP = 100000;
 }
 
 
@@ -20,13 +27,6 @@ void UExperienceComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Player = Cast<AMyRPGCharacter>(GetOwner());
-	PlayerStatMap.Add(FName("Health"), 0);
-	PlayerStatMap.Add(FName("Mana"), 1);
-	PlayerStatMap.Add(FName("Stamina"), 2);
-	PlayerStatMap.Add(FName("Defense"), 3);
-	PlayerStatMap.Add(FName("Damage"), 4);
-	StoredXP = 100000;
 	// ...
 	
 }

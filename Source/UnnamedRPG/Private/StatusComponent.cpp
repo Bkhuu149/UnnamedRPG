@@ -12,6 +12,7 @@ UStatusComponent::UStatusComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	// ...
+	Player = Cast<AMyRPGCharacter>(GetOwner());
 }
 
 
@@ -20,7 +21,6 @@ void UStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	SetComponentTickInterval(1.f);
-	Player = Cast<AMyRPGCharacter>(GetOwner());
 
 	//ActiveStatusEffects.Add(EStatus::BURN, 100);
 }
