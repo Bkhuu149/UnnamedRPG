@@ -69,6 +69,7 @@ void UExperienceComponent::UpgradeMaxHealth() {
 	Player->SetHealthMax(Player->GetHealthMax() + HealthUpgradeAmount);
 	Player->SetHealth(Player->GetHealthMax());
 	Player->UpdateHealhBar();
+	UpdateExperienceAmmount();
 }
 
 void UExperienceComponent::UpgradeMaxMana() {
@@ -82,6 +83,7 @@ void UExperienceComponent::UpgradeMaxMana() {
 	Player->SetManaMax(Player->GetManaMax() + ManaUpgradeAmount);
 	Player->AddMana(Player->GetManaMax());
 	Player->UpdateManaBar();
+	UpdateExperienceAmmount();
 }
 
 void UExperienceComponent::UpgradeMaxStamina() {
@@ -93,6 +95,7 @@ void UExperienceComponent::UpgradeMaxStamina() {
 	PlayerStatMap[FName("Stamina")]++;
 	Player->SetStaminaMax(Player->GetStaminaMax() + StaminaUpgradeAmount);
 	Player->UpdateStaminaBar();
+	UpdateExperienceAmmount();
 }
 
 void UExperienceComponent::UpgradeBaseDefense() {
@@ -103,6 +106,7 @@ void UExperienceComponent::UpgradeBaseDefense() {
 	RemoveXP(StatCost);
 	PlayerStatMap[FName("Defense")]++;
 	Player->SetDefenseStat(Player->GetDefenseStat() + DefenseUpgradeAmount);
+	UpdateExperienceAmmount();
 }
 
 void UExperienceComponent::UpgradeBaseDamage() {
@@ -113,6 +117,7 @@ void UExperienceComponent::UpgradeBaseDamage() {
 	RemoveXP(StatCost);
 	PlayerStatMap[FName("Damage")]++;
 	Player->SetStrengthStat(Player->GetStrengthStat() + StrengthUpgradeAmount);
+	UpdateExperienceAmmount();
 }
 
 void UExperienceComponent::GetStatUpgradeInformation(FName StatName, int& CurrentLevel, int& NewLevel, int& Cost, int& NewExperience) {
