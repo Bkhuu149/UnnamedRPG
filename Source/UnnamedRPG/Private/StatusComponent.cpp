@@ -69,6 +69,7 @@ void UStatusComponent::RemoveEffect(EStatus Effect) {
 void UStatusComponent::AddItemEffect(EStatus ItemEffect, int Time) {
 	//For use outside of class
 	ActiveStatusEffects.Add(ItemEffect, Time);
+	Player->AddStatus(ItemEffect);
 }
 
 void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
@@ -138,7 +139,7 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 	TPair<EStatus, int> ActivatedEffect = TPair<EStatus, int>(Effect, StatusEffectBuildups[Effect]);
 	StatusEffectBuildups.Remove(Effect);
 	ActiveStatusEffects.Add(ActivatedEffect);
-
+	Player->AddStatus(Effect);
 
 	switch (Effect)
 	{

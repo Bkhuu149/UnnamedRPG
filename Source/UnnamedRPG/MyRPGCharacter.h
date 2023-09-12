@@ -283,6 +283,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateExperienceAmmount();
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void AddStatus(EStatus Status);
+
 	UFUNCTION(BlueprintCallable)
 		void ResetAttack();
 	

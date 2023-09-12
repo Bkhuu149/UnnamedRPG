@@ -52,4 +52,7 @@ public:
 	float FireTickDamage = 2;
 
 	AMyRPGCharacter* Player;
+
+	UFUNCTION(BlueprintCallable)
+	int GetStatusTimeRemaining(EStatus Effect) { return ActiveStatusEffects[Effect]; }
 };
