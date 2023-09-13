@@ -649,7 +649,7 @@ bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("MyEnum is %s"), *UEnum::GetValueAsString(Type)));
 	if (!BarrierHit && bHit) {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Adding Debuff: %s"), *UEnum::GetValueAsString(Type)));
-
+		ResetAttack();
 		StatusComp->AddDebuff(Type, val);
 	}
 	return bHit;

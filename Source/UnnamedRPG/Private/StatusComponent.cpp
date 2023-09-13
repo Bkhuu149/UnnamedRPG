@@ -37,6 +37,7 @@ void UStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		Player->DoFireTickDamage();
 	}
 	DecrimentEffects(ActiveStatusEffects);
+	Player->UpdateStatusBars();
 	// ...
 }
 
@@ -223,4 +224,11 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 	default:
 		break;
 	}
+}
+
+int UStatusComponent::GetStatusTimeRemaining(EStatus Effect) { 
+	if (ActiveStatusEffects.Contains(Effect)) { 
+		return ActiveStatusEffects[Effect]; 
+	}
+	return 0;
 }

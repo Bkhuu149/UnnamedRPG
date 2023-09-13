@@ -54,5 +54,5 @@ public:
 	AMyRPGCharacter* Player;
 
 	UFUNCTION(BlueprintCallable)
-	int GetStatusTimeRemaining(EStatus Effect) { return ActiveStatusEffects[Effect]; }
+		int GetStatusTimeRemaining(EStatus Effect);
 };

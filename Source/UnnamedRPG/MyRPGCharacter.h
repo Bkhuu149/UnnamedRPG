@@ -286,6 +286,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void AddStatus(EStatus Status);
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateStatusBars();
+
 	UFUNCTION(BlueprintCallable)
 		void ResetAttack();
 	
