@@ -263,6 +263,7 @@ bool AEnemyClass::DamageChar(float val, EDamageType Type) {
 	bool bHit = Super::DamageChar(val, Type);
 	//Reset attack timer to allow player to finish their combo
 	if (bHit) { 
+		StatusComp->AddDebuff(Type, val);
 		if (AttackTimer.IsValid()) {
 			GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
 			AttackTimer.Invalidate();
@@ -278,7 +279,21 @@ bool AEnemyClass::DamageChar(float val, EDamageType Type) {
 
 void AEnemyClass::KillCharacter() {
 	Super::KillCharacter();
+	MyController->StopMovement();
 	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(Target);
 	Player->GetExperienceComponent()->GiveXP(EXPDropped);
 	Player->RemoveCombatant(this);
+}
+
+void AEnemyClass::DoFireTickDamage() {
+	SetHealth(GetHealth() - 5);
+	if (GetHealth() <= 0) {
+		KillCharacter();
+		StatusComp->RemoveEffect(EStatus::BURN);
+	}
+	UpdateHealthBar();
+}
+
+void AEnemyClass::SetMovementSpeed(float NewSpeed) { 
+	GetCharacterMovement()->MaxWalkSpeed = NewSpeed * SpeedMultiplier;
 }

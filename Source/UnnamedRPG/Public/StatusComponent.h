@@ -49,8 +49,6 @@ public:
 
 	virtual void DeactivateEffect(EStatus Effect);
 
-	float FireTickDamage = 2;
-
 	AMyRPGCharacter* Player;
 
 	UFUNCTION(BlueprintCallable)

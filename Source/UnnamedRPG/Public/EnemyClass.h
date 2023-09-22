@@ -79,6 +79,11 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void SetStaggered(bool IsStaggered) { Staggered = IsStaggered; }
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Status")
+		UEnemyStatusComponent* StatusComp;
+
+	float SpeedMultiplier = 1.f;
 private:
 
 	FTimerHandle AttackTimer;
@@ -116,13 +121,14 @@ private:
 
 	virtual void StateAttack();
 
-	UEnemyStatusComponent* StatusComp;
-
 public: 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintCallable)
+		void SetMovementSpeed(float NewSpeed);
 
 	bool GetIsTargeted() { return Targeted; }
 
@@ -132,6 +138,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EndDash();
 
-
+	void DoFireTickDamage();
 
 };

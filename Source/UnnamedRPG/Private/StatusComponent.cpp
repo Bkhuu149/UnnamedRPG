@@ -148,13 +148,11 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 		//Damage over time
 		break;
 	case EStatus::WET:
-		//Player has slippery floor
-		//Change to slowness to slow player down later
+		//Player has decreased mana recovery
 		Player->SetManaRestoreMultiplier(.5);
 		break;
 	case EStatus::HEAVY:
-		//Mana recovers slower
-		//Change to make player not be able to jump or TBD
+		//Player can't jump
 		Player->SetCanJump(false);
 		break;
 	case EStatus::UNSTEADY:
