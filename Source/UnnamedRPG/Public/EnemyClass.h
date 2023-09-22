@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "RPGBaseClass.h"
+#include "EnemyStatusComponent.h"
 #include "AIController.h"
 #include "Perception/PawnSensingComponent.h"
 #include "../MyRPGCharacter.h"
@@ -115,6 +116,7 @@ private:
 
 	virtual void StateAttack();
 
+	UEnemyStatusComponent* StatusComp;
 
 public: 
 	// Called every frame
