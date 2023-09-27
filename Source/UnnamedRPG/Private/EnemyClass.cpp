@@ -184,10 +184,10 @@ void AEnemyClass::StateAttack() {
 
 void AEnemyClass::StateChaseFar() {
 	//Player is far away, perform ranged attack
+	CurrentEnemyState = EEnemyState::CHASE_CLOSE;
 	MyController->StopMovement();
 	int AttackIndex = FMath::RandRange(0, AttackAnimFar.Num() - 1);
 	PlayAnimMontage(AttackAnimFar[AttackIndex]);
-	CurrentEnemyState = EEnemyState::CHASE_CLOSE;
 	
 }
 
@@ -228,7 +228,7 @@ void AEnemyClass::ResetTarget() {
 	Target = nullptr;
 	SetHealth(GetHealthMax());
 	UpdateHealthBar();
-	SetMovementSpeed(250.f);
+	GetCharacterMovement()->MaxWalkSpeed = CalculateNewSpeed();
 }
 
 void AEnemyClass::Rotate(float DeltaTime)
@@ -294,6 +294,8 @@ void AEnemyClass::DoFireTickDamage() {
 	UpdateHealthBar();
 }
 
-void AEnemyClass::SetMovementSpeed(float NewSpeed) { 
-	GetCharacterMovement()->MaxWalkSpeed = NewSpeed * SpeedMultiplier;
+float AEnemyClass::CalculateNewSpeed() {
+	
+	float Speed = (Targeted) ? EnemyRunningSpeed : EnemyWalkingSpeed;
+	return Speed * SpeedMultiplier;
 }

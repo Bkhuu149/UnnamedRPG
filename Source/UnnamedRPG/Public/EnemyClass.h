@@ -84,8 +84,15 @@ protected:
 		UEnemyStatusComponent* StatusComp;
 
 	float SpeedMultiplier = 1.f;
+
+	float EnemyWalkingSpeed = 250;
+	float EnemyRunningSpeed = 500;
+
+	bool CanAttackRanged = true;
+	
 private:
 
+	
 	FTimerHandle AttackTimer;
 
 	FTimerHandle DashTimer;
@@ -127,8 +134,9 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+
 	UFUNCTION(BlueprintCallable)
-		void SetMovementSpeed(float NewSpeed);
+	float CalculateNewSpeed();
 
 	bool GetIsTargeted() { return Targeted; }
 
@@ -139,5 +147,9 @@ public:
 	void EndDash();
 
 	void DoFireTickDamage();
+
+	void SetSpeedMultiplier(float NewMultiplier) { SpeedMultiplier = NewMultiplier; }
+
+	void SetCanAttackRange(bool CanPerform) { CanAttackRanged = CanPerform; }
 
 };

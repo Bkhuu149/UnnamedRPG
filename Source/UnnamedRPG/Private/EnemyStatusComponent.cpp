@@ -142,7 +142,9 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::WET:
 		//Player has decreased mana recovery
+		//Enemy can't perform ranged attack
 		//Change this
+		Enemy->SetCanAttackRange(false);
 		break;
 	case EStatus::HEAVY:
 		//Player can't jump
@@ -154,6 +156,8 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::SLOWED:
 		//movement slowed
+		Enemy->SetSpeedMultiplier(.7);
+		Enemy->GetCharacterMovement()->MaxWalkSpeed = Enemy->CalculateNewSpeed();
 		break;
 	case EStatus::DUST:
 		//Deals less damage
@@ -174,12 +178,15 @@ void UEnemyStatusComponent::DeactivateEffect(EStatus Effect) {
 	case EStatus::BURN:
 		break;
 	case EStatus::WET:
+		Enemy->SetCanAttackRange(true);
 		break;
 	case EStatus::HEAVY:
 		break;
 	case EStatus::UNSTEADY:
 		break;
 	case EStatus::SLOWED:
+		Enemy->SetSpeedMultiplier(1);
+		Enemy->GetCharacterMovement()->MaxWalkSpeed = Enemy->CalculateNewSpeed();
 		break;
 	case EStatus::DUST:
 		break;
