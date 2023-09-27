@@ -185,6 +185,7 @@ void AEnemyClass::StateAttack() {
 void AEnemyClass::StateChaseFar() {
 	//Player is far away, perform ranged attack
 	CurrentEnemyState = EEnemyState::CHASE_CLOSE;
+	if (!CanAttackRanged) { return; }
 	MyController->StopMovement();
 	int AttackIndex = FMath::RandRange(0, AttackAnimFar.Num() - 1);
 	PlayAnimMontage(AttackAnimFar[AttackIndex]);
