@@ -147,11 +147,11 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 		Enemy->SetCanAttackRange(false);
 		break;
 	case EStatus::HEAVY:
-		//Player can't jump
-		//Change this
+		//Make Attack anims slower
+		Enemy->SetCurrentAttackSpeed(Enemy->GetInitialAttackSpeed()*.7);
 		break;
 	case EStatus::UNSTEADY:
-		//Stamina recovers slower
+		//
 		//Change this
 		break;
 	case EStatus::SLOWED:
@@ -161,11 +161,14 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::DUST:
 		//Deals less damage
+		Enemy->SetCurrentDamage(Enemy->GetInitialDamage() * 0.7f);
 		break;
 	case EStatus::PARALIZED:
 		//Occasional stun
+		Enemy->StartParalysis();
 		break;
 	case EStatus::SMOKE:
+		//Something
 		break;
 	default:
 		break;
@@ -181,6 +184,7 @@ void UEnemyStatusComponent::DeactivateEffect(EStatus Effect) {
 		Enemy->SetCanAttackRange(true);
 		break;
 	case EStatus::HEAVY:
+		Enemy->SetCurrentAttackSpeed(Enemy->GetInitialAttackSpeed());
 		break;
 	case EStatus::UNSTEADY:
 		break;
@@ -189,8 +193,10 @@ void UEnemyStatusComponent::DeactivateEffect(EStatus Effect) {
 		Enemy->GetCharacterMovement()->MaxWalkSpeed = Enemy->CalculateNewSpeed();
 		break;
 	case EStatus::DUST:
+		Enemy->SetCurrentDamage(Enemy->GetInitialDamage());
 		break;
 	case EStatus::PARALIZED:
+		Enemy->EndParalysis();
 		break;
 	case EStatus::SMOKE:
 		break;

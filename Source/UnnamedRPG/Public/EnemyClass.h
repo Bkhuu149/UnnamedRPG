@@ -54,9 +54,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	TArray<UAnimMontage*> AttackAnimFar;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	UAnimMontage* StunAnim;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float CooldownTime = 5.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-	float Damage = 10.f;
+	float InitialDamage = 10.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	float CurrentDamage = 10.f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UMyDamageType> MyType;
 
@@ -89,6 +94,11 @@ protected:
 	float EnemyRunningSpeed = 500;
 
 	bool CanAttackRanged = true;
+
+	UPROPERTY(EditAnywhere)
+	float InitialAttackSpeed = 1.f;
+	UPROPERTY(EditAnywhere)
+	float CurrentAttackSpeed = 1.f;
 	
 private:
 
@@ -152,4 +162,23 @@ public:
 
 	void SetCanAttackRange(bool CanPerform) { CanAttackRanged = CanPerform; }
 
+	float GetInitialDamage() { return InitialDamage; }
+	
+	void SetCurrentDamage(float NewDamage) { 
+		CurrentDamage = NewDamage;
+		CurrentWeapon->SetDamage(NewDamage);
+	}
+
+	void ResetDamage() {
+		CurrentDamage = InitialDamage;
+		CurrentWeapon->SetDamage(InitialDamage);
+	}
+
+	float GetInitialAttackSpeed() { return InitialAttackSpeed; }
+	void SetCurrentAttackSpeed(float NewSpeed) { CurrentAttackSpeed = NewSpeed; }
+
+	void StartParalysis();
+	void TriggerStun();
+	void EndParalysis();
+	FTimerHandle ParalysisTimer;
 };

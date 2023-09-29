@@ -24,7 +24,7 @@ void AEnemyClass::BeginPlay()
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(ChosenWeapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
-	CurrentWeapon->SetDamage(Damage);
+	CurrentWeapon->SetDamage(InitialDamage);
 	CurrentWeapon->SetDamageType(WeaponType);
 	if (WalkPath.Num() == 0) {
 		WalkPath.Add(GetActorTransform());
@@ -188,7 +188,7 @@ void AEnemyClass::StateChaseFar() {
 	if (!CanAttackRanged) { return; }
 	MyController->StopMovement();
 	int AttackIndex = FMath::RandRange(0, AttackAnimFar.Num() - 1);
-	PlayAnimMontage(AttackAnimFar[AttackIndex]);
+	PlayAnimMontage(AttackAnimFar[AttackIndex], CurrentAttackSpeed);
 	
 }
 
@@ -207,7 +207,7 @@ void AEnemyClass::DashTrace() {
 	for (AActor* Enemy : OutHits) {
 		AMyRPGCharacter* Temp = Cast<AMyRPGCharacter>(Enemy);
 		if (Temp) {
-			UGameplayStatics::ApplyDamage(Enemy, 10, NULL, this, MyType);
+			UGameplayStatics::ApplyDamage(Enemy, CurrentDamage, NULL, this, MyType);
 		}
 	}
 }
@@ -251,7 +251,7 @@ void AEnemyClass::Attack()
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsCoolingDown) { return; }
 	MyController->StopMovement();
 	int AttackIndex = FMath::RandRange(0, AttackAnimClose.Num()-1);
-	PlayAnimMontage(AttackAnimClose[AttackIndex]);
+	PlayAnimMontage(AttackAnimClose[AttackIndex], CurrentAttackSpeed);
 	IsCoolingDown = true;
 	if (AttackTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
@@ -299,4 +299,22 @@ float AEnemyClass::CalculateNewSpeed() {
 	
 	float Speed = (Targeted) ? EnemyRunningSpeed : EnemyWalkingSpeed;
 	return Speed * SpeedMultiplier;
+}
+
+void AEnemyClass::StartParalysis() {
+	GetWorld()->GetTimerManager().SetTimer(ParalysisTimer, this, &AEnemyClass::TriggerStun, FMath::RandRange(3, 6), false);
+}
+
+void AEnemyClass::EndParalysis() {
+	GetWorld()->GetTimerManager().ClearTimer(ParalysisTimer);
+	ParalysisTimer.Invalidate();
+}
+
+void AEnemyClass::TriggerStun() {
+	ResetInvincibility();
+	CurrentWeapon->EndLineTrace();
+	if (IsDead) { return; }
+	GetMesh()->GetAnimInstance()->StopAllMontages(1.f);
+	PlayAnimMontage(StunAnim);
+	GetWorld()->GetTimerManager().SetTimer(ParalysisTimer, this, &AEnemyClass::TriggerStun, FMath::RandRange(3, 6), false);
 }
