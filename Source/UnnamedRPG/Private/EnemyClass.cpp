@@ -249,6 +249,11 @@ void AEnemyClass::Attack()
 {
 	//Performs random attack in AttackAnimClose array
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsCoolingDown) { return; }
+	if (IsBlind) {
+		//If enemy is blind, add random rotation about the z axis to have the enemy's attacks be less accurate
+		FRotator RandBlindRot = FRotator(0, FMath::FRandRange(-60, 60), 0);
+		AddActorLocalRotation(RandBlindRot);
+	}
 	MyController->StopMovement();
 	int AttackIndex = FMath::RandRange(0, AttackAnimClose.Num()-1);
 	PlayAnimMontage(AttackAnimClose[AttackIndex], CurrentAttackSpeed);

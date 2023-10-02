@@ -141,9 +141,7 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 		//Damage over time
 		break;
 	case EStatus::WET:
-		//Player has decreased mana recovery
 		//Enemy can't perform ranged attack
-		//Change this
 		Enemy->SetCanAttackRange(false);
 		break;
 	case EStatus::HEAVY:
@@ -152,7 +150,9 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::UNSTEADY:
 		//
-		//Change this
+		//
+		//
+		//
 		break;
 	case EStatus::SLOWED:
 		//movement slowed
@@ -168,7 +168,9 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 		Enemy->StartParalysis();
 		break;
 	case EStatus::SMOKE:
-		//Something
+		// Player: Gets bliness and obscures the screen
+		// Enemy: Before enemy attacks player enemy gets +-(45 through 90) rotation 
+		Enemy->SetBlindness(true);
 		break;
 	default:
 		break;
@@ -199,6 +201,7 @@ void UEnemyStatusComponent::DeactivateEffect(EStatus Effect) {
 		Enemy->EndParalysis();
 		break;
 	case EStatus::SMOKE:
+		Enemy->SetBlindness(false);
 		break;
 	case EStatus::REGEN:
 		break;

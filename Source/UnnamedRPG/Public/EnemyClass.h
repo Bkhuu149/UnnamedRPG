@@ -120,6 +120,8 @@ private:
 
 	bool IsCoolingDown = false;
 
+	bool IsBlind = false;
+
 	void ResetTarget();
 
 	void Rotate(float DeltaTime);
@@ -176,6 +178,8 @@ public:
 
 	float GetInitialAttackSpeed() { return InitialAttackSpeed; }
 	void SetCurrentAttackSpeed(float NewSpeed) { CurrentAttackSpeed = NewSpeed; }
+	
+	void SetBlindness(bool val) { IsBlind = val; }
 
 	void StartParalysis();
 	void TriggerStun();
