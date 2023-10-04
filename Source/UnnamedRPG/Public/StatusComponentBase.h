@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MyEnumUtils.h"
 #include "Components/ActorComponent.h"
 #include "StatusComponentBase.generated.h"
 
@@ -20,9 +21,14 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
+		TMap<EStatus, int> StatusEffectBuildups;
+
+	UPROPERTY(EditAnywhere)
+		TMap<EStatus, int> ActiveStatusEffects;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
 };

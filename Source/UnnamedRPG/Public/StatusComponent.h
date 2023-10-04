@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "MyEnumUtils.h"
+#include "StatusComponentBase.h"
 #include "StatusComponent.generated.h"
 
 
 class AMyRPGCharacter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class UNNAMEDRPG_API UStatusComponent : public UActorComponent
+class UNNAMEDRPG_API UStatusComponent : public UStatusComponentBase
 {
 	GENERATED_BODY()
 
@@ -22,12 +23,7 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere)
-	TMap<EStatus, int> StatusEffectBuildups;
-
-	UPROPERTY(EditAnywhere)
-	TMap<EStatus, int> ActiveStatusEffects;
+	AMyRPGCharacter* Player;
 
 public:	
 	// Called every frame
@@ -49,7 +45,6 @@ public:
 
 	virtual void DeactivateEffect(EStatus Effect);
 
-	AMyRPGCharacter* Player;
 
 	UFUNCTION(BlueprintCallable)
 		int GetStatusTimeRemaining(EStatus Effect);

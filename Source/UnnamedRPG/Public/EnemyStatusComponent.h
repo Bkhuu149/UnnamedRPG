@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "MyEnumUtils.h"
+#include "StatusComponentBase.h"
 #include "Components/ActorComponent.h"
 #include "EnemyStatusComponent.generated.h"
 
 class AEnemyClass;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class UNNAMEDRPG_API UEnemyStatusComponent : public UActorComponent
+class UNNAMEDRPG_API UEnemyStatusComponent : public UStatusComponentBase
 {
 	GENERATED_BODY()
 
@@ -21,12 +22,6 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere)
-		TMap<EStatus, int> StatusEffectBuildups;
-
-	UPROPERTY(EditAnywhere)
-		TMap<EStatus, int> ActiveStatusEffects;
 
 	AEnemyClass* Enemy;
 public:	
