@@ -310,6 +310,7 @@ void AMyRPGCharacter::OnTargetPressed() {
 	if (OutHit.IsEmpty()) { return; }
 
 	Target = Cast<ARPGBaseClass>(OutHit[0].GetActor());
+	UpdateEnemyHealthHud();
 	RecentTargets.Add(Target);
 }
 
@@ -352,6 +353,7 @@ void AMyRPGCharacter::OnSwitchTargetPressed() {
 	TargetIndex++;
 	if (TargetIndex > OutHit.Num()-1) { TargetIndex = 0; }
 	Target = Cast<ARPGBaseClass>(OutHit[TargetIndex].GetActor());
+	UpdateEnemyHealthHud();
 	RecentTargets.Add(Target);
 }
 
@@ -628,6 +630,7 @@ void AMyRPGCharacter::TransitionCamera(float DeltaTime, FVector3d CamPosition) {
 
 void AMyRPGCharacter::ResetTarget() {
 	Target = nullptr;
+	UpdateEnemyHealthHud();
 	Targeted = false;
 	TargetIndex = 0;
 	bUseControllerRotationYaw = false;

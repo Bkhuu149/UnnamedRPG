@@ -289,6 +289,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateStatusBars();
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void UpdateEnemyHealthHud();
+
 	UFUNCTION(BlueprintCallable)
 		void ResetAttack();
 	
