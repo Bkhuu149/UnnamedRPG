@@ -19,6 +19,9 @@ void AEnemyClass::BeginPlay()
 	//Set spawn location to get center of walk radius
 	MyController = static_cast<AAIController*>(GetController());
 	NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
+	CurrentCooldownTime = InitialCooldownTime;
+	CurrentDamage = InitialDamage;
+	CurrentAttackSpeed = InitialAttackSpeed;
 
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(ChosenWeapon, WeaponTransform));
@@ -262,7 +265,7 @@ void AEnemyClass::Attack()
 		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
 		AttackTimer.Invalidate();
 	}
-	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, FMath::RandRange(CooldownTime -3.f, CooldownTime + 3.f), false);
+	GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, FMath::RandRange(CurrentCooldownTime -3.f, CurrentCooldownTime + 3.f), false);
 }
 
 bool AEnemyClass::DamageChar(float val, EDamageType Type) {
@@ -278,7 +281,7 @@ bool AEnemyClass::DamageChar(float val, EDamageType Type) {
 			GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
 			DelayTimer.Invalidate();
 		}
-		GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, CooldownTime -3.f, false); 
+		GetWorld()->GetTimerManager().SetTimer(AttackTimer, [&]() { IsCoolingDown = false; }, FMath::RandRange(CurrentCooldownTime - 3.f, CurrentCooldownTime + 3.f), false);
 	}
 	return bHit;
 }

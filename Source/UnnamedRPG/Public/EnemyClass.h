@@ -55,11 +55,12 @@ protected:
 	TArray<UAnimMontage*> AttackAnimFar;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	UAnimMontage* StunAnim;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-	float CooldownTime = 5.f;
+	float InitialCooldownTime = 5.f;
+	float CurrentCooldownTime = 5.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float InitialDamage = 10.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	float CurrentDamage = 10.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -97,7 +98,6 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float InitialAttackSpeed = 1.f;
-	UPROPERTY(EditAnywhere)
 	float CurrentAttackSpeed = 1.f;
 	
 private:
@@ -175,6 +175,12 @@ public:
 		CurrentDamage = InitialDamage;
 		CurrentWeapon->SetDamage(InitialDamage);
 	}
+
+	float GetInitialCooldownTime() { return InitialCooldownTime; }
+
+	void SetCurrentCooldownTime(float NewTime) { CurrentCooldownTime = NewTime; }
+
+	void ResetCooldownTime() { CurrentCooldownTime = InitialCooldownTime; }
 
 	float GetInitialAttackSpeed() { return InitialAttackSpeed; }
 	void SetCurrentAttackSpeed(float NewSpeed) { CurrentAttackSpeed = NewSpeed; }

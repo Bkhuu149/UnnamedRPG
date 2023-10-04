@@ -149,10 +149,8 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 		Enemy->SetCurrentAttackSpeed(Enemy->GetInitialAttackSpeed()*.7);
 		break;
 	case EStatus::UNSTEADY:
-		//
-		//
-		//
-		//
+		//Makes enemy attack cooldown longer
+		Enemy->SetCurrentCooldownTime(Enemy->GetInitialCooldownTime() * 1.5);
 		break;
 	case EStatus::SLOWED:
 		//movement slowed
@@ -169,7 +167,7 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::SMOKE:
 		// Player: Gets bliness and obscures the screen
-		// Enemy: Before enemy attacks player enemy gets +-(45 through 90) rotation 
+		// Enemy: Before enemy attacks player enemy gets between [-60, 60] rotation 
 		Enemy->SetBlindness(true);
 		break;
 	default:
@@ -189,6 +187,7 @@ void UEnemyStatusComponent::DeactivateEffect(EStatus Effect) {
 		Enemy->SetCurrentAttackSpeed(Enemy->GetInitialAttackSpeed());
 		break;
 	case EStatus::UNSTEADY:
+		Enemy->ResetCooldownTime();
 		break;
 	case EStatus::SLOWED:
 		Enemy->SetSpeedMultiplier(1);
@@ -202,8 +201,6 @@ void UEnemyStatusComponent::DeactivateEffect(EStatus Effect) {
 		break;
 	case EStatus::SMOKE:
 		Enemy->SetBlindness(false);
-		break;
-	case EStatus::REGEN:
 		break;
 	default:
 		break;
