@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Engine/Texture2D.h"
 #include "InteractableInterface.h"
 //#include "EnemyClass.h"
 #include "SavePoint.generated.h"
@@ -20,6 +21,15 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere)
+		FName PointName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (MakeEditWidget = true))
+		FTransform SpawnTransform;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UTexture2D* Thumbnail;
 
 public:	
 	const FString SaveName = FString("slot1");
