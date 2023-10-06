@@ -21,7 +21,7 @@
 #include "Public/MyInteractComponent.h"
 #include "Public/InventoryComponent.h"
 #include "Public/AttackSkillComponent.h"
-#include "Public/StatusComponent.h"
+#include "Public/PlayerStatusComponent.h"
 #include "Public/ExperienceComponent.h"
 #include "Public/MyEnumUtils.h"
 
@@ -62,7 +62,7 @@ protected:
 		UAttackSkillComponent* AttackSkillComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Status")
-		UStatusComponent* StatusComp;
+		UPlayerStatusComponent* StatusComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Experience")
 		UExperienceComponent* ExperienceComp;
@@ -452,7 +452,7 @@ public:
 	UMyInteractComponent* GetInteractComponent() const { return InteractComp; }
 	UInventoryComponent* GetInventoryComponent() const { return InventoryComp; }
 	UAttackSkillComponent* GetAttackSkillComponent() const { return AttackSkillComp; }
-	UStatusComponent* GetStatusComponent() const { return StatusComp; }
+	UPlayerStatusComponent* GetStatusComponent() const { return StatusComp; }
 	UExperienceComponent* GetExperienceComponent() const { return ExperienceComp; }
 
 	void StartParalysis();

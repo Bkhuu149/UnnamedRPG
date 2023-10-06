@@ -6,19 +6,19 @@
 #include "Components/ActorComponent.h"
 #include "MyEnumUtils.h"
 #include "StatusComponentBase.h"
-#include "StatusComponent.generated.h"
+#include "PlayerStatusComponent.generated.h"
 
 
 class AMyRPGCharacter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class UNNAMEDRPG_API UStatusComponent : public UStatusComponentBase
+class UNNAMEDRPG_API UPlayerStatusComponent : public UStatusComponentBase
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UStatusComponent();
+	UPlayerStatusComponent();
 
 protected:
 	// Called when the game starts

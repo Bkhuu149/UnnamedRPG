@@ -8,7 +8,7 @@
 #include "Engine/Texture2D.h"
 #include "MyEnumUtils.h"
 #include "SavePoint.h"
-#include "StatusComponent.h"
+#include "PlayerStatusComponent.h"
 
 #include "InventoryComponent.generated.h"
 

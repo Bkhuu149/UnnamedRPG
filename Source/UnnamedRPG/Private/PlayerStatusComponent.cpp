@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "StatusComponent.h"
+#include "PlayerStatusComponent.h"
 #include "../MyRPGCharacter.h"
 
 
 // Sets default values for this component's properties
-UStatusComponent::UStatusComponent()
+UPlayerStatusComponent::UPlayerStatusComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -17,7 +17,7 @@ UStatusComponent::UStatusComponent()
 
 
 // Called when the game starts
-void UStatusComponent::BeginPlay()
+void UPlayerStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -26,7 +26,7 @@ void UStatusComponent::BeginPlay()
 
 
 // Called every frame
-void UStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	//Perform Active Status Effects;
@@ -40,7 +40,7 @@ void UStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 
 
-void UStatusComponent::ActivateEffect(EStatus Effect) {
+void UPlayerStatusComponent::ActivateEffect(EStatus Effect) {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Activate Effect %s"), *UEnum::GetValueAsString(Effect)));
 
 	//Move Effect from Buildup map to Active Effects map
@@ -88,7 +88,7 @@ void UStatusComponent::ActivateEffect(EStatus Effect) {
 	}
 }
 
-void UStatusComponent::DeactivateEffect(EStatus Effect) {
+void UPlayerStatusComponent::DeactivateEffect(EStatus Effect) {
 
 	switch (Effect)
 	{
@@ -131,7 +131,7 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 	}
 }
 
-void UStatusComponent::AddItemEffect(EStatus ItemEffect, int Time) {
+void UPlayerStatusComponent::AddItemEffect(EStatus ItemEffect, int Time) {
 	//For use outside of class
 	ActiveStatusEffects.Add(ItemEffect, Time);
 	Player->AddStatus(ItemEffect);

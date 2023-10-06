@@ -13,8 +13,8 @@ AMyRPGCharacter::AMyRPGCharacter()
 	InteractComp = CreateDefaultSubobject<UMyInteractComponent>(TEXT("Interact Component"));
 	InventoryComp = CreateDefaultSubobject<UInventoryComponent>(TEXT("Inventory Component"));
 	AttackSkillComp = CreateDefaultSubobject<UAttackSkillComponent>(TEXT("Attack Skill Component"));
-	StatusComp = CreateDefaultSubobject<UStatusComponent>(TEXT("Status Component"));
 	ExperienceComp = CreateDefaultSubobject<UExperienceComponent>(TEXT("Experience Component"));
+	StatusComp = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("Player Status Component"));
 }
 
 // Called when the game starts or when spawned
