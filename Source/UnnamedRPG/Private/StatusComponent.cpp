@@ -20,7 +20,6 @@ UStatusComponent::UStatusComponent()
 void UStatusComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	SetComponentTickInterval(1.f);
 
 	//ActiveStatusEffects.Add(EStatus::BURN, 100);
 }
@@ -30,108 +29,16 @@ void UStatusComponent::BeginPlay()
 void UStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	DecrimentEffects(StatusEffectBuildups);
 	//Perform Active Status Effects;
 	if (ActiveStatusEffects.Contains(EStatus::BURN)) {
 		//Do FireTickDamage
 		Player->DoFireTickDamage();
 	}
-	DecrimentEffects(ActiveStatusEffects);
 	Player->UpdateStatusBars();
 	// ...
 }
 
-void UStatusComponent::DecrimentEffects(TMap<EStatus, int>& StatusMap) {
-	for (TPair<EStatus, int>& Effect : StatusMap) {
-		Effect.Value--;
-	}
-	RemoveFinishedEffects(StatusMap);
-}
 
-void UStatusComponent::RemoveFinishedEffects(TMap<EStatus, int>& StatusMap) {
-	TArray<EStatus> Keys;
-	StatusMap.GetKeys(Keys);
-	for (EStatus Key : Keys) {
-		if (StatusMap[Key] <= 0) {
-			StatusMap.Remove(Key);
-			DeactivateEffect(Key);
-		}
-	}
-}
-
-void UStatusComponent::RemoveEffect(EStatus Effect) {
-	//Removes all data of the effect given
-	StatusEffectBuildups.Remove(Effect);
-	ActiveStatusEffects.Remove(Effect);
-	DeactivateEffect(Effect);
-
-}
-
-void UStatusComponent::AddItemEffect(EStatus ItemEffect, int Time) {
-	//For use outside of class
-	ActiveStatusEffects.Add(ItemEffect, Time);
-	Player->AddStatus(ItemEffect);
-}
-
-void UStatusComponent::AddDebuff(EDamageType Type, float Damage) {
-	int DebuffTime = CalculateEffectBuildupFromDamage(Damage);
-	EStatus DesiredDebuff;
-	switch (Type) {
-	case EDamageType::NONE:
-		return;
-	case EDamageType::FIRE:
-		DesiredDebuff = EStatus::BURN;
-		break;
-	case EDamageType::WATER:
-		DesiredDebuff = EStatus::WET;
-		break;
-	case EDamageType::EARTH:
-		DesiredDebuff = EStatus::HEAVY;
-		break;
-	case EDamageType::WIND:
-		DesiredDebuff = EStatus::UNSTEADY;
-		break;
-	case EDamageType::ICE:
-		DesiredDebuff = EStatus::SLOWED;
-		break;
-	case EDamageType::LIGHTNING:
-		DesiredDebuff = EStatus::PARALIZED;
-		break;
-	case EDamageType::SAND:
-		DesiredDebuff = EStatus::DUST;
-		break;
-	case EDamageType::SMOKE:
-		DesiredDebuff = EStatus::SMOKE;
-		break;
-
-	default:
-		return;
-	}
-
-	if (ActiveStatusEffects.Contains(DesiredDebuff)) {
-		//Debuff already active, increase time for debuff but keep it below threshold
-		ActiveStatusEffects[DesiredDebuff] = FMath::Clamp(ActiveStatusEffects[DesiredDebuff] + DebuffTime, 0, 100);
-		return;
-	}
-	else if (StatusEffectBuildups.Contains(DesiredDebuff)) {
-		//Debuff is not active but player has some buildup for it
-		int NewDebuffTime = FMath::Clamp(StatusEffectBuildups[DesiredDebuff] + DebuffTime, 0, 100);
-		StatusEffectBuildups.Add(DesiredDebuff, NewDebuffTime);
-		//StatusEffectBuildups[DesiredDebuff] = FMath::Clamp(NewDebuffTime, 0, 100);
-		//If Buildup reaches thresshold, activate effect
-		if (NewDebuffTime >= 99) {
-			ActivateEffect(DesiredDebuff);
-		}
-		return;
-	}
-	//Player doesn't have any buildup for this debuff, create buildup
-	StatusEffectBuildups.Add(DesiredDebuff, DebuffTime);
-}
-
-int UStatusComponent::CalculateEffectBuildupFromDamage(float Damage) {
-	//Returns a temporary value, function to be made to calculate damage later
-	return FMath::CeilToInt(Damage);
-}
 
 void UStatusComponent::ActivateEffect(EStatus Effect) {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Activate Effect %s"), *UEnum::GetValueAsString(Effect)));
@@ -224,9 +131,8 @@ void UStatusComponent::DeactivateEffect(EStatus Effect) {
 	}
 }
 
-int UStatusComponent::GetStatusTimeRemaining(EStatus Effect) { 
-	if (ActiveStatusEffects.Contains(Effect)) { 
-		return ActiveStatusEffects[Effect]; 
-	}
-	return 0;
+void UStatusComponent::AddItemEffect(EStatus ItemEffect, int Time) {
+	//For use outside of class
+	ActiveStatusEffects.Add(ItemEffect, Time);
+	Player->AddStatus(ItemEffect);
 }

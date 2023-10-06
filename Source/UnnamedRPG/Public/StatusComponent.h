@@ -29,23 +29,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	virtual void DecrimentEffects(TMap<EStatus, int>& StatusMap);
-
-	virtual void RemoveFinishedEffects(TMap<EStatus, int>& StatusMap);
-
-	virtual void RemoveEffect(EStatus Effect);
-
 	virtual void AddItemEffect(EStatus ItemEffect, int Time);
 
-	virtual void AddDebuff(EDamageType Type, float Damage);
+	virtual void ActivateEffect(EStatus Effect) override;
 
-	virtual int CalculateEffectBuildupFromDamage(float Damage);
-
-	virtual void ActivateEffect(EStatus Effect);
-
-	virtual void DeactivateEffect(EStatus Effect);
-
-
-	UFUNCTION(BlueprintCallable)
-		int GetStatusTimeRemaining(EStatus Effect);
+	virtual void DeactivateEffect(EStatus Effect) override;
 };
