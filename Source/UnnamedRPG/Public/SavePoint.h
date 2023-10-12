@@ -53,4 +53,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTransform InteractableLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsClaimed = false;
 };

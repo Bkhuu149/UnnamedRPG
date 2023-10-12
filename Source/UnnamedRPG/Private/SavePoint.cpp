@@ -37,6 +37,7 @@ void ASavePoint::InitialSave(ACharacter* Character)
 
 void ASavePoint::HandleInteraction(ACharacter* Character)
 {
+	IsClaimed = true;
 	AMyRPGCharacter* RPGCharacter = Cast<AMyRPGCharacter>(Character);
 	BlueprintSave();
 	SaveLevel();
