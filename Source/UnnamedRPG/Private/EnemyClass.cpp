@@ -231,7 +231,6 @@ void AEnemyClass::ResetTarget() {
 	MyController->StopMovement();
 	Target = nullptr;
 	SetHealth(GetHealthMax());
-	UpdateHealthBar();
 	GetCharacterMovement()->MaxWalkSpeed = CalculateNewSpeed();
 }
 
@@ -300,7 +299,6 @@ void AEnemyClass::DoFireTickDamage() {
 		KillCharacter();
 		StatusComp->RemoveEffect(EStatus::BURN);
 	}
-	UpdateHealthBar();
 }
 
 float AEnemyClass::CalculateNewSpeed() {
