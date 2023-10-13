@@ -634,8 +634,8 @@ void AMyRPGCharacter::ResetTarget() {
 	Targeted = false;
 	TargetIndex = 0;
 	bUseControllerRotationYaw = false;
-
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+	UpdateEnemyHealthHud();
 }
 
 bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {

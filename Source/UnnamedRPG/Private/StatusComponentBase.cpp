@@ -125,3 +125,12 @@ int UStatusComponentBase::GetStatusTimeRemaining(EStatus Effect) {
 	}
 	return 0;
 }
+
+TArray<EStatus> UStatusComponentBase::GetActiveStatuses() {
+	TArray<EStatus> Statuses;
+	ActiveStatusEffects.ValueSort([](int A, int B) {
+		return A < B;
+		});
+	ActiveStatusEffects.GenerateKeyArray(Statuses);
+	return Statuses;
+}

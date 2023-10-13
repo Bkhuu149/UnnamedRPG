@@ -47,4 +47,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		int GetStatusTimeRemaining(EStatus Effect);
+
+	UFUNCTION(BlueprintCallable)
+		TArray<EStatus> GetActiveStatuses();
 };
