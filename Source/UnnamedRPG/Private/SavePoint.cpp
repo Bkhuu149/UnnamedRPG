@@ -40,7 +40,7 @@ void ASavePoint::HandleInteraction(ACharacter* Character)
 	IsClaimed = true;
 	AMyRPGCharacter* RPGCharacter = Cast<AMyRPGCharacter>(Character);
 	BlueprintSave();
-	SaveLevel();
+	SaveCamp();
 	RPGCharacter->RestoreChar();
 	RPGCharacter->SaveGame();
 	RPGCharacter->SaveInventory();

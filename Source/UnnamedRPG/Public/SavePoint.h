@@ -49,7 +49,7 @@ public:
 	void ResetLevel();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void SaveLevel();
+	void SaveCamp();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FTransform InteractableLocation;
