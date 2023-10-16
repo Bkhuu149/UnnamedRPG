@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "MyEnumUtils.h"
+#include "Engine/DataTable.h"
+#include "Engine/Texture2D.h"
 #include "MyStructUtils.generated.h"
 /**
  * 
@@ -30,4 +32,19 @@ struct FAugmentSlotStruct
 		IsUnlocked = Acquired;
 	}
 
+};
+
+USTRUCT(BlueprintType)
+struct FSavePointStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FName LevelName;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FName PointName;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FText PointDescription;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UTexture2D* Thumbnail;
 };
