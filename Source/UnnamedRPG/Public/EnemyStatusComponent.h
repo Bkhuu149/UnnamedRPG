@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "MyEnumUtils.h"
+#include "../MyRPGCharacter.h"
+#include "Kismet/GameplayStatics.h"
 #include "StatusComponentBase.h"
 #include "Components/ActorComponent.h"
 #include "EnemyStatusComponent.generated.h"

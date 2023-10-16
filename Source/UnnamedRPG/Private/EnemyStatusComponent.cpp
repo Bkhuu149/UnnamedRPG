@@ -44,7 +44,8 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 	TPair<EStatus, int> ActivatedEffect = TPair<EStatus, int>(Effect, StatusEffectBuildups[Effect]);
 	StatusEffectBuildups.Remove(Effect);
 	ActiveStatusEffects.Add(ActivatedEffect);
-
+	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+	Player->UpdateEnemyHealthHud();
 	switch (Effect)
 	{
 	case EStatus::BURN:
