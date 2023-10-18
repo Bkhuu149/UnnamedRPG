@@ -22,9 +22,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
-		FName PointName;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (MakeEditWidget = true))
 		FTransform SpawnTransform;
 
@@ -56,4 +53,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsClaimed = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName PointName;
+
 };

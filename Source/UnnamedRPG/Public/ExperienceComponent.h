@@ -27,9 +27,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 		int StoredXP = 0;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
-	TMap<FName, int> PlayerStatMap;
-
 	float HealthUpgradeAmount = 5.f;
 	float ManaUpgradeAmount = 5.f;
 	float StaminaUpgradeAmount = 5.f;
@@ -82,4 +79,8 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateExperienceAmmount();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
+		TMap<FName, int> PlayerStatMap;
+
 };
