@@ -25,6 +25,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
+		TMap<FName, int> PlayerStatMap;
+
+	UPROPERTY(EditAnywhere)
 		int StoredXP = 0;
 	
 	float HealthUpgradeAmount = 5.f;
@@ -42,6 +45,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void RemoveXP(int Xp);
+
+	UFUNCTION(BlueprintCallable)
+		TMap<FName, int> GetStatMap() { return PlayerStatMap; }
 
 	UFUNCTION(BlueprintCallable)
 		int GetStoredXP() { return StoredXP; }
@@ -79,8 +85,4 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateExperienceAmmount();
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability")
-		TMap<FName, int> PlayerStatMap;
-
 };
