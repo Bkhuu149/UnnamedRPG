@@ -118,8 +118,6 @@ void AMyRPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	PlayerInputComponent->BindAction(TEXT("Interact"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnInteractPressed);
 
-	PlayerInputComponent->BindAction(TEXT("Menu"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnMenuPressed);
-
 	PlayerInputComponent->BindAction(TEXT("TEMPKILL"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::KILL);
 	
 	PlayerInputComponent->BindAction(TEXT("SwitchTarget"), EInputEvent::IE_Pressed, this, &AMyRPGCharacter::OnSwitchTargetPressed);
@@ -558,11 +556,6 @@ void AMyRPGCharacter::OnInteractPressed() {
 
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Interact"));
 }
-
-void AMyRPGCharacter::OnMenuPressed() {
-
-}
-
 
 void AMyRPGCharacter::OnSprintPressed() {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || MyCurrentState == EPlayerState::INTERACTING) { return; }

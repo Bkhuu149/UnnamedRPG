@@ -250,9 +250,6 @@ private:
 	//Handle Interact Pressed
 	void OnInteractPressed();
 
-	//Handle Menu Pressed
-	void OnMenuPressed();
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
