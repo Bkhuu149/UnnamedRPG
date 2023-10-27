@@ -50,7 +50,13 @@ public:
 		TMap<FName, int> GetStatMap() { return PlayerStatMap; }
 
 	UFUNCTION(BlueprintCallable)
+		void SetStatMap(TMap<FName, int> NewStatMap) { PlayerStatMap = NewStatMap; }
+
+	UFUNCTION(BlueprintCallable)
 		int GetStoredXP() { return StoredXP; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetStoredXP(int SavedXP) { StoredXP = SavedXP; }
 
 	UFUNCTION(BlueprintCallable)
 		int GetStatLevel(FName StatName) { return PlayerStatMap[StatName]; }
