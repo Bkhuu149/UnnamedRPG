@@ -13,5 +13,6 @@ UCLASS()
 class UNNAMEDRPG_API UMyGameUserSettings : public UGameUserSettings
 {
 	GENERATED_BODY()
-	
+public:
+
 };
