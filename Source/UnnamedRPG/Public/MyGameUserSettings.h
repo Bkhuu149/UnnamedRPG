@@ -13,6 +13,11 @@ UCLASS()
 class UNNAMEDRPG_API UMyGameUserSettings : public UGameUserSettings
 {
 	GENERATED_BODY()
-public:
 
+protected:
+	UPROPERTY(Config)
+	float MouseSensitivity = 50.f;
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetMouseSensitivity(float NewSensitivity) { MouseSensitivity = NewSensitivity; }
 };
