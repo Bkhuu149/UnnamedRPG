@@ -15,6 +15,7 @@ class UNNAMEDRPG_API UMyGameUserSettings : public UGameUserSettings
 	GENERATED_BODY()
 
 protected:
+
 	UPROPERTY(Config)
 	float MouseSensitivity = 50.f;
 public:
