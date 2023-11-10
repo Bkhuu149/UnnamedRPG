@@ -65,6 +65,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void KillCharacter();
 
+	virtual void DisableChar();
+
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void HealChar(float val);
 

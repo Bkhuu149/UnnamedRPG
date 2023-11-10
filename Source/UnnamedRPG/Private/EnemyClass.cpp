@@ -291,6 +291,32 @@ void AEnemyClass::KillCharacter() {
 	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(Target);
 	Player->GetExperienceComponent()->GiveXP(EXPDropped);
 	Player->RemoveCombatant(this);
+
+	if (DelayTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
+		DelayTimer.Invalidate();
+	}
+
+	if (AttackTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(AttackTimer);
+		AttackTimer.Invalidate();
+	}
+
+	if (DashTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(DashTimer);
+		DashTimer.Invalidate();
+	}
+
+	if (ParalysisTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(ParalysisTimer);
+		ParalysisTimer.Invalidate();
+	}
+}
+
+void AEnemyClass::DisableChar() {
+	Super::DisableChar();
+	StatusComp->PrimaryComponentTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void AEnemyClass::DoFireTickDamage() {

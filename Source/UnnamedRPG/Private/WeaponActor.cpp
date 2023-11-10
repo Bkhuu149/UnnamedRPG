@@ -17,6 +17,16 @@ void AWeaponActor::BeginPlay()
 	SetDamageType(EDamageType::NONE);
 }
 
+void AWeaponActor::BeginDestroy()
+{
+	Super::BeginDestroy();
+
+	if (ColTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(ColTimer);
+		ColTimer.Invalidate();
+	}
+}
+
 // Called every frame
 void AWeaponActor::Tick(float DeltaTime)
 {

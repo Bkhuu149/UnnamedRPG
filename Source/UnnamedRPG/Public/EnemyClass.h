@@ -28,6 +28,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (MakeEditWidget = true))
 	TArray<FTransform> WalkPath;
 
@@ -143,6 +144,7 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void DisableChar() override;
 
 	UFUNCTION(BlueprintCallable)
 	float CalculateNewSpeed();

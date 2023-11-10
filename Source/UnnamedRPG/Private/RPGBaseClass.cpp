@@ -54,7 +54,12 @@ void ARPGBaseClass::KillCharacter() {
 	IsDead = true;
 	UAnimMontage* DeathMontage = DeathAnims[FMath::FRandRange(0, DeathAnims.Num())];
 	PlayAnimMontage(DeathMontage);
-	GetWorld()->GetTimerManager().SetTimer(DisableColTimer, [&]() { SetActorEnableCollision(false); 	PrimaryActorTick.bCanEverTick = false;}, DeathMontage->GetPlayLength(), false);
+	GetWorld()->GetTimerManager().SetTimer(DisableColTimer, this, &ARPGBaseClass::DisableChar, DeathMontage->GetPlayLength(), false);
+}
+
+void ARPGBaseClass::DisableChar() {
+	SetActorEnableCollision(false);
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void ARPGBaseClass::HealChar(float val) {
