@@ -17,7 +17,7 @@ void ANonPlayerClass::BeginPlay()
 void ANonPlayerClass::Rotate(float DeltaTime)
 {
 	//Slowly rotate enemy towards character
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || !Targeted) { return; }
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector CurrentLocation = GetActorLocation();
 	FVector TargetLocation = Target->GetActorLocation();
 	CurrentLocation.Z = 0;

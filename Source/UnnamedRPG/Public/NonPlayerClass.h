@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "RPGBaseClass.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "NonPlayerClass.generated.h"
 
 UCLASS()
