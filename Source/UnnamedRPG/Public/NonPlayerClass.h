@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "RPGBaseClass.h"
+#include "InteractableInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NonPlayerClass.generated.h"
 
 UCLASS()
-class UNNAMEDRPG_API ANonPlayerClass : public ARPGBaseClass
+class UNNAMEDRPG_API ANonPlayerClass : public ARPGBaseClass, public IInteractableInterface
 {
 	GENERATED_BODY()
 
@@ -27,5 +28,10 @@ private:
 	void Rotate(float DeltaTime);
 
 public:
+	virtual void Tick(float DeltaTime) override;
 
+	virtual void HandleInteraction(ACharacter* Character) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FTransform InteractableLocation;
 };

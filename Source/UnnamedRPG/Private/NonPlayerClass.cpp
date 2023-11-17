@@ -17,7 +17,7 @@ void ANonPlayerClass::BeginPlay()
 void ANonPlayerClass::Rotate(float DeltaTime)
 {
 	//Slowly rotate enemy towards character
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
+	//if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying()) { return; }
 	FVector CurrentLocation = GetActorLocation();
 	FVector TargetLocation = Target->GetActorLocation();
 	CurrentLocation.Z = 0;
@@ -25,4 +25,20 @@ void ANonPlayerClass::Rotate(float DeltaTime)
 	FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 	FRotator CharacterRInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), CharacterLookRotator, DeltaTime, 10.f);
 	SetActorRotation(CharacterRInterpVal);
+}
+
+void ANonPlayerClass::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (Target) {
+		//Rotate Enemy to player if targeted
+		Rotate(DeltaTime);
+	}
+}
+
+void ANonPlayerClass::HandleInteraction(ACharacter* Character)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Touched NPC")));
+	Target = Character;
 }
