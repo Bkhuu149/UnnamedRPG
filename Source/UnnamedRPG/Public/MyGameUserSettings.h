@@ -17,8 +17,29 @@ class UNNAMEDRPG_API UMyGameUserSettings : public UGameUserSettings
 protected:
 
 	UPROPERTY(Config)
-	float MouseSensitivity = 50.f;
+	float MouseSensitivity = 1.f;
+	UPROPERTY(Config)
+		float MasterVolume = 1.f;
+	UPROPERTY(Config)
+		float SoundEffectVolume = 1.f;
+	UPROPERTY(Config)
+		float CharacterVolume = 1.f;
+	UPROPERTY(Config)
+		float BGMVolume = 1.f;
+
+
+
 public:
+
 	UFUNCTION(BlueprintCallable)
-	void SetMouseSensitivity(float NewSensitivity) { MouseSensitivity = NewSensitivity; }
+		static UMyGameUserSettings* GetMyGameGameUserSettings() { return Cast<UMyGameUserSettings>(UGameUserSettings::GetGameUserSettings()); }
+
+	UFUNCTION(BlueprintCallable)
+	void SetMouseSensitivity(float NewSensitivity) { MouseSensitivity = FMath::Clamp(NewSensitivity, 0.01, 5.00f); }
+
+	UFUNCTION(BlueprintCallable)
+	void SetMasterVolume(float NewVolume) { MasterVolume = FMath::Clamp(NewVolume, 0.0, 1.f); }
+
+	UFUNCTION(BlueprintCallable)
+	void SetSoundEffectVolume(float NewVolume) { SoundEffectVolume = FMath::Clamp(NewVolume, 0.0, 1.f); }	
 };
