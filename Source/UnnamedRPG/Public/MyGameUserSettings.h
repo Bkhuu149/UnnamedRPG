@@ -34,12 +34,34 @@ public:
 	UFUNCTION(BlueprintCallable)
 		static UMyGameUserSettings* GetMyGameGameUserSettings() { return Cast<UMyGameUserSettings>(UGameUserSettings::GetGameUserSettings()); }
 
-	UFUNCTION(BlueprintCallable)
-	void SetMouseSensitivity(float NewSensitivity) { MouseSensitivity = FMath::Clamp(NewSensitivity, 0.01, 5.00f); }
+	UFUNCTION(BlueprintCallable, Category = "Game Settings")
+		void SetMouseSensitivityValue(float NewSensitivity) { MouseSensitivity = FMath::Clamp(NewSensitivity, 0.01, 5.00f); }
 
-	UFUNCTION(BlueprintCallable)
-	void SetMasterVolume(float NewVolume) { MasterVolume = FMath::Clamp(NewVolume, 0.0, 1.f); }
+	UFUNCTION(BlueprintCallable, Category = "Game Settings")
+		float GetMouseSensitivityValue() { return MouseSensitivity; }
 
-	UFUNCTION(BlueprintCallable)
-	void SetSoundEffectVolume(float NewVolume) { SoundEffectVolume = FMath::Clamp(NewVolume, 0.0, 1.f); }	
+	UFUNCTION(BlueprintCallable, Category = "Audio Settings")
+		void SetMasterVolumeValue(float NewVolume) { MasterVolume = FMath::Clamp(NewVolume, 0.0, 1.f); }
+
+	UFUNCTION(BlueprintCallable, Category = "Audio Settings")
+		float GetMasterVolumeValue() { return MasterVolume; }
+
+	UFUNCTION(BlueprintCallable, Category = "Audio Settings")
+		void SetSoundEffectVolumeValue(float NewVolume) { SoundEffectVolume = FMath::Clamp(NewVolume, 0.0, 1.f); }	
+
+	UFUNCTION(BlueprintCallable, Category = "Audio Settings")
+		float GetSoundEffectVolumeValue() { return SoundEffectVolume; }
+
+	UFUNCTION(BlueprintCallable, Category = "Audio Settings")
+		void SetCharacterVolumeValue(float NewVolume) { CharacterVolume = FMath::Clamp(NewVolume, 0.0, 1.f); }
+
+	UFUNCTION(BlueprintCallable, Category = "Audio Settings")
+		float GetCharacterVolumeValue() { return CharacterVolume; }
+
+	UFUNCTION(BlueprintCallable, Category = "Audio Settings")
+		void SetBGMVolumeValue(float NewVolume) { BGMVolume = FMath::Clamp(NewVolume, 0.0, 1.f); }
+
+	UFUNCTION(BlueprintCallable, Category = "Audio Settings")
+		float GetBGMVolumeValue() { return BGMVolume; }
+
 };
