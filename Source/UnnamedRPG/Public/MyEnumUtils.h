@@ -63,3 +63,9 @@ enum class EEnemyState : uint8 {
 	ATTACK			UMETA(DisplayName = "Attack") //Performing an attack
 };
 
+UENUM(BlueprintType)
+enum class ENonPlayerState : uint8 {
+	IDLE			UMETA(DisplayName = "Idle"), //Default, not doing anything
+	FOLLOW_PATH		UMETA(DisplayName = "Follow Path"), //Walking along set path
+	TALKING			UMETA(DisplayName = "Talking") //Dialog in progress
+};

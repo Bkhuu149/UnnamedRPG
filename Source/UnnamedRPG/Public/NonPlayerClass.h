@@ -22,10 +22,25 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
-		AActor* Target;
+	AActor* Target;
+
+	UPROPERTY(EditAnywhere)
+	ENonPlayerState CurrentNonPlayerState = ENonPlayerState::IDLE;
+
+	UFUNCTION(BlueprintCallable)
+	void SetState(ENonPlayerState NewState) { CurrentNonPlayerState = NewState; }
 
 private:
-	void Rotate(float DeltaTime);
+	void Rotate(float DeltaTime, FRotator RotateTo);
+	FRotator DefaultRotation;
+
+	virtual void TickStateMachine(float DeltaTime);
+
+	virtual void StateIdle(float DeltaTime);
+
+	virtual void StateFollowPath();
+
+	virtual void StateTalking(float DeltaTime);
 
 public:
 	virtual void Tick(float DeltaTime) override;
