@@ -26,6 +26,8 @@ protected:
 		float CharacterVolume = 1.f;
 	UPROPERTY(Config)
 		float BGMVolume = 1.f;
+	UPROPERTY(Config)
+		int FOV = 90;
 
 
 
@@ -63,5 +65,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Audio Settings")
 		float GetBGMVolumeValue() { return BGMVolume; }
+
+	UFUNCTION(BlueprintCallable, Category = "Game Settings")
+		void SetFOVValue(int NewValue) { FOV = FMath::Clamp(NewValue, 5, 170); }
+
+	UFUNCTION(BlueprintCallable, Category = "GameSettings")
+		int GetFOVValue() { return FOV; }
 
 };
