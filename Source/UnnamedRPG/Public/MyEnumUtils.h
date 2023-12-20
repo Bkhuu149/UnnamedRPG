@@ -69,3 +69,23 @@ enum class ENonPlayerState : uint8 {
 	FOLLOW_PATH		UMETA(DisplayName = "Follow Path"), //Walking along set path
 	TALKING			UMETA(DisplayName = "Talking") //Dialog in progress
 };
+
+UENUM(BlueprintType)
+enum class EKeybind : uint8 {
+	ATTACK			UMETA(DisplayName = "Attack"),
+	BLOCK			UMETA(DisplayName = "Block"),
+	DODGE			UMETA(DisplayName = "Dodge"),
+	FINISHER		UMETA(DisplayName = "Finisher"),
+	HEAL			UMETA(DisplayName = "Heal"),
+	INTERACT		UMETA(DisplayName = "Interact"),
+	INVENTORY		UMETA(DisplayName = "Inventory"),
+	JUMP			UMETA(DisplayName = "Jump"),
+	MENU			UMETA(DisplayName = "Menu"),
+	SPRINT			UMETA(DisplayName = "Sprint"),
+	SWITCHTARGET	UMETA(DisplayName = "Switch Target"),
+	TARGET			UMETA(DisplayName = "Target"),
+	USEITEM1		UMETA(DisplayName = "Use Item 1"),
+	USEITEM2		UMETA(DisplayName = "Use Item 2"),
+	USEITEM3		UMETA(DisplayName = "Use Item 3"),
+	USEITEM4		UMETA(DisplayName = "Use Item 4")
+};
