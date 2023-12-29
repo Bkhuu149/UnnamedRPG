@@ -74,7 +74,7 @@ protected:
 	EEnemyState CurrentEnemyState = EEnemyState::IDLE;
 
 	UFUNCTION(BlueprintCallable)
-	virtual bool DamageChar(float val, EDamageType Type) override;
+	virtual bool DamageChar(float val, EDamageType Type, bool IsStrong = false) override;
 
 	virtual void KillCharacter() override;
 	

@@ -631,7 +631,7 @@ void AMyRPGCharacter::ResetTarget() {
 	UpdateEnemyHealthHud();
 }
 
-bool AMyRPGCharacter::DamageChar(float val, EDamageType Type) {
+bool AMyRPGCharacter::DamageChar(float val, EDamageType Type, bool IsStrong) {
 	float damage = EnemyDamageMultiplier * val * (1-(DefenseStat/2));
 	bool bHit = Super::DamageChar(damage, Type);
 	if (Barrier && !bHit) {

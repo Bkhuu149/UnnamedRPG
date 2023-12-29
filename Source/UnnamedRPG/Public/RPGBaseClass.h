@@ -60,7 +60,7 @@ public:
 	virtual void CheckSpeed(float FallDamage = 0.f);
 
 	//Handle Health
-	virtual bool DamageChar(float val, EDamageType Type);
+	virtual bool DamageChar(float val, EDamageType Type, bool IsStrong = false);
 
 	UFUNCTION(BlueprintCallable, Category = "Character")
 	virtual void KillCharacter();
@@ -100,6 +100,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Animations")
 	UAnimMontage* HitReactAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Animations")
+	UAnimMontage* HitKnockbackAnim;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	UClass* ChosenWeapon;

@@ -299,7 +299,7 @@ public:
 
 	//Handle Health
 	UFUNCTION(BlueprintCallable)
-	virtual bool DamageChar(float val, EDamageType Type) override;
+	virtual bool DamageChar(float val, EDamageType Type, bool IsStrong = false) override;
 	virtual void HealChar(float val) override;
 
 	virtual void KillCharacter() override;
