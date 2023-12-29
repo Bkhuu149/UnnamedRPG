@@ -673,8 +673,9 @@ void AMyRPGCharacter::KillCharacter() {
 }
 
 void AMyRPGCharacter::RestoreMana() {
+	//Should take around 40 seconds to restore mana fully regardless of max ammount
 	if (Mana < ManaMax) {
-		Mana += .025 * ManaRecoveryMultiplier;
+		Mana += (.025 * ManaRecoveryMultiplier) * (ManaMax / 100);
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Blue, FString::Printf(TEXT("Mana: %f"), Mana));
 	}
 	if (Mana >= ManaMax) {
