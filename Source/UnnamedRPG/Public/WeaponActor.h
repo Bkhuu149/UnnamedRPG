@@ -72,6 +72,11 @@ public:
 	float Damage = 10.f;
 	void SetDamage(float NewDamage) { Damage = NewDamage; }
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool IsStrong = false;
+	UFUNCTION(BlueprintCallable)
+	void SetStrongHit(bool NewHit) { IsStrong = NewHit; }
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Element")
 	UNiagaraSystem* Trail;
 

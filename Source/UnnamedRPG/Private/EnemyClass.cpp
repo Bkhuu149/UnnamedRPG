@@ -268,7 +268,7 @@ void AEnemyClass::Attack()
 }
 
 bool AEnemyClass::DamageChar(float val, EDamageType Type, bool IsStrong) {
-	bool bHit = Super::DamageChar(val, Type);
+	bool bHit = Super::DamageChar(val, Type, IsStrong);
 	//Reset attack timer to allow player to finish their combo
 	if (bHit) { 
 		StatusComp->AddDebuff(Type, val);
@@ -289,8 +289,10 @@ void AEnemyClass::KillCharacter() {
 	Super::KillCharacter();
 	MyController->StopMovement();
 	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(Target);
-	Player->GetExperienceComponent()->GiveXP(EXPDropped);
-	Player->RemoveCombatant(this);
+	if (Player) {
+		Player->GetExperienceComponent()->GiveXP(EXPDropped);
+		Player->RemoveCombatant(this);
+	}
 
 	if (DelayTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(DelayTimer);

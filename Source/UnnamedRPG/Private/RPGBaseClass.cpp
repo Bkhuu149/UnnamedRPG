@@ -42,7 +42,10 @@ bool ARPGBaseClass::DamageChar(float val, EDamageType Type, bool IsStrong) {
 		return true;
 	}
 	Health -= val;
-	if (Interruptable) { PlayAnimMontage(HitReactAnim); }
+	if (Interruptable) { 
+		UAnimMontage* Anim = (IsStrong) ? HitKnockbackAnim : HitReactAnim;
+		PlayAnimMontage(Anim); 
+	}
 	StartInvincibility();
 	//GetWorld()->GetTimerManager().SetTimer(InvincibiltyTimer, this, &ARPGBaseClass::ResetInvincibility, 0.5, false);
 	return true;

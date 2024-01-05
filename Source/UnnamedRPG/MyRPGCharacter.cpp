@@ -362,6 +362,7 @@ void AMyRPGCharacter::PerformAerialAttack() {
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
 	CurrentWeapon->SetDamage(15 * AttackDamageMultiplier * (1 - AttackDebuffMultiplier));
+	CurrentWeapon->SetStrongHit(true);
 
 	switch (CurrentWeapon->GetWeaponType()) {
 
@@ -466,6 +467,7 @@ void AMyRPGCharacter::DoFinisher() {
 
 	float AttackLength = PerformAttack(FinisherAttack);
 	CurrentWeapon->SetDamageType(AttackSkillComp->GetFinisherAugment());
+	CurrentWeapon->SetStrongHit(false);
 	//GetWorld()->GetTimerManager().SetTimer(AttackTimer, this, &AMyRPGCharacter::ResetAttack, AttackLength, false); 
 }
 
@@ -508,6 +510,7 @@ float AMyRPGCharacter::PerformAttack(FAttackStruct* Attack) {
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
 	CurrentWeapon->SetDamage(AttackCount * Attack->Damage * AttackDamageMultiplier * (1 - AttackDebuffMultiplier) * StrengthStat);
+	CurrentWeapon->SetStrongHit(Attack->IsFinisher && AttackCount >= CurrentMaxAttackCount);
 	//IsAttacking = true;
 	MyCurrentState = EPlayerState::ATTACKING;
 	//AbilityComp->GiveAbilityAndActivateOnce(AttackAbility);
@@ -632,7 +635,7 @@ void AMyRPGCharacter::ResetTarget() {
 
 bool AMyRPGCharacter::DamageChar(float val, EDamageType Type, bool IsStrong) {
 	float damage = EnemyDamageMultiplier * val * (1-(DefenseStat/2));
-	bool bHit = Super::DamageChar(damage, Type);
+	bool bHit = Super::DamageChar(damage, Type, IsStrong);
 	if (Barrier && !bHit) {
 		BarrierHit = true;
 	}
