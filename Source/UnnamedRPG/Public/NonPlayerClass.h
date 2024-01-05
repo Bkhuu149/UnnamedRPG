@@ -6,6 +6,7 @@
 #include "RPGBaseClass.h"
 #include "InteractableInterface.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "AIController.h"
 #include "NonPlayerClass.generated.h"
 
 UCLASS()
@@ -30,6 +31,12 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void SetState(ENonPlayerState NewState) { CurrentNonPlayerState = NewState; }
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FTimerHandle PathTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (MakeEditWidget = true))
+		TArray<FTransform> WalkPath;
+
 private:
 	void Rotate(float DeltaTime, FRotator RotateTo);
 	FRotator DefaultRotation;
@@ -41,6 +48,15 @@ private:
 	virtual void StateFollowPath();
 
 	virtual void StateTalking(float DeltaTime);
+
+	//UNavigationSystemV1* NavSys;
+
+	AAIController* MyController;
+
+	UPROPERTY(EditAnywhere)
+	int CurrentPathNode = 0;
+
+	EPathFollowingRequestResult::Type FollowResult;
 
 public:
 	virtual void Tick(float DeltaTime) override;

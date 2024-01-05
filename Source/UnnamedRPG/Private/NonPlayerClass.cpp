@@ -13,6 +13,7 @@ void ANonPlayerClass::BeginPlay()
 {
 	Super::BeginPlay();
 	DefaultRotation = GetActorRotation(); //Capture rotation
+	MyController = static_cast<AAIController*>(GetController());
 }
 
 void ANonPlayerClass::Rotate(float DeltaTime, FRotator RotateTo)
@@ -49,7 +50,26 @@ void ANonPlayerClass::StateIdle(float DeltaTime) {
 }
 
 void ANonPlayerClass::StateFollowPath() {
-	return;
+	//if (!NavSys || WalkPath.Num() == 0) { return; }
+	if (PathTimer.IsValid()) {
+		return;
+	}
+	if (!MyController->IsFollowingAPath()) {
+		//Not currently following a path, find next node in path and walk to it
+		//CurrentNonPlayerState = ENonPlayerState::IDLE;
+		CurrentPathNode++;
+		if (CurrentPathNode >= WalkPath.Num()) {
+			CurrentPathNode = 0;
+		}
+		FVector Location = WalkPath[CurrentPathNode].GetLocation();
+		FollowResult = MyController->MoveToLocation(Location, 100.f);
+		if (PathTimer.IsValid()) {
+			GetWorld()->GetTimerManager().ClearTimer(PathTimer);
+			PathTimer.Invalidate();
+		}
+		GetWorld()->GetTimerManager().SetTimer(PathTimer, [&]() {
+			PathTimer.Invalidate(); }, 1.f, false);
+	}
 }
 
 void ANonPlayerClass::StateTalking(float DeltaTime) {
