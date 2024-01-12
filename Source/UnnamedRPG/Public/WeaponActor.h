@@ -3,38 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "NiagaraFunctionLibrary.h"
-#include "Engine/DataTable.h"
-#include "NiagaraComponent.h"
 #include "GameFramework/Actor.h"
 #include "MyEnumUtils.h"
-#include "MyDamageType.h"
-#include "Engine/Texture2D.h"
+#include "MyStructUtils.h"
 #include "Kismet/GameplayStatics.h"
 #include "WeaponActor.generated.h"
 
-
-USTRUCT(BlueprintType)
-struct FDamageTypeStruct : public FTableRowBase
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText DamageTypeDescription;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<UMyDamageType> Type;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UNiagaraSystem* TypeWeaponTrail;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UNiagaraSystem* TypeWeaponEffect;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	UTexture2D* Thumbnail;
-
-};
 
 UCLASS()
 class UNNAMEDRPG_API AWeaponActor : public AActor

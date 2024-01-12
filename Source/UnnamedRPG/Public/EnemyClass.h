@@ -190,4 +190,8 @@ public:
 	void TriggerStun();
 	void EndParalysis();
 	FTimerHandle ParalysisTimer;
+
+	UFUNCTION(BlueprintCallable)
+	void InstantRotateToActor(AActor* OtherActor);
+
 };

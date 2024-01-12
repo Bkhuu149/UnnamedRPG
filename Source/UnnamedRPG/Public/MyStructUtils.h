@@ -6,6 +6,11 @@
 #include "MyEnumUtils.h"
 #include "Engine/DataTable.h"
 #include "Engine/Texture2D.h"
+#include "MyDamageType.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Engine/Texture2D.h"
+
 #include "MyStructUtils.generated.h"
 /**
  * 
@@ -47,4 +52,26 @@ struct FSavePointStruct : public FTableRowBase
 		FText PointDescription;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UTexture2D* Thumbnail;
+};
+
+USTRUCT(BlueprintType)
+struct FDamageTypeStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+		UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FText DamageTypeDescription;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		TSubclassOf<UMyDamageType> Type;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UNiagaraSystem* TypeWeaponTrail;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UNiagaraSystem* TypeWeaponEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		UTexture2D* Thumbnail;
+
 };

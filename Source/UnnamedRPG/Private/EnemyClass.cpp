@@ -352,3 +352,13 @@ void AEnemyClass::TriggerStun() {
 	PlayAnimMontage(StunAnim);
 	GetWorld()->GetTimerManager().SetTimer(ParalysisTimer, this, &AEnemyClass::TriggerStun, FMath::RandRange(3, 6), false);
 }
+
+void AEnemyClass::InstantRotateToActor(AActor* OtherActor) {
+	//Instant rotation to actor, normally should be used before knockback
+	FVector CurrentLocation = GetActorLocation();
+	FVector TargetLocation = OtherActor->GetActorLocation();
+	CurrentLocation.Z = 0;
+	TargetLocation.Z = 0;
+	FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
+	SetActorRotation(CharacterLookRotator);
+}
