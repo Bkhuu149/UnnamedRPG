@@ -14,6 +14,18 @@ void ANonPlayerClass::BeginPlay()
 	Super::BeginPlay();
 	DefaultRotation = GetActorRotation(); //Capture rotation
 	MyController = static_cast<AAIController*>(GetController());
+	NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
+
+	if (WalkPath.Num() == 0) {
+		WalkPath.Add(GetActorTransform());
+	}
+	else {
+		WalkPath[0] = GetActorTransform();
+	}
+
+	for (int i = 1; i < WalkPath.Num(); i++) {
+		WalkPath[i] = UKismetMathLibrary::ComposeTransforms(WalkPath[i], GetActorTransform());
+	}
 }
 
 void ANonPlayerClass::Rotate(float DeltaTime, FRotator RotateTo)
@@ -50,7 +62,7 @@ void ANonPlayerClass::StateIdle(float DeltaTime) {
 }
 
 void ANonPlayerClass::StateFollowPath() {
-	//if (!NavSys || WalkPath.Num() == 0) { return; }
+	if (!NavSys || WalkPath.Num() == 0) { return; }
 	if (PathTimer.IsValid()) {
 		return;
 	}
@@ -68,12 +80,13 @@ void ANonPlayerClass::StateFollowPath() {
 			PathTimer.Invalidate();
 		}
 		GetWorld()->GetTimerManager().SetTimer(PathTimer, [&]() {
-			PathTimer.Invalidate(); }, 1.f, false);
+			PathTimer.Invalidate(); }, 10.f, false);
 	}
 }
 
 void ANonPlayerClass::StateTalking(float DeltaTime) {
 	if (Target) {
+		MyController->StopMovement();
 		//Rotate Enemy to player if targeted
 		FVector CurrentLocation = GetActorLocation();
 		FVector TargetLocation = Target->GetActorLocation();
@@ -87,12 +100,13 @@ void ANonPlayerClass::StateTalking(float DeltaTime) {
 
 void ANonPlayerClass::HandleInteraction(ACharacter* Character)
 {
+	if (CurrentNonPlayerState == ENonPlayerState::TALKING) { return; }
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Touched NPC")));
 	Target = Character;
+	PrevNonPlayerState = CurrentNonPlayerState;
 	CurrentNonPlayerState = ENonPlayerState::TALKING;
 
-	// TEMP Delay for 10 seconds
 	FTimerHandle DelayTimer;
-	FTimerDelegate RespawnDelegate = FTimerDelegate::CreateUObject(this, &ANonPlayerClass::SetState, ENonPlayerState::IDLE);
+	FTimerDelegate RespawnDelegate = FTimerDelegate::CreateUObject(this, &ANonPlayerClass::SetState, PrevNonPlayerState);
 	GetWorld()->GetTimerManager().SetTimer(DelayTimer, RespawnDelegate, 10, true);
 }

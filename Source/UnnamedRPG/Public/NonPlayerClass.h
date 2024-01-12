@@ -7,6 +7,7 @@
 #include "InteractableInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "AIController.h"
+#include "NavigationSystem.h"
 #include "NonPlayerClass.generated.h"
 
 UCLASS()
@@ -26,7 +27,9 @@ protected:
 	AActor* Target;
 
 	UPROPERTY(EditAnywhere)
-	ENonPlayerState CurrentNonPlayerState = ENonPlayerState::IDLE;
+	ENonPlayerState CurrentNonPlayerState = ENonPlayerState::FOLLOW_PATH;
+
+	ENonPlayerState PrevNonPlayerState = ENonPlayerState::IDLE;
 
 	UFUNCTION(BlueprintCallable)
 	void SetState(ENonPlayerState NewState) { CurrentNonPlayerState = NewState; }
@@ -35,7 +38,7 @@ protected:
 	FTimerHandle PathTimer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (MakeEditWidget = true))
-		TArray<FTransform> WalkPath;
+	TArray<FTransform> WalkPath;
 
 private:
 	void Rotate(float DeltaTime, FRotator RotateTo);
@@ -49,7 +52,7 @@ private:
 
 	virtual void StateTalking(float DeltaTime);
 
-	//UNavigationSystemV1* NavSys;
+	UNavigationSystemV1* NavSys;
 
 	AAIController* MyController;
 
