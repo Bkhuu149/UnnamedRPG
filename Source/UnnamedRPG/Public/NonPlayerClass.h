@@ -66,6 +66,9 @@ public:
 
 	virtual void HandleInteraction(ACharacter* Character) override;
 
+	UFUNCTION(BlueprintCallable)
+	ENonPlayerState GetCurrentState() { return CurrentNonPlayerState; }
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FTransform InteractableLocation;
 };
