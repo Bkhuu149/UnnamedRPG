@@ -15,6 +15,7 @@ void ANonPlayerClass::BeginPlay()
 	DefaultRotation = GetActorRotation(); //Capture rotation
 	MyController = static_cast<AAIController*>(GetController());
 	NavSys = UNavigationSystemV1::GetCurrent(GetWorld());
+	MyController->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &ANonPlayerClass::OnMoveCompleted);
 
 	if (WalkPath.Num() == 0) {
 		WalkPath.Add(GetActorTransform());
@@ -75,12 +76,6 @@ void ANonPlayerClass::StateFollowPath() {
 		}
 		FVector Location = WalkPath[CurrentPathNode].GetLocation();
 		FollowResult = MyController->MoveToLocation(Location, 100.f);
-		if (PathTimer.IsValid()) {
-			GetWorld()->GetTimerManager().ClearTimer(PathTimer);
-			PathTimer.Invalidate();
-		}
-		GetWorld()->GetTimerManager().SetTimer(PathTimer, [&]() {
-			PathTimer.Invalidate(); }, 10.f, false);
 	}
 }
 
@@ -109,4 +104,20 @@ void ANonPlayerClass::HandleInteraction(ACharacter* Character)
 	FTimerHandle DelayTimer;
 	FTimerDelegate RespawnDelegate = FTimerDelegate::CreateUObject(this, &ANonPlayerClass::SetState, PrevNonPlayerState);
 	GetWorld()->GetTimerManager().SetTimer(DelayTimer, RespawnDelegate, 10, true);
+}
+
+void ANonPlayerClass::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Schmoove Done")));
+	if (PathTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(PathTimer);
+		PathTimer.Invalidate();
+	}
+	GetWorld()->GetTimerManager().SetTimer(PathTimer, [&]() {
+		PathTimer.Invalidate(); }, 10.f, false);
+}
+
+void ANonPlayerClass::DisableChar() {
+	Super::DisableChar();
+	MyController->GetPathFollowingComponent()->OnRequestFinished.RemoveAll(this);
 }

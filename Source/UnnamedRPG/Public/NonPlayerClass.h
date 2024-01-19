@@ -52,6 +52,8 @@ private:
 
 	virtual void StateTalking(float DeltaTime);
 
+	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result);
+
 	UNavigationSystemV1* NavSys;
 
 	AAIController* MyController;
@@ -65,6 +67,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void HandleInteraction(ACharacter* Character) override;
+
+	virtual void DisableChar() override;
 
 	UFUNCTION(BlueprintCallable)
 	ENonPlayerState GetCurrentState() { return CurrentNonPlayerState; }
