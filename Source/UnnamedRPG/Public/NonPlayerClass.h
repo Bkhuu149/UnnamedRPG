@@ -54,6 +54,8 @@ private:
 
 	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result);
 
+	virtual void NextPathNode(bool Forward);
+
 	UNavigationSystemV1* NavSys;
 
 	AAIController* MyController;

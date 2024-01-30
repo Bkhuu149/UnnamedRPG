@@ -70,10 +70,6 @@ void ANonPlayerClass::StateFollowPath() {
 	if (!MyController->IsFollowingAPath()) {
 		//Not currently following a path, find next node in path and walk to it
 		//CurrentNonPlayerState = ENonPlayerState::IDLE;
-		CurrentPathNode++;
-		if (CurrentPathNode >= WalkPath.Num()) {
-			CurrentPathNode = 0;
-		}
 		FVector Location = WalkPath[CurrentPathNode].GetLocation();
 		FollowResult = MyController->MoveToLocation(Location, 100.f);
 	}
@@ -100,6 +96,7 @@ void ANonPlayerClass::HandleInteraction(ACharacter* Character)
 	Target = Character;
 	PrevNonPlayerState = CurrentNonPlayerState;
 	CurrentNonPlayerState = ENonPlayerState::TALKING;
+	NextPathNode(false);
 
 	FTimerHandle DelayTimer;
 	FTimerDelegate RespawnDelegate = FTimerDelegate::CreateUObject(this, &ANonPlayerClass::SetState, PrevNonPlayerState);
@@ -109,12 +106,28 @@ void ANonPlayerClass::HandleInteraction(ACharacter* Character)
 void ANonPlayerClass::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Schmoove Done")));
+	NextPathNode(true);
+
 	if (PathTimer.IsValid()) {
 		GetWorld()->GetTimerManager().ClearTimer(PathTimer);
 		PathTimer.Invalidate();
 	}
 	GetWorld()->GetTimerManager().SetTimer(PathTimer, [&]() {
 		PathTimer.Invalidate(); }, 10.f, false);
+}
+
+void ANonPlayerClass::NextPathNode(bool Forward) {
+	if (Forward) { 
+		CurrentPathNode++;
+		if (CurrentPathNode >= WalkPath.Num()) {
+			CurrentPathNode = 0;
+		}
+	} else { 
+		CurrentPathNode--; 
+		if (CurrentPathNode < 0) {
+			CurrentPathNode = WalkPath.Num() - 1;
+		}
+	}
 }
 
 void ANonPlayerClass::DisableChar() {
