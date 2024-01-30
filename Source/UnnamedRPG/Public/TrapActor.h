@@ -44,4 +44,7 @@ public:
 		TSubclassOf<UMyDamageType> MyType;
 	UFUNCTION(BlueprintCallable)
 		void SetDamageType(EDamageType NewType);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void Activate();
 };

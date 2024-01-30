@@ -29,4 +29,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetSpeed(float NewSpeed) { Speed = NewSpeed; }
 
+
 };
