@@ -22,6 +22,7 @@ void AEnemyClass::BeginPlay()
 	CurrentCooldownTime = InitialCooldownTime;
 	CurrentDamage = InitialDamage;
 	CurrentAttackSpeed = InitialAttackSpeed;
+	MyController->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AEnemyClass::OnMoveCompleted);
 
 	const FTransform WeaponTransform = GetMesh()->GetSocketTransform("WeaponSocket", ERelativeTransformSpace::RTS_World);
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(ChosenWeapon, WeaponTransform));
@@ -115,19 +116,9 @@ void AEnemyClass::StatePathWalking() {
 	if (!MyController->IsFollowingAPath()) {
 		//Not currently following a path, find next node in path and walk to it
 		CurrentEnemyState = EEnemyState::IDLE;
-		CurrentPathNode++;
-		if (CurrentPathNode >= WalkPath.Num()) {
-			CurrentPathNode = 0;
-		}
 		FVector Location = WalkPath[CurrentPathNode].GetLocation();
 		FollowResult = MyController->MoveToLocation(Location, 100.f);
-		if (DelayTimer.IsValid()) {
-			GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
-			DelayTimer.Invalidate();
-		}
-		GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {
-			DelayTimer.Invalidate();}, 10.f, false);
-
+		if (FVector::Distance(Location, GetActorLocation()) < 1 && !DelayTimer.IsValid()) { NextPathNode(true); } //TEMP, shouldn't rely on DelayTimer
 	}
 }
 
@@ -361,4 +352,33 @@ void AEnemyClass::InstantRotateToActor(AActor* OtherActor) {
 	TargetLocation.Z = 0;
 	FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 	SetActorRotation(CharacterLookRotator);
+}
+
+void AEnemyClass::NextPathNode(bool Forward) {
+	if (Forward) {
+		CurrentPathNode++;
+		if (CurrentPathNode >= WalkPath.Num()) {
+			CurrentPathNode = 0;
+		}
+	} else {
+		CurrentPathNode--;
+		if (CurrentPathNode < 0) {
+			CurrentPathNode = WalkPath.Num() - 1;
+		}
+	}
+}
+
+void AEnemyClass::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
+{
+	if (CurrentEnemyState != EEnemyState::PATH_WALKING) { return; }
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Evil Schmoove Done")));
+	NextPathNode(true);
+
+	if (DelayTimer.IsValid()) {
+		GetWorld()->GetTimerManager().ClearTimer(DelayTimer);
+		DelayTimer.Invalidate();
+	}
+	GetWorld()->GetTimerManager().SetTimer(DelayTimer, [&]() {
+		DelayTimer.Invalidate(); }, 10.f, false);
 }

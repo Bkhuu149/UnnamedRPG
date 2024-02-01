@@ -69,7 +69,6 @@ void ANonPlayerClass::StateFollowPath() {
 	}
 	if (!MyController->IsFollowingAPath()) {
 		//Not currently following a path, find next node in path and walk to it
-		//CurrentNonPlayerState = ENonPlayerState::IDLE;
 		FVector Location = WalkPath[CurrentPathNode].GetLocation();
 		FollowResult = MyController->MoveToLocation(Location, 100.f);
 	}

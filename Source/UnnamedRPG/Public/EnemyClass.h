@@ -82,7 +82,7 @@ protected:
 	void SetState(EEnemyState NewState) { CurrentEnemyState = NewState; };
 
 	UFUNCTION(BlueprintCallable)
-		void SetStaggered(bool IsStaggered) { Staggered = IsStaggered; }
+	void SetStaggered(bool IsStaggered) { Staggered = IsStaggered; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Status")
 		UEnemyStatusComponent* StatusComp;
@@ -137,6 +137,10 @@ private:
 	virtual void StateChaseFar();
 
 	virtual void StateAttack();
+
+	virtual void NextPathNode(bool Forward);
+
+	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result);
 
 public: 
 	// Called every frame
