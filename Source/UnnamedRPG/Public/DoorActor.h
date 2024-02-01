@@ -1,8 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
-#include "InteractableInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "MyEnumUtils.h"
 #include "Kismet/GameplayStatics.h"
@@ -18,7 +16,7 @@ enum class EDoorType : uint8 {
 };
 
 UCLASS()
-class UNNAMEDRPG_API ADoorActor : public AActor, public IInteractableInterface
+class UNNAMEDRPG_API ADoorActor : public AActor
 {
 	GENERATED_BODY()
 	
@@ -37,16 +35,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void HandleInteraction(ACharacter* Character) override;
+	UFUNCTION(BlueprintCallable)
+	void TryOpen();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* Door;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FTransform TargetTransform;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FTransform InteractableLocation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsOpen = false;
@@ -57,8 +53,6 @@ public:
 private:
 
 	FTimerHandle OpenTimer;
-
-	bool CheckDistance(FVector CharacterLocation, float PushRange);
 
 	void RaiseGate();
 

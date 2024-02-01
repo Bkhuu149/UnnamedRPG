@@ -2,8 +2,6 @@
 
 
 #include "DoorActor.h"
-#include "../MyRPGCharacter.h"
-#include "MyInteractComponent.h"
 
 
 
@@ -46,68 +44,37 @@ void ADoorActor::Tick(float DeltaTime)
 
 }
 
-bool ADoorActor::CheckDistance(FVector CharacterLocation, float PushRange) {
-	//Check if character is near button when interacting
-	FVector ButtonLocation = UKismetMathLibrary::TransformLocation(GetActorTransform(), InteractableLocation.GetLocation());
-	float DistanceSq = FVector::DistSquared(ButtonLocation, CharacterLocation);
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Button location at: %s"), *ButtonLocation.ToString()));
-	if (DistanceSq < pow(PushRange, 2.0f)) {
-		return true;
-	}
-	return false;
-}
-
-void ADoorActor::HandleInteraction(ACharacter* Character) 
-{	
+void ADoorActor::TryOpen() {
 	if (!Door) {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("No door to open")));
 
-		return;
-	}
-	if (!Character) {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character not valid")));
 		return;
 	}
 	if (IsOpen) {
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, (TEXT("Door already open!")));
 		return;
 	}
-
-	//Do distance calculations here
-	UMyInteractComponent* InteractComp = Cast<UMyInteractComponent>(Character->GetComponentByClass(UMyInteractComponent::StaticClass()));
-	if (!InteractComp) {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character does not have push component")));
-		return;
-	}
-
-	if (!CheckDistance(Character->GetActorLocation(), InteractComp->PushRange)) {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, (TEXT("Character too far away")));
-		return;
-	}
-
 	IsOpen = true;
 
-	switch (DoorType){
-		case EDoorType::Swivel:
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("A Swivel Door"));
-			RotateDoor();
-			break;
+	switch (DoorType) {
+	case EDoorType::Swivel:
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("A Swivel Door"));
+		RotateDoor();
+		break;
 
-		case EDoorType::Bridge:
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("A Bridge Door"));
-			LowerBridge();
-			break;
+	case EDoorType::Bridge:
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("A Bridge Door"));
+		LowerBridge();
+		break;
 
 
-		case EDoorType::Gate:
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Opening Gate Door"));
-			RaiseGate();
-			break;
+	case EDoorType::Gate:
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Opening Gate Door"));
+		RaiseGate();
+		break;
 
 	}
-	Cast<AMyRPGCharacter>(Character)->SetPlayerState(EPlayerState::IDLE);
 	SaveDoor();
-
 }
 
 void ADoorActor::RaiseGate() {
