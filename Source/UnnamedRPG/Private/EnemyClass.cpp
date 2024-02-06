@@ -118,7 +118,7 @@ void AEnemyClass::StatePathWalking() {
 		CurrentEnemyState = EEnemyState::IDLE;
 		FVector Location = WalkPath[CurrentPathNode].GetLocation();
 		FollowResult = MyController->MoveToLocation(Location, 100.f);
-		if (FVector::Distance(Location, GetActorLocation()) < 1 && !DelayTimer.IsValid()) { NextPathNode(true); } //TEMP, shouldn't rely on DelayTimer
+		if (FVector::Distance(Location, GetActorLocation()) < 1 && !DelayTimer.IsValid()) { NextPathNode(true); }
 	}
 }
 

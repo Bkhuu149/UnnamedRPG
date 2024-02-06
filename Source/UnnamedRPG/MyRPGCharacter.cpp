@@ -21,6 +21,7 @@ void AMyRPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	//AbilityComp->InitAbilityActorInfo(this, this);
+	RestoreChar();
 }
 
 // Called every frame
