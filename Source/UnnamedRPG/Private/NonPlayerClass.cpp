@@ -96,6 +96,7 @@ void ANonPlayerClass::HandleInteraction(ACharacter* Character)
 	PrevNonPlayerState = CurrentNonPlayerState;
 	CurrentNonPlayerState = ENonPlayerState::TALKING;
 	NextPathNode(false);
+	BeginDialog();
 
 	FTimerHandle DelayTimer;
 	FTimerDelegate RespawnDelegate = FTimerDelegate::CreateUObject(this, &ANonPlayerClass::SetState, PrevNonPlayerState);

@@ -75,6 +75,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	ENonPlayerState GetCurrentState() { return CurrentNonPlayerState; }
 
+	UFUNCTION(BlueprintCallable)
+	void GetCurrentState(ENonPlayerState NewState) { CurrentNonPlayerState = NewState; }
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BeginDialog();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FTransform InteractableLocation;
 };
