@@ -29,6 +29,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	ENonPlayerState CurrentNonPlayerState = ENonPlayerState::FOLLOW_PATH;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ENonPlayerState PrevNonPlayerState = ENonPlayerState::IDLE;
 
 	UFUNCTION(BlueprintCallable)

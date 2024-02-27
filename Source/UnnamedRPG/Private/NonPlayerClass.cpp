@@ -91,16 +91,11 @@ void ANonPlayerClass::StateTalking(float DeltaTime) {
 void ANonPlayerClass::HandleInteraction(ACharacter* Character)
 {
 	if (CurrentNonPlayerState == ENonPlayerState::TALKING) { return; }
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Touched NPC")));
 	Target = Character;
 	PrevNonPlayerState = CurrentNonPlayerState;
 	CurrentNonPlayerState = ENonPlayerState::TALKING;
 	NextPathNode(false);
 	BeginDialog();
-
-	FTimerHandle DelayTimer;
-	FTimerDelegate RespawnDelegate = FTimerDelegate::CreateUObject(this, &ANonPlayerClass::SetState, PrevNonPlayerState);
-	GetWorld()->GetTimerManager().SetTimer(DelayTimer, RespawnDelegate, 10, true);
 }
 
 void ANonPlayerClass::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
