@@ -76,7 +76,7 @@ public:
 	ENonPlayerState GetCurrentState() { return CurrentNonPlayerState; }
 
 	UFUNCTION(BlueprintCallable)
-	void GetCurrentState(ENonPlayerState NewState) { CurrentNonPlayerState = NewState; }
+	void SetCurrentState(ENonPlayerState NewState) { CurrentNonPlayerState = NewState; }
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void BeginDialog();
