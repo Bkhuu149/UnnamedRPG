@@ -829,3 +829,11 @@ void AMyRPGCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint
 		MyCurrentState = EPlayerState::IDLE;
 	}
 }
+
+void AMyRPGCharacter::DisableMovement() {
+	GetMovementComponent()->Deactivate();
+}
+
+void AMyRPGCharacter::EnableMovement() {
+	GetMovementComponent()->Activate();
+}

@@ -312,6 +312,12 @@ public:
 	void MoveForwardBack(float value);
 
 	void MoveRightLeft(float value);
+
+	UFUNCTION(BlueprintCallable)
+	void DisableMovement();
+
+	UFUNCTION(BlueprintCallable)
+	void EnableMovement();
 	
 //	bool GetIsDodging() { return IsDodging; }
 

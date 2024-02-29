@@ -95,6 +95,8 @@ void ANonPlayerClass::HandleInteraction(ACharacter* Character)
 	PrevNonPlayerState = CurrentNonPlayerState;
 	CurrentNonPlayerState = ENonPlayerState::TALKING;
 	NextPathNode(false);
+	Cast<AMyRPGCharacter>(Character)->DisableMovement();
+
 	BeginDialog();
 }
 

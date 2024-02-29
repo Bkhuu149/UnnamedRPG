@@ -8,6 +8,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "AIController.h"
 #include "NavigationSystem.h"
+#include "../MyRPGCharacter.h"
 #include "NonPlayerClass.generated.h"
 
 UCLASS()
