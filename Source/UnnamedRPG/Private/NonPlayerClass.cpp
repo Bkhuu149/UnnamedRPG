@@ -131,3 +131,8 @@ void ANonPlayerClass::DisableChar() {
 	Super::DisableChar();
 	MyController->GetPathFollowingComponent()->OnRequestFinished.RemoveAll(this);
 }
+
+void ANonPlayerClass::DialogFinished() {
+	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	Cast<AMyRPGCharacter>(Character)->EnableMovement();
+}

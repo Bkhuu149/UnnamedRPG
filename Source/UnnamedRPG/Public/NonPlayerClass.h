@@ -9,6 +9,7 @@
 #include "AIController.h"
 #include "NavigationSystem.h"
 #include "../MyRPGCharacter.h"
+#include "Kismet/GameplayStatics.h"
 #include "NonPlayerClass.generated.h"
 
 UCLASS()
@@ -82,6 +83,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void BeginDialog();
+
+	UFUNCTION(BlueprintCallable)
+	void DialogFinished();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FTransform InteractableLocation;
