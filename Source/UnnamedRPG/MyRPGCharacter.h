@@ -277,7 +277,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void UpdateStaminaBar();
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void UpdateExperienceAmmount();
 
 	UFUNCTION(BlueprintImplementableEvent)
