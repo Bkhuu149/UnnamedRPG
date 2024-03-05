@@ -241,6 +241,7 @@ private:
 	//Player Camera Positions
 	FVector3d NormalCamPosition = FVector3d(0, 0, 0);
 	FVector3d FollowCamPosition = FVector3d(0, 0, 50);
+	FVector3d TalkingCamPosition = FVector3d(100, 50, 20);
 
 	float PerformAttack(FAttackStruct* Attack);
 
@@ -249,6 +250,9 @@ private:
 
 	//Handle Interact Pressed
 	void OnInteractPressed();
+
+	//Handle Character Rotation
+	FRotator TurnToRotator;
 
 public:	
 	// Called every frame
@@ -318,6 +322,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void EnableMovement();
+
+	UFUNCTION(BlueprintCallable)
+	void TurnPlayer(ARPGBaseClass* CurrTarget);
 	
 //	bool GetIsDodging() { return IsDodging; }
 

@@ -96,6 +96,8 @@ void ANonPlayerClass::HandleInteraction(ACharacter* Character)
 	CurrentNonPlayerState = ENonPlayerState::TALKING;
 	NextPathNode(false);
 	Cast<AMyRPGCharacter>(Character)->DisableMovement();
+	Cast<AMyRPGCharacter>(Character)->SetPlayerState(EPlayerState::TALKING);
+	Cast<AMyRPGCharacter>(Character)->TurnPlayer(this);
 
 	BeginDialog();
 }
@@ -135,4 +137,5 @@ void ANonPlayerClass::DisableChar() {
 void ANonPlayerClass::DialogFinished() {
 	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	Cast<AMyRPGCharacter>(Character)->EnableMovement();
+	Cast<AMyRPGCharacter>(Character)->SetPlayerState(EPlayerState::IDLE);
 }

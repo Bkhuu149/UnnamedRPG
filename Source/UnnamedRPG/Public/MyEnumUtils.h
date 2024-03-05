@@ -50,7 +50,8 @@ enum class EPlayerState : uint8 {
 	SPRINTING		UMETA(DisplayName = "Sprinting"),
 	INTERACTING		UMETA(DisplayName = "Interacting"),
 	ATTACKING		UMETA(DisplayName = "Attacking"),
-	BLOCKING		UMETA(DisplayName = "Blocking")
+	BLOCKING		UMETA(DisplayName = "Blocking"),
+	TALKING			UMETA(DisplayName = "Talking")
 
 };
 

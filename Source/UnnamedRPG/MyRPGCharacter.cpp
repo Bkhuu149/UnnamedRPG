@@ -32,6 +32,8 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 	if (Targeted) {
 		FocusTarget(DeltaTime);
 		TransitionCamera(DeltaTime, FollowCamPosition);
+	} else if (MyCurrentState == EPlayerState::TALKING) {
+		TransitionCamera(DeltaTime, TalkingCamPosition);
 	} else {
 		TransitionCamera(DeltaTime, NormalCamPosition);
 	}
@@ -40,6 +42,9 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 	FRotator RinterpVal;
 	ForwardBackInputValue = GetInputAxisValue("ForwardBack");
 	RightLeftInputValue = GetInputAxisValue("RightLeft");
+	float LerpTime = 10.f;
+	FRotator CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), TurnToRotator, DeltaTime, LerpTime);
+
 	switch (MyCurrentState) {
 	case EPlayerState::INTERACTING:
 		CameraRotation = GetController()->GetControlRotation();
@@ -57,6 +62,9 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 		if (CurrentStamina <= 0) {
 			OnSprintReleased();
 		}
+		break;
+	case EPlayerState::TALKING:
+		SetActorRotation(CharacterRotationInterpVal);
 		break;
 	case EPlayerState::IDLE:
 		if (CurrentStamina < StaminaMax) {
@@ -836,4 +844,16 @@ void AMyRPGCharacter::DisableMovement() {
 
 void AMyRPGCharacter::EnableMovement() {
 	GetMovementComponent()->Activate();
+}
+
+// Basically the same code found in FocusTarget(), but without all the movement stuff or whatever
+void AMyRPGCharacter::TurnPlayer(ARPGBaseClass* CurrTarget) {
+	FVector CurrentLocation = GetActorLocation();
+	FVector TargetLocation = CurrTarget->GetActorLocation();
+
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
+	FRotator CameraRotation = GetController()->GetControlRotation();
+	CurrentLocation.Z = 0;
+	TargetLocation.Z = 0;
+	TurnToRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 }
