@@ -62,7 +62,6 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 		}
 		break;
 	case EPlayerState::TALKING:
-		CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), TurnToRotator, DeltaTime, LerpTime);
 		SetActorRotation(CharacterRotationInterpVal);
 		break;
 	case EPlayerState::IDLE:
