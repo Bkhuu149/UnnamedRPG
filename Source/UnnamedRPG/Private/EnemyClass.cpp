@@ -168,7 +168,7 @@ void AEnemyClass::StateAttack() {
 	float Distance = FVector::Distance(GetActorLocation(), Target->GetActorLocation());
 	if (Distance < 125) {
 		//Target still close, attack
-		Attack();
+		Attack(InitialDamage);
 	}
 	else{
 		//Target far away, try following
@@ -238,7 +238,7 @@ void AEnemyClass::Rotate(float DeltaTime)
 	SetActorRotation(CharacterRInterpVal);
 }
 
-void AEnemyClass::Attack() 
+void AEnemyClass::Attack(float Damage) 
 {
 	//Performs random attack in AttackAnimClose array
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsCoolingDown) { return; }

@@ -70,6 +70,7 @@ void UEnemyStatusComponent::ActivateEffect(EStatus Effect) {
 		break;
 	case EStatus::DUST:
 		//Deals less damage
+		Enemy->SetWeaknessState(true);
 		Enemy->SetCurrentDamage(Enemy->GetInitialDamage() * 0.7f);
 		break;
 	case EStatus::PARALIZED:
@@ -105,6 +106,7 @@ void UEnemyStatusComponent::DeactivateEffect(EStatus Effect) {
 		Enemy->GetCharacterMovement()->MaxWalkSpeed = Enemy->CalculateNewSpeed();
 		break;
 	case EStatus::DUST:
+		Enemy->SetWeaknessState(false);
 		Enemy->SetCurrentDamage(Enemy->GetInitialDamage());
 		break;
 	case EStatus::PARALIZED:

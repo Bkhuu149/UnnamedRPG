@@ -124,7 +124,7 @@ private:
 
 	void Rotate(float DeltaTime);
 
-	virtual void Attack();
+	virtual void Attack(float Damage);
 
 	virtual void TickStateMachine();
 
@@ -178,6 +178,10 @@ public:
 		CurrentDamage = InitialDamage;
 		CurrentWeapon->SetDamage(InitialDamage);
 	}
+	
+	bool IsWeakened = false;
+
+	void SetWeaknessState(bool IsDusted) { IsWeakened = IsDusted; }
 
 	float GetInitialCooldownTime() { return InitialCooldownTime; }
 
