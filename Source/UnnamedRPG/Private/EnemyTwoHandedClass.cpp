@@ -16,12 +16,12 @@ void AEnemyTwoHandedClass::BeginPlay()
 	CurrentOffhandWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(ChosenOffhandWeapon, WeaponTransform));
 	CurrentOffhandWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "OffhandSocket");
 	CurrentOffhandWeapon->SetOwner(this);
-	CurrentOffhandWeapon->SetDamage(InitialDamage);
 	CurrentOffhandWeapon->SetDamageType(OffhandWeaponType);
 }
 
 void AEnemyTwoHandedClass::BeginOffhandSwordEvent() {
 	//This is called during the attack animation notify
+	CurrentOffhandWeapon->SetDamage(CurrentWeapon->Damage);
 	CurrentOffhandWeapon->StartLineTrace();
 }
 

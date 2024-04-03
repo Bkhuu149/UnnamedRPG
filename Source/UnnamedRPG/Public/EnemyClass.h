@@ -49,6 +49,10 @@ protected:
 	AActor* Target;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	TArray<UAnimMontage*> AttackAnimClose;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
+	TArray<float> AttackDamageClose;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
 	TArray<UAnimMontage*> AttackAnimFar;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Abilities")
@@ -120,11 +124,13 @@ private:
 
 	bool IsBlind = false;
 
+	float AttackDamageMultiplier = 1.0f;
+
 	void ResetTarget();
 
 	void Rotate(float DeltaTime);
 
-	virtual void Attack(float Damage);
+	virtual void Attack();
 
 	virtual void TickStateMachine();
 
@@ -169,19 +175,7 @@ public:
 
 	float GetInitialDamage() { return InitialDamage; }
 	
-	void SetCurrentDamage(float NewDamage) { 
-		CurrentDamage = NewDamage;
-		CurrentWeapon->SetDamage(NewDamage);
-	}
-
-	void ResetDamage() {
-		CurrentDamage = InitialDamage;
-		CurrentWeapon->SetDamage(InitialDamage);
-	}
-	
-	bool IsWeakened = false;
-
-	void SetWeaknessState(bool IsDusted) { IsWeakened = IsDusted; }
+	void SetAttackDamageMultiplier(float NewMultiplier) { AttackDamageMultiplier = NewMultiplier; }
 
 	float GetInitialCooldownTime() { return InitialCooldownTime; }
 

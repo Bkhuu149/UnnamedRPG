@@ -28,7 +28,10 @@ void AEnemyClass::BeginPlay()
 	CurrentWeapon = Cast<AWeaponActor>(GetWorld()->SpawnActor<AActor>(ChosenWeapon, WeaponTransform));
 	CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 	CurrentWeapon->SetOwner(this);
-	CurrentWeapon->SetDamage(InitialDamage);
+	while(AttackDamageClose.Num() < AttackAnimClose.Num()) 
+	{
+		AttackDamageClose.Add(InitialDamage);
+	}
 	CurrentWeapon->SetDamageType(WeaponType);
 	if (WalkPath.Num() == 0) {
 		WalkPath.Add(GetActorTransform());
@@ -168,7 +171,7 @@ void AEnemyClass::StateAttack() {
 	float Distance = FVector::Distance(GetActorLocation(), Target->GetActorLocation());
 	if (Distance < 125) {
 		//Target still close, attack
-		Attack(InitialDamage);
+		Attack();
 	}
 	else{
 		//Target far away, try following
@@ -238,7 +241,7 @@ void AEnemyClass::Rotate(float DeltaTime)
 	SetActorRotation(CharacterRInterpVal);
 }
 
-void AEnemyClass::Attack(float Damage) 
+void AEnemyClass::Attack() 
 {
 	//Performs random attack in AttackAnimClose array
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() || IsCoolingDown) { return; }
@@ -249,6 +252,7 @@ void AEnemyClass::Attack(float Damage)
 	}
 	MyController->StopMovement();
 	int AttackIndex = FMath::RandRange(0, AttackAnimClose.Num()-1);
+	CurrentWeapon->SetDamage(AttackDamageClose[AttackIndex] * AttackDamageMultiplier);
 	PlayAnimMontage(AttackAnimClose[AttackIndex], CurrentAttackSpeed);
 	IsCoolingDown = true;
 	if (AttackTimer.IsValid()) {
