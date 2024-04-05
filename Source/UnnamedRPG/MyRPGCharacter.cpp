@@ -855,3 +855,8 @@ void AMyRPGCharacter::TurnPlayer(ARPGBaseClass* CurrTarget) {
 	TargetLocation.Z = 0;
 	TurnToRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 }
+
+void AMyRPGCharacter::SetCameraBoomPosition(FVector NewPosition) {
+	USpringArmComponent* CameraBoom = FindComponentByClass<USpringArmComponent>();
+	//CameraBoom->SetWorldLocation();
+}

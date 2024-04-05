@@ -469,5 +469,6 @@ public:
 	void EndParalysis();
 	FTimerHandle ParalysisTimer;
 
+	void SetCameraBoomPosition(FVector NewPosition);
 };
 
