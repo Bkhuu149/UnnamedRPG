@@ -678,8 +678,7 @@ void AMyRPGCharacter::HealChar(float val) {
 void AMyRPGCharacter::KillCharacter() {
 	Super::KillCharacter();
 
-	SaveInventory();	
-	
+	SaveInventory();
 }
 
 void AMyRPGCharacter::RestoreMana() {
