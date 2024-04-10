@@ -101,7 +101,7 @@ void ANonPlayerClass::HandleInteraction(ACharacter* Character)
 	Player->SetPlayerState(EPlayerState::TALKING);
 	Player->TurnPlayer(this);
 
-	FVector MiddleLocalLocation = Player->GetActorLocation() - this->GetActorLocation();
+	FVector MiddleLocalLocation = (GetActorLocation() - Player->GetActorLocation()) / 2;
 	Player->SetCameraBoomPosition(MiddleLocalLocation);
 	BeginDialog();
 }
@@ -142,4 +142,5 @@ void ANonPlayerClass::DialogFinished() {
 	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	Player->EnableMovement();
 	Player->SetPlayerState(EPlayerState::IDLE);
+	Player->SetCameraBoomPosition(FVector(0, 0, 100));
 }
