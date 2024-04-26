@@ -29,6 +29,8 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+
 	if (Targeted) {
 		FocusTarget(DeltaTime);
 		TransitionCamera(DeltaTime, FollowCamPosition);
@@ -64,6 +66,7 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 	case EPlayerState::TALKING:
 		CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), TurnToRotator, DeltaTime, LerpTime);
 		SetActorRotation(CharacterRotationInterpVal);
+
 		break;
 	case EPlayerState::IDLE:
 		if (CurrentStamina < StaminaMax) {
@@ -858,8 +861,18 @@ void AMyRPGCharacter::TurnPlayer(ARPGBaseClass* CurrTarget) {
 
 void AMyRPGCharacter::SetCameraBoomPosition(FVector NewPosition) {
 	USpringArmComponent* CameraBoom = FindComponentByClass<USpringArmComponent>();
-	FVector LookAtLocation = GetActorLocation() + NewPosition;
-	FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), LookAtLocation);
-	CameraBoom->SetWorldLocation(LookAtLocation);
+	FVector PlayerLocation = GetActorLocation();
+	PlayerLocation.Z = NewPosition.Z;
+	PlayerLocation += CameraBoom->SocketOffset;
+	AController* PlayerCamera = GetController();
+	FRotator CameraLookRotation = UKismetMathLibrary::FindLookAtRotation(CameraBoom->SocketOffset + PlayerLocation, NewPosition);
+	CameraLookRotation.Yaw += 90;
+	PlayerCamera->SetControlRotation(CameraLookRotation);
+	//CameraBoom->SetWorldLocation(NewPosition);
+	//FVector LookAtLocation = GetActorLocation() + NewPosition;
+	//FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), LookAtLocation);
+	//CameraBoom->SetWorldLocation(NewPosition);
+	//CameraBoom->SetRelativeLocation(NewPosition);
+	//CameraBoom->SetWorldLocation(LookAtLocation);
 	//GetController()->SetControlRotation(CharacterLookRotator);
 }
