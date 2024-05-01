@@ -25,6 +25,7 @@
 #include "Public/ExperienceComponent.h"
 #include "Public/MyEnumUtils.h"
 
+
 #include "Engine/GameEngine.h"
 #include "Engine/DataTable.h"
 #include "MyRPGCharacter.generated.h"
@@ -469,6 +470,6 @@ public:
 	void EndParalysis();
 	FTimerHandle ParalysisTimer;
 
-	void SetCameraBoomPosition(FVector NewPosition);
+	void StartTalking(ARPGBaseClass* Npc);
 };
 

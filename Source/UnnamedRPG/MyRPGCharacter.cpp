@@ -859,15 +859,75 @@ void AMyRPGCharacter::TurnPlayer(ARPGBaseClass* CurrTarget) {
 	TurnToRotator = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
 }
 
-void AMyRPGCharacter::SetCameraBoomPosition(FVector NewPosition) {
+void AMyRPGCharacter::StartTalking(ARPGBaseClass* Npc) {
+
+
+	AController* PlayerCamera = GetController();
+	FVector NpcEyes = Npc->GetMesh()->GetSocketLocation("Eyes_Position");
+	FVector MyEyes = GetMesh()->GetSocketLocation("Eyes_Position");
+	FVector MiddleLocation = ((NpcEyes + MyEyes) / 2);
 	USpringArmComponent* CameraBoom = FindComponentByClass<USpringArmComponent>();
 	FVector PlayerLocation = GetActorLocation();
-	PlayerLocation.Z = NewPosition.Z;
+	PlayerLocation.Z = MiddleLocation.Z;
 	PlayerLocation += CameraBoom->SocketOffset;
-	AController* PlayerCamera = GetController();
-	FRotator CameraLookRotation = UKismetMathLibrary::FindLookAtRotation(CameraBoom->SocketOffset + PlayerLocation, NewPosition);
+	FRotator CameraLookRotation = UKismetMathLibrary::FindLookAtRotation(CameraBoom->SocketOffset + PlayerLocation, MiddleLocation);
 	CameraLookRotation.Yaw += 90;
 	PlayerCamera->SetControlRotation(CameraLookRotation);
+
+
+
+	PlayerLocation.Z = CameraBoom->GetRelativeLocation().Z + GetActorLocation().Z;
+	FRotator PlayerRotation = GetActorRotation();
+	bool LeftHit = false, RightHit = false;
+	FHitResult ActorHit;
+	TArray<AActor*> ActorsToIgnore = { this, Npc };
+	float TraceDistance = 1400.f;
+	for (int i = 0; i < 10; i++) {
+		FRotator PositiveRot = PlayerRotation + FRotator(0, 9 * (i + 1), 0);
+		FRotator NegativeRot = PlayerRotation - FRotator(0, 9 * (i + 1), 0);
+		if (!RightHit) {
+			RightHit = UKismetSystemLibrary::LineTraceSingle(
+				GetWorld(),
+				PlayerLocation,
+				PlayerLocation + PositiveRot.Vector() * TraceDistance,
+				ETraceTypeQuery::TraceTypeQuery2,
+				false,
+				ActorsToIgnore,
+				EDrawDebugTrace::Persistent, ActorHit, true
+			);
+		}
+		if (!LeftHit) {
+			LeftHit = UKismetSystemLibrary::LineTraceSingle(
+				GetWorld(),
+				PlayerLocation,
+				PlayerLocation + NegativeRot.Vector() * TraceDistance,
+				ETraceTypeQuery::TraceTypeQuery2,
+				false,
+				ActorsToIgnore,
+				EDrawDebugTrace::Persistent, ActorHit, true
+			);
+		}
+	}
+
+	FVector CameraTargetLocation;
+	if (!(LeftHit || RightHit))
+	{
+		CameraTargetLocation = PlayerLocation + (PlayerRotation + FRotator(0, 90, 0)).Vector() * TraceDistance;
+	}
+	else {
+		CameraTargetLocation = ActorHit.ImpactPoint;
+	}
+
+	UKismetSystemLibrary::DrawDebugSphere(GetWorld(), CameraTargetLocation, 50, 32, FLinearColor::Green, 60, 2);
+
+
+	
+	
+
+
+
+
+
 	//CameraBoom->SetWorldLocation(NewPosition);
 	//FVector LookAtLocation = GetActorLocation() + NewPosition;
 	//FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), LookAtLocation);
