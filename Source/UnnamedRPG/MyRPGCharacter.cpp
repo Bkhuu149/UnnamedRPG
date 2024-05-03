@@ -66,6 +66,7 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 	case EPlayerState::TALKING:
 		CharacterRotationInterpVal = UKismetMathLibrary::RInterpTo(GetActorRotation(), TurnToRotator, DeltaTime, LerpTime);
 		SetActorRotation(CharacterRotationInterpVal);
+		//USpringArmComponent* CameraBoom = FindComponentByClass<USpringArmComponent>();
 
 		break;
 	case EPlayerState::IDLE:
@@ -877,19 +878,24 @@ void AMyRPGCharacter::StartTalking(ARPGBaseClass* Npc) {
 
 
 	PlayerLocation.Z = CameraBoom->GetRelativeLocation().Z + GetActorLocation().Z;
+	FTransform t = CameraBoom->GetSocketTransform("SpringEndpoint");
+	//UKismetSystemLibrary::DrawDebugSphere(GetWorld(), t.GetLocation(), 50, 32, FLinearColor::Green, 60, 2);
+
+
 	FRotator PlayerRotation = GetActorRotation();
 	bool LeftHit = false, RightHit = false;
 	FHitResult ActorHit;
 	TArray<AActor*> ActorsToIgnore = { this, Npc };
-	float TraceDistance = 1400.f;
+	float TraceDistance = (PlayerLocation - t.GetLocation()).Length();
 	for (int i = 0; i < 10; i++) {
 		FRotator PositiveRot = PlayerRotation + FRotator(0, 9 * (i + 1), 0);
 		FRotator NegativeRot = PlayerRotation - FRotator(0, 9 * (i + 1), 0);
+		
 		if (!RightHit) {
 			RightHit = UKismetSystemLibrary::LineTraceSingle(
 				GetWorld(),
 				PlayerLocation,
-				PlayerLocation + PositiveRot.Vector() * TraceDistance,
+				PlayerLocation - PositiveRot.Vector() * TraceDistance,
 				ETraceTypeQuery::TraceTypeQuery2,
 				false,
 				ActorsToIgnore,
@@ -900,7 +906,7 @@ void AMyRPGCharacter::StartTalking(ARPGBaseClass* Npc) {
 			LeftHit = UKismetSystemLibrary::LineTraceSingle(
 				GetWorld(),
 				PlayerLocation,
-				PlayerLocation + NegativeRot.Vector() * TraceDistance,
+				PlayerLocation - NegativeRot.Vector() * TraceDistance,
 				ETraceTypeQuery::TraceTypeQuery2,
 				false,
 				ActorsToIgnore,
@@ -909,22 +915,17 @@ void AMyRPGCharacter::StartTalking(ARPGBaseClass* Npc) {
 		}
 	}
 
-	FVector CameraTargetLocation;
+	
 	if (!(LeftHit || RightHit))
 	{
-		CameraTargetLocation = PlayerLocation + (PlayerRotation + FRotator(0, 90, 0)).Vector() * TraceDistance;
+		TalkingCameraPosition = PlayerLocation + (PlayerRotation + FRotator(0, 90, 0)).Vector() * TraceDistance;
 	}
 	else {
-		CameraTargetLocation = ActorHit.ImpactPoint;
+		TalkingCameraPosition = ActorHit.ImpactPoint;
 	}
 
-	UKismetSystemLibrary::DrawDebugSphere(GetWorld(), CameraTargetLocation, 50, 32, FLinearColor::Green, 60, 2);
 
-
-	
-	
-
-
+	UKismetSystemLibrary::DrawDebugSphere(GetWorld(), TalkingCameraPosition, 50, 32, FLinearColor::Green, 60, 2);
 
 
 

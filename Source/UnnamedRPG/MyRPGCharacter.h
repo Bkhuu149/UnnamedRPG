@@ -242,6 +242,7 @@ private:
 	//Player Camera Positions in Local Space
 	FVector3d NormalCamPosition = FVector3d(0, 0, 0);
 	FVector3d FollowCamPosition = FVector3d(0, 0, 50);
+	FVector TalkingCameraPosition;
 
 	float PerformAttack(FAttackStruct* Attack);
 
