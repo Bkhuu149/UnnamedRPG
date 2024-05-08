@@ -29,16 +29,22 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
+	FRotator CameraRotation = GetController()->GetControlRotation();
 
 	if (Targeted) {
 		FocusTarget(DeltaTime);
 		TransitionCamera(DeltaTime, FollowCamPosition);
-	} else {
+	} 
+	else if (MyCurrentState == EPlayerState::TALKING) {
+
+		FRotator test = UKismetMathLibrary::RInterpTo(CameraRotation, TalkingCameraPosition.Rotation(), DeltaTime, 5.f);
+		GetController()->SetControlRotation(test);
+	}
+	else {
 		TransitionCamera(DeltaTime, NormalCamPosition);
 	}
 	
-	FRotator CameraRotation;
+	
 	FRotator RinterpVal;
 	FRotator CharacterRotationInterpVal;
 	ForwardBackInputValue = GetInputAxisValue("ForwardBack");
@@ -47,7 +53,6 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 
 	switch (MyCurrentState) {
 	case EPlayerState::INTERACTING:
-		CameraRotation = GetController()->GetControlRotation();
 		RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, GetActorForwardVector().ToOrientationRotator(), DeltaTime, 10.f);
 		GetController()->SetControlRotation(RinterpVal);
 		break;
@@ -862,25 +867,11 @@ void AMyRPGCharacter::TurnPlayer(ARPGBaseClass* CurrTarget) {
 
 void AMyRPGCharacter::StartTalking(ARPGBaseClass* Npc) {
 
-
-	AController* PlayerCamera = GetController();
-	FVector NpcEyes = Npc->GetMesh()->GetSocketLocation("Eyes_Position");
-	FVector MyEyes = GetMesh()->GetSocketLocation("Eyes_Position");
-	FVector MiddleLocation = ((NpcEyes + MyEyes) / 2);
-	USpringArmComponent* CameraBoom = FindComponentByClass<USpringArmComponent>();
 	FVector PlayerLocation = GetActorLocation();
-	PlayerLocation.Z = MiddleLocation.Z;
-	PlayerLocation += CameraBoom->SocketOffset;
-	FRotator CameraLookRotation = UKismetMathLibrary::FindLookAtRotation(CameraBoom->SocketOffset + PlayerLocation, MiddleLocation);
-	CameraLookRotation.Yaw += 90;
-	PlayerCamera->SetControlRotation(CameraLookRotation);
-
-
+	USpringArmComponent* CameraBoom = FindComponentByClass<USpringArmComponent>();
 
 	PlayerLocation.Z = CameraBoom->GetRelativeLocation().Z + GetActorLocation().Z;
 	FTransform t = CameraBoom->GetSocketTransform("SpringEndpoint");
-	//UKismetSystemLibrary::DrawDebugSphere(GetWorld(), t.GetLocation(), 50, 32, FLinearColor::Green, 60, 2);
-
 
 	FRotator PlayerRotation = GetActorRotation();
 	bool LeftHit = false, RightHit = false;
@@ -899,7 +890,7 @@ void AMyRPGCharacter::StartTalking(ARPGBaseClass* Npc) {
 				ETraceTypeQuery::TraceTypeQuery2,
 				false,
 				ActorsToIgnore,
-				EDrawDebugTrace::Persistent, ActorHit, true
+				EDrawDebugTrace::None, ActorHit, true
 			);
 		}
 		if (!LeftHit) {
@@ -910,7 +901,7 @@ void AMyRPGCharacter::StartTalking(ARPGBaseClass* Npc) {
 				ETraceTypeQuery::TraceTypeQuery2,
 				false,
 				ActorsToIgnore,
-				EDrawDebugTrace::Persistent, ActorHit, true
+				EDrawDebugTrace::None, ActorHit, true
 			);
 		}
 	}
@@ -923,17 +914,6 @@ void AMyRPGCharacter::StartTalking(ARPGBaseClass* Npc) {
 	else {
 		TalkingCameraPosition = ActorHit.ImpactPoint;
 	}
-
-
-	UKismetSystemLibrary::DrawDebugSphere(GetWorld(), TalkingCameraPosition, 50, 32, FLinearColor::Green, 60, 2);
-
-
-
-	//CameraBoom->SetWorldLocation(NewPosition);
-	//FVector LookAtLocation = GetActorLocation() + NewPosition;
-	//FRotator CharacterLookRotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), LookAtLocation);
-	//CameraBoom->SetWorldLocation(NewPosition);
-	//CameraBoom->SetRelativeLocation(NewPosition);
-	//CameraBoom->SetWorldLocation(LookAtLocation);
-	//GetController()->SetControlRotation(CharacterLookRotator);
+	TalkingCameraPosition = PlayerLocation - TalkingCameraPosition;
+	//UKismetSystemLibrary::DrawDebugSphere(GetWorld(), TalkingCameraPosition, 50, 32, FLinearColor::Green, 60, 2);
 }
