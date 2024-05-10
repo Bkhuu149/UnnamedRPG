@@ -36,9 +36,11 @@ void AMyRPGCharacter::Tick(float DeltaTime)
 		TransitionCamera(DeltaTime, FollowCamPosition);
 	} 
 	else if (MyCurrentState == EPlayerState::TALKING) {
-
-		FRotator test = UKismetMathLibrary::RInterpTo(CameraRotation, TalkingCameraPosition.Rotation(), DeltaTime, 5.f);
-		GetController()->SetControlRotation(test);
+		FVector PlayerLocation = GetActorLocation();
+		PlayerLocation.Z += 100;
+		FRotator LookRotator = UKismetMathLibrary::FindLookAtRotation(TalkingCameraPosition, PlayerLocation);
+		FRotator RinterpVal = UKismetMathLibrary::RInterpTo(CameraRotation, LookRotator, DeltaTime, 5.f);
+		GetController()->SetControlRotation(RinterpVal);
 	}
 	else {
 		TransitionCamera(DeltaTime, NormalCamPosition);
@@ -914,6 +916,6 @@ void AMyRPGCharacter::StartTalking(ARPGBaseClass* Npc) {
 	else {
 		TalkingCameraPosition = ActorHit.ImpactPoint;
 	}
-	TalkingCameraPosition = PlayerLocation - TalkingCameraPosition;
+	TalkingCameraPosition = TalkingCameraPosition;
 	//UKismetSystemLibrary::DrawDebugSphere(GetWorld(), TalkingCameraPosition, 50, 32, FLinearColor::Green, 60, 2);
 }
