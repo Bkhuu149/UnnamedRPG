@@ -20,7 +20,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float Speed = 0;
+		float Speed = 10.0;
 
 public:	
 	// Called every frame
