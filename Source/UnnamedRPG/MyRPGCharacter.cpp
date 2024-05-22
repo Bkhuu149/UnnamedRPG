@@ -917,5 +917,6 @@ void AMyRPGCharacter::StartTalking(ARPGBaseClass* Npc) {
 		TalkingCameraPosition = ActorHit.ImpactPoint;
 	}
 	TalkingCameraPosition = TalkingCameraPosition;
+	Target = Npc;
 	//UKismetSystemLibrary::DrawDebugSphere(GetWorld(), TalkingCameraPosition, 50, 32, FLinearColor::Green, 60, 2);
 }

@@ -139,5 +139,6 @@ void ANonPlayerClass::DisableChar() {
 void ANonPlayerClass::DialogFinished() {
 	AMyRPGCharacter* Player = Cast<AMyRPGCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	Player->EnableMovement();
+	Player->ResetTarget();
 	Player->SetPlayerState(EPlayerState::IDLE);
 }

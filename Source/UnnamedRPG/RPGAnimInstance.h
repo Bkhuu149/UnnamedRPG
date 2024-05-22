@@ -69,7 +69,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	float PushHeight = 0.f;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+	FRotator HeadRotation = FRotator(0, 0, 0);
+
 private:
 	void CalculateMovementInput();
 };

@@ -459,6 +459,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RemoveCombatant(AActor* Combatant);
 
+	ARPGBaseClass* GetTarget() { return Target; }
+
 	//UAbilitySystemComponent* GetAbilitySystemComponent() const override{ return AbilityComp; };
 	UMyInteractComponent* GetInteractComponent() const { return InteractComp; }
 	UInventoryComponent* GetInventoryComponent() const { return InventoryComp; }
