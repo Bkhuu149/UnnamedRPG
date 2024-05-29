@@ -21,16 +21,21 @@ void URPGAnimInstance::NativeUpdateAnimation(float DeltaTimeX) {
 
 	//Reading character values to determine which state character is in
 	bIsTargeted = Character->GetTarget() != nullptr;
+
+	TargetLocation = bIsTargeted ? Character->GetTarget()->GetMesh()->GetSocketLocation("Eyes_Position") : FVector(0, 0, 0);
+	HeadRotation = Character->GetControlRotation();
+	HeadRotation.Normalize();
 	
+	/*
 	if (bIsTargeted) {
 		//FVector LookDirection = Character->GetTarget()->GetActorLocation() - Character->GetActorLocation();
 		//LookDirection.Normalize();
 		//HeadRotation = LookDirection.Rotation();
-		HeadRotation = UKismetMathLibrary::FindLookAtRotation(Character->GetActorLocation(), Character->GetTarget()->GetActorLocation()) - Character->GetActorRotation();
+		//HeadRotation = UKismetMathLibrary::FindLookAtRotation(Character->GetActorLocation(), Character->GetTarget()->GetActorLocation()) - Character->GetActorRotation();
 	}
 	else {
-		HeadRotation = FRotator(0, 0, 0);
-	}
+		//HeadRotation = FRotator(0, 0, 0);
+	}*/
 	
 	Velocity = MoveComp->Velocity;
 	GroundSpeed = ((FVector2D)Velocity).Length();

@@ -73,6 +73,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
 	FRotator HeadRotation = FRotator(0, 0, 0);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Information")
+		FVector TargetLocation;
+
 private:
 	void CalculateMovementInput();
 };
