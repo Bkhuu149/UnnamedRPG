@@ -119,7 +119,7 @@ void AWeaponActor::SetDamageType(EDamageType NewType) {
 	if (ElementParticles) {
 		UNiagaraComponent* WeaponEffect = UNiagaraFunctionLibrary::SpawnSystemAttached(ElementParticles, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT("Particle"), FVector(0, 0, 0), FRotator::ZeroRotator, EAttachLocation::SnapToTargetIncludingScale, true);
 		//Need to scale partcles based on what weapon it is, below is for broadsword
-		WeaponEffect->SetRelativeScale3D(FVector(0.2, 0.2, 0.2));
+		WeaponEffect->SetRelativeScale3D(ParticleScale);
 		
 	}
 

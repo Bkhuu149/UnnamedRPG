@@ -60,6 +60,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		EWeaponType Weapon = EWeaponType::OTHER;
 
+	UPROPERTY(EditAnywhere)
+		FVector ParticleScale = FVector(1,1,1);
+
 	EWeaponType GetWeaponType() { return Weapon; }
 
 	UNiagaraComponent* TrailComp;
