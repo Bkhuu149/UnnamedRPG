@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 #include "ProjectileClass.generated.h"
 
 UCLASS()
@@ -25,6 +26,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void CheckCollision();
 
 	UFUNCTION(BlueprintCallable)
 	void SetSpeed(float NewSpeed) { Speed = NewSpeed; }

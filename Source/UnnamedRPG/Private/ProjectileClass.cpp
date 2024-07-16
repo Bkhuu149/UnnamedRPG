@@ -25,3 +25,11 @@ void AProjectileClass::Tick(float DeltaTime)
 
 }
 
+void AProjectileClass::CheckCollision()
+{
+	FHitResult OutHit;
+	TArray<AActor*> IgnoreList;
+	AActor* tableinit[] = { Owner };
+	IgnoreList.Append(tableinit);
+	bool bHit = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation(), FVector(1, 1, 1), FRotator::ZeroRotator, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
+}
