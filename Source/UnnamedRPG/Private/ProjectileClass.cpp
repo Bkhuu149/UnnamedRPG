@@ -21,8 +21,9 @@ void AProjectileClass::BeginPlay()
 // Called every frame
 void AProjectileClass::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-
+	FVector ForwardVector = GetActorForwardVector() * Speed;
+	FVector NewLocation = GetActorLocation() + ForwardVector;
+	SetActorLocation(NewLocation);
 }
 
 void AProjectileClass::CheckCollision()
@@ -32,4 +33,15 @@ void AProjectileClass::CheckCollision()
 	AActor* tableinit[] = { Owner };
 	IgnoreList.Append(tableinit);
 	bool bHit = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation(), FVector(1, 1, 1), FRotator::ZeroRotator, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
+}
+
+void AProjectileClass::HandleCollision(AActor* HitActor)
+{
+	if (GetOwner() == HitActor) { return; }
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UKismetSystemLibrary::GetDisplayName(HitActor));
+	ARPGBaseClass* HitRPGActor = Cast<ARPGBaseClass>(HitActor);
+	if (HitRPGActor) {
+		UGameplayStatics::ApplyDamage(HitRPGActor, 10.0, NULL, GetOwner(), MyType);
+	}
+	HitRPGActor->Destroy();
 }

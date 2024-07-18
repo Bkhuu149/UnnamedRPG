@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
+#include "RPGBaseClass.h"
 #include "ProjectileClass.generated.h"
 
 UCLASS()
@@ -21,13 +22,18 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float Speed = 10.0;
+	float Speed = 10.0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UMyDamageType> MyType;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	void CheckCollision();
+
+	void HandleCollision(AActor* HitActor);
 
 	UFUNCTION(BlueprintCallable)
 	void SetSpeed(float NewSpeed) { Speed = NewSpeed; }

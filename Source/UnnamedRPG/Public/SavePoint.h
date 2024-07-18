@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "Engine/Texture2D.h"
 #include "InteractableInterface.h"
-//#include "EnemyClass.h"
 #include "SavePoint.generated.h"
 
 UCLASS()
