@@ -24,15 +24,18 @@ void AProjectileClass::Tick(float DeltaTime)
 	FVector ForwardVector = GetActorForwardVector() * Speed;
 	FVector NewLocation = GetActorLocation() + ForwardVector;
 	SetActorLocation(NewLocation);
+	CheckCollision();
 }
 
 void AProjectileClass::CheckCollision()
 {
 	FHitResult OutHit;
 	TArray<AActor*> IgnoreList;
-	AActor* tableinit[] = { Owner };
+	AActor* tableinit[] = { this, Owner };
 	IgnoreList.Append(tableinit);
-	bool bHit = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation(), FVector(1, 1, 1), FRotator::ZeroRotator, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
+	bool bHit = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation() + FVector(2, 2, 2),
+		FVector(1, 1, 1), FRotator::ZeroRotator, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
+	if (bHit) { HandleCollision(OutHit.GetActor()); }
 }
 
 void AProjectileClass::HandleCollision(AActor* HitActor)
@@ -43,5 +46,5 @@ void AProjectileClass::HandleCollision(AActor* HitActor)
 	if (HitRPGActor) {
 		UGameplayStatics::ApplyDamage(HitRPGActor, 10.0, NULL, GetOwner(), MyType);
 	}
-	HitRPGActor->Destroy();
+	this->K2_DestroyActor();
 }
