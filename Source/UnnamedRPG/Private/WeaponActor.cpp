@@ -53,8 +53,9 @@ void AWeaponActor::WeaponLineTrace() {
 void AWeaponActor::StartLineTrace() {
 	//Start timer for weapon hit detection
 	if (Trail) {
-		TrailComp = UNiagaraFunctionLibrary::SpawnSystemAttached(Trail, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT("Middle"), FVector(0, 0, 0), FRotator::ZeroRotator, EAttachLocation::KeepRelativeOffset, true);
-		//TrailComp->SetRelativeScale3D(ParticleScale);
+		TrailComp = UNiagaraFunctionLibrary::SpawnSystemAttached(Trail, Cast<USceneComponent>(GetComponentByClass(UStaticMeshComponent::StaticClass())), TEXT("Middle"), FVector(0, 0, 0), FRotator::ZeroRotator, EAttachLocation::SnapToTargetIncludingScale, true);
+		//TrailComp->SetRelativeScale3D(TrailScale);
+		TrailComp->SetVariableFloat("RibbonWidth", TrailWidth);
 	}
 	GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AWeaponActor::WeaponLineTrace, 0.01, true);
 	

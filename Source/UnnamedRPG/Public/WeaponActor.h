@@ -63,6 +63,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		FVector ParticleScale = FVector(1,1,1);
 
+	UPROPERTY(EditAnywhere)
+		float TrailWidth = 25;
+
 	EWeaponType GetWeaponType() { return Weapon; }
 
 	UNiagaraComponent* TrailComp;
