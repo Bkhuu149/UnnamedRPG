@@ -15,7 +15,7 @@ AProjectileClass::AProjectileClass()
 void AProjectileClass::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	GetWorld()->GetTimerManager().SetTimer(ColTimer, this, &AProjectileClass::CheckCollision, 0.07, true);
 }
 
 // Called every frame
@@ -24,7 +24,6 @@ void AProjectileClass::Tick(float DeltaTime)
 	FVector ForwardVector = GetActorForwardVector() * Speed;
 	FVector NewLocation = GetActorLocation() + ForwardVector;
 	SetActorLocation(NewLocation);
-	CheckCollision();
 }
 
 void AProjectileClass::CheckCollision()
@@ -33,8 +32,9 @@ void AProjectileClass::CheckCollision()
 	TArray<AActor*> IgnoreList;
 	AActor* tableinit[] = { this, Owner };
 	IgnoreList.Append(tableinit);
-	bool bHit = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation() + FVector(2, 2, 2),
-		FVector(1, 1, 1), FRotator::ZeroRotator, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
+	FVector CollisionSize = FVector(32, 32, 32);
+	bool bHit = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation(),
+		CollisionSize, FRotator::ZeroRotator, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
 	if (bHit) { HandleCollision(OutHit.GetActor()); }
 }
 

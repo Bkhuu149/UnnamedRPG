@@ -27,6 +27,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<UMyDamageType> MyType;
 
+private:
+	FTimerHandle ColTimer;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
