@@ -29,6 +29,8 @@ protected:
 
 private:
 	FTimerHandle ColTimer;
+	FVector PrevLocation;
+	FVector CollisionSize = FVector(32, 32, 32);
 
 public:	
 	// Called every frame
