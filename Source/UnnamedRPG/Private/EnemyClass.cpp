@@ -376,7 +376,6 @@ void AEnemyClass::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingRe
 {
 	if (CurrentEnemyState != EEnemyState::PATH_WALKING) { return; }
 
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Evil Schmoove Done")));
 	NextPathNode(true);
 
 	if (DelayTimer.IsValid()) {

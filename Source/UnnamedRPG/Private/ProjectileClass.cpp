@@ -38,17 +38,16 @@ void AProjectileClass::CheckCollision()
 	AActor* tableinit[] = { this, Owner };
 	IgnoreList.Append(tableinit);
 	bool bHit = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), GetActorLocation(), GetActorLocation(),
-		CollisionSize, FRotator::ZeroRotator, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::ForDuration, OutHit, true);
+		CollisionSize, FRotator::ZeroRotator, TraceTypeQuery2, false, IgnoreList, EDrawDebugTrace::Type::None, OutHit, true);
 	if (bHit) { HandleCollision(OutHit.GetActor()); }
 }
 
 void AProjectileClass::HandleCollision(AActor* HitActor)
 {
 	if (GetOwner() == HitActor) { return; }
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, UKismetSystemLibrary::GetDisplayName(HitActor));
 	ARPGBaseClass* HitRPGActor = Cast<ARPGBaseClass>(HitActor);
 	if (HitRPGActor) {
-		UGameplayStatics::ApplyDamage(HitRPGActor, 10.0, NULL, GetOwner(), MyType);
+		UGameplayStatics::ApplyDamage(HitRPGActor, 10.0, NULL, Owner, MyType);
 	}
 	this->K2_DestroyActor();
 }

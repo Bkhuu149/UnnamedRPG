@@ -195,5 +195,4 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void InstantRotateToActor(AActor* OtherActor);
-
 };

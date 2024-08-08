@@ -106,7 +106,6 @@ void ANonPlayerClass::HandleInteraction(ACharacter* Character)
 
 void ANonPlayerClass::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Schmoove Done")));
 	NextPathNode(true);
 
 	if (PathTimer.IsValid()) {
